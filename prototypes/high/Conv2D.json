@@ -1,0 +1,25 @@
+{
+    "name": "Conv2D",
+    "properties": [
+        {
+            "type": "Integer",
+            "name": "filters",
+            "value": "5"
+        },
+        {
+            "type": "IntegerTuple",
+            "name": "kernel_size",
+            "value": "[2, 2]"
+        },
+        {
+            "type": "Selection",
+            "name": "padding",
+            "value": "same"
+        },
+        {
+            "type": "Selection",
+            "name": "activation",
+            "value": "linear"
+        }
+    ]
+}

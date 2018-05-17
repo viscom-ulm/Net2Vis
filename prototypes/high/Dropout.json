@@ -1,0 +1,10 @@
+{
+    "name": "Dropout",
+    "properties": [
+        {
+            "type": "Integer",
+            "name": "rate",
+            "value": "0.5"
+        }
+    ]
+}

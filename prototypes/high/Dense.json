@@ -1,0 +1,15 @@
+{
+	"name": "Dense",
+	"properties": [
+		{
+			"type": "Integer",
+			"name": "units",
+			"value": "5"
+		},
+		{
+			"type": "Selection",
+			"name": "activation",
+			"value": "linear"
+		}
+	]
+}

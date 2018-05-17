@@ -1,0 +1,15 @@
+{
+    "name": "MaxPooling2D",
+    "properties": [
+        {
+            "type": "IntegerTuple",
+            "name": "pool_size",
+            "value": "[2, 2]"
+        },
+        {
+            "type": "IntegerTuple",
+            "name": "strides",
+            "value": "[2, 2]"
+        }
+    ]
+}
