@@ -36,7 +36,10 @@ def add_layer_type(name, spec, graph):
         layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif('conv2d' in name):
-        pass
+        specs = spec.split(',')
+        layer = layers.Conv2D(specs[0], specs[1])
+        layer.add_specs(specs[2:])
+        graph.add_layer(layer)
     elif('maxpooling2d' in name):
         pass
     elif ('dropout' in name):
