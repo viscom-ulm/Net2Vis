@@ -33,6 +33,7 @@ def add_layer_type(name, spec, graph):
     if('dense' in name):
         specs = spec.split(',')
         layer = layers.Dense(specs[0])
+        layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif('conv2d' in name):
         pass
