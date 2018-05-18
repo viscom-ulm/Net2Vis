@@ -1,4 +1,5 @@
 import argparse
+from keras import translate_keras
 
 parser = argparse.ArgumentParser(
     description='Translate a network implementation into NetViz format.')
@@ -11,3 +12,6 @@ args = parser.parse_args()
 file_input = open(args.file_name, 'r')
 content = file_input.readlines()
 content = [x.strip() for x in content] 
+
+if(args.model_type == 'Keras'):
+    translate_keras(content)
