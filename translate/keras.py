@@ -13,30 +13,30 @@ def translate_keras(content):
 
 
 def check_sequential(line, graph):
-    name = line.split('.add(')[1]
-    name = name.split('(')
-    spec = name[1]
-    name = name[0].strip().lower()
+    properties = line.split('.add(')[1]
+    name = properties.split('(')[0]
+    spec = properties.replace(name, '').strip('()')
+    name = name.strip().lower()
     add_layer_type(name, spec, graph)
 
 
 def check_functional(line, graph):
     name = line.split('=')[1]
-    name = name.split('(')[0]
     spec = name.split('(')[1]
     spec = spec.split(')')[0]
+    name = name.split('(')[0]
     name = name.strip().lower()
     add_layer_type(name, spec, graph)
 
 
 def add_layer_type(name, spec, graph):
     if('dense' in name):
-        specs = spec.split(',')
+        specs = split_specs(spec)
         layer = layers.Dense(specs[0])
         layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif('conv2d' in name):
-        specs = spec.split(',')
+        specs = split_specs(spec)
         layer = layers.Conv2D(specs[0], specs[1])
         layer.add_specs(specs[2:])
         graph.add_layer(layer)
@@ -46,3 +46,27 @@ def add_layer_type(name, spec, graph):
         pass
     elif ('flatten' in name):
         pass
+
+
+def split_specs(spec):
+    specs = []
+    current = ''
+    level = 0
+    for letter in spec:
+        if(letter == '('):
+            current = current + letter
+            level = level+1
+        elif(letter == ')'):
+            current = current + letter
+            level = level-1
+        elif(letter == ','):
+            if(level == 0):
+                specs.append(current)
+                current = ''
+            else:
+                current = current + letter
+        elif(letter == ' '):
+            pass
+        else:
+            current = current + letter
+    return specs

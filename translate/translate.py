@@ -3,9 +3,9 @@ from keras import translate_keras
 
 parser = argparse.ArgumentParser(
     description='Translate a network implementation into NetViz format.')
-parser.add_argument('file_name', metavar='file name', type=str, 
+parser.add_argument('file_name', metavar='file_name', type=str, 
     help='Name of the file to be translated.')
-parser.add_argument('model_type', metavar='model type', type=str,
+parser.add_argument('model_type', metavar='model_type', type=str,
     help='Type of the model to be translated (currently supported: Keras)')
 
 args = parser.parse_args()
