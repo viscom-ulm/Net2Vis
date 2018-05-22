@@ -49,7 +49,9 @@ def add_layer_type(name, spec, graph):
         layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif ('flatten' in name): # Flatten Layer
-        pass
+        layer = layers.Flatten()
+        layer.add_specs(specs)
+        graph.add_layer(layer)
     elif ('activation' in name): # Activation Layer, non-existant in our model. Layt layer gets assigned the activation.
         graph.layers[-1].properties['activation'] = specs[0]
 
@@ -82,7 +84,8 @@ def split_specs(spec):
             pass
         else: # Add the Letter to the current Spec.
             current = current + letter
-    specs.append(current) # Append the last Spec
+    if(current != ''): # Append the last Spec if existant.
+        specs.append(current)
     return specs
 
 # Get the Raw-Value of a Spec.

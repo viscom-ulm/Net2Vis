@@ -94,6 +94,19 @@ class Dropout(Layer):
     def __repr__(self):
         return "%s(rate: %r, properties: %r)" % (self.__class__, self.rate, self.properties)
 
+# Representation of Flatten Layers. 
+class Flatten(Layer):
+    # Initialize.
+    def __init__(self):
+        Layer.__init__(self)
+        self.properties = {
+            'data_format': None
+        }
+
+    # String Representation of the Layer.
+    def __repr__(self):
+        return "%s(properties: %r)" % (self.__class__, self.properties)
+
 # Try to cast Spec to Bool.
 def try_str_to_bool(s):
     if s == 'True':
