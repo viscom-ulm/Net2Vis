@@ -21,22 +21,21 @@ def check_sequential(line, graph):
 
 
 def check_functional(line, graph):
-    name = line.split('=')[1]
-    spec = name.split('(')[1]
-    spec = spec.split(')')[0]
-    name = name.split('(')[0]
+    properties = line[(line.find('=')+1):]
+    name = properties.split('(')[0]
+    spec = properties.replace(name, '').strip('(')    
     name = name.strip().lower()
     add_layer_type(name, spec, graph)
 
 
 def add_layer_type(name, spec, graph):
+    specs = split_specs(spec)
+    print(specs)
     if('dense' in name):
-        specs = split_specs(spec)
         layer = layers.Dense(specs[0])
         layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif('conv2d' in name):
-        specs = split_specs(spec)
         layer = layers.Conv2D(specs[0], specs[1])
         layer.add_specs(specs[2:])
         graph.add_layer(layer)
@@ -47,7 +46,6 @@ def add_layer_type(name, spec, graph):
     elif ('flatten' in name):
         pass
     elif ('activation' in name):
-        specs = split_specs(spec)
         graph.layers[-1].properties['activation'] = specs[0]
 
 
@@ -57,6 +55,8 @@ def split_specs(spec):
     level = 0
     for letter in spec:
         if(letter == '('):
+            if(level < 0):
+                break
             current = current + letter
             level = level+1
         elif(letter == ')'):
