@@ -10,8 +10,7 @@ def translate_keras(content):
             check_sequential(line, graph)
         elif (' = ' in line): # Functional Model
             check_functional(line, graph)
-    for layer in graph.layers:
-        print(layer)
+    print(graph)
 
 # If Sequential: Modify the line to be interpretable by the converter.
 def check_sequential(line, graph):
