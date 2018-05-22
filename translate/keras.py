@@ -15,7 +15,7 @@ def translate_keras(content):
 def check_sequential(line, graph):
     properties = line.split('.add(')[1]
     name = properties.split('(')[0]
-    spec = properties.replace(name, '').strip('()')
+    spec = properties.replace(name, '').strip('(')
     name = name.strip().lower()
     add_layer_type(name, spec, graph)
 
@@ -46,6 +46,9 @@ def add_layer_type(name, spec, graph):
         pass
     elif ('flatten' in name):
         pass
+    elif ('activation' in name):
+        specs = split_specs(spec)
+        graph.layers[-1].properties['activation'] = specs[0]
 
 
 def split_specs(spec):
@@ -57,7 +60,8 @@ def split_specs(spec):
             current = current + letter
             level = level+1
         elif(letter == ')'):
-            current = current + letter
+            if(level>0):
+                current = current + letter
             level = level-1
         elif(letter == ','):
             if(level == 0):
@@ -67,6 +71,11 @@ def split_specs(spec):
                 current = current + letter
         elif(letter == ' '):
             pass
+        elif(letter == '\''):
+            pass
+        elif(letter == '"'):
+            pass
         else:
             current = current + letter
+    specs.append(current)
     return specs
