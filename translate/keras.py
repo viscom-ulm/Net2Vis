@@ -33,11 +33,11 @@ def check_functional(line, graph):
 def add_layer_type(name, spec, graph):
     specs = split_specs(spec) # Split the spec variable to obtain a list of specs.
     if('dense' in name): # Dense Layer.
-        layer = layers.Dense(specs[0])
+        layer = layers.Dense(spec_raw(specs[0]))
         layer.add_specs(specs[1:])
         graph.add_layer(layer)
     elif('conv2d' in name): # Convolution Layer 2D.
-        layer = layers.Conv2D(specs[0], specs[1])
+        layer = layers.Conv2D(spec_raw(specs[0]), spec_raw(specs[1]))
         layer.add_specs(specs[2:])
         graph.add_layer(layer)
     elif('maxpooling2d' in name): # Max-Pooling Layer 2D.
@@ -80,3 +80,11 @@ def split_specs(spec):
             current = current + letter
     specs.append(current) # Append the last Spec
     return specs
+
+# Get the Raw-Value of a Spec.
+def spec_raw(spec):
+    split = spec.split('=')
+    if(len(split) > 1): # If Name defined, return raw value separately.
+        return split[1]
+    else: # Return Raw value.
+        return spec
