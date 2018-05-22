@@ -1,19 +1,22 @@
+# Representation of Layers (Base Class).
 class Layer:
-    def __init__(self):
+    # Initialize the Properties.
+    def __init__(self): 
         self.properties = {}
 
+    # Add Specifications.
     def add_specs(self, specs):
-        for spec in specs:
-            spec = spec.replace(')', '').strip()
+        for spec in specs: # Update Properties based on Specs. Try to Parse the Specs.
             spec_split = spec.split('=')
-            self.properties[spec_split[0].strip()] = try_str_to_bool(spec_split[1].strip().strip('\''))
+            self.properties[spec_split[0].strip()] = try_str_to_bool(spec_split[1])
 
-    
+    # String Representation of the Layer.
     def __repr__(self):
         return "%s(properties: %r)" % (self.__class__, self.properties)
 
-
+# Representation of Dense Layers. 
 class Dense(Layer):
+    # Initialize with unit number.
     def __init__(self, units):
         Layer.__init__(self)
         self.units = units
@@ -29,12 +32,13 @@ class Dense(Layer):
             'bias_constraint': None
         }
 
-
+    # String Representation of the Layer.
     def __repr__(self):
         return "%s(units: %r, properties: %r)" % (self.__class__, self.units, self.properties)
 
 
 class Conv2D(Layer):
+    # Initialize with filter number and convolution kernel.
     def __init__(self, filters, kernel_size):
         Layer.__init__(self)
         self.filters = filters
@@ -55,10 +59,11 @@ class Conv2D(Layer):
             'bias_constraint': None
         }
 
+    # String Representation of the Layer.
     def __repr__(self):
         return "%s(filters: %r, kernel: %r, properties: %r)" % (self.__class__, self.filters, self.kernel_size, self.properties)
 
-
+# Try to cast Spec to Bool.
 def try_str_to_bool(s):
     if s == 'True':
         return True
@@ -67,7 +72,7 @@ def try_str_to_bool(s):
     else:
         return try_str_to_number(s)
 
-
+# Try to cast Spec to Int or Float.
 def try_str_to_number(s):
     try:
         return int(s)
@@ -77,7 +82,7 @@ def try_str_to_number(s):
         except ValueError:
             return try_str_to_tuple(s)
 
-
+# Try to cast String to Int-Tuple.
 def try_str_to_tuple(s):
     try:
         return tuple(map(int, s[1:-1].split(',')))
