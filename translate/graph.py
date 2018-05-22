@@ -1,6 +1,13 @@
+class Node:
+    def __init__(self):
+        self.data = None
+        self.children = []
+        self.parent = None
+
 # Representation of the Graph that gets extracted from Code.
 class Graph:
     layers = []
+    root = Node()
 
     # Add a new Layer to the Graph.
     def add_layer(self, layer):
@@ -14,3 +21,7 @@ class Graph:
             if(i != (len(self.layers)-1)):
                 str = str + ' -> '
         return str
+
+    # Build a tree-structure based on the Layers
+    def build_tree(self):
+        return

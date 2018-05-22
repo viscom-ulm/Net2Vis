@@ -3,6 +3,8 @@ class Layer:
     # Initialize the Properties.
     def __init__(self): 
         self.properties = {}
+        self.input = []
+        self.output = []
 
     # Add Specifications.
     def add_specs(self, specs):
