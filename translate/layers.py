@@ -92,7 +92,7 @@ class Dropout(Layer):
 
     # String Representation of the Layer.
     def __repr__(self):
-        return "%s(units: %r, properties: %r)" % (self.__class__, self.rate, self.properties)
+        return "%s(rate: %r, properties: %r)" % (self.__class__, self.rate, self.properties)
 
 # Try to cast Spec to Bool.
 def try_str_to_bool(s):
