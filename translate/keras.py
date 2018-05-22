@@ -41,9 +41,13 @@ def add_layer_type(name, spec, graph):
         layer.add_specs(specs[2:])
         graph.add_layer(layer)
     elif('maxpooling2d' in name): # Max-Pooling Layer 2D.
-        pass
+        layer = layers.MaxPool2D()
+        layer.add_specs(specs)
+        graph.add_layer(layer)
     elif ('dropout' in name): # Dropout Layer
-        pass
+        layer = layers.Dropout(spec_raw(specs[0]))
+        layer.add_specs(specs[1:])
+        graph.add_layer(layer)
     elif ('flatten' in name): # Flatten Layer
         pass
     elif ('activation' in name): # Activation Layer, non-existant in our model. Layt layer gets assigned the activation.

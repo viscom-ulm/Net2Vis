@@ -36,7 +36,7 @@ class Dense(Layer):
     def __repr__(self):
         return "%s(units: %r, properties: %r)" % (self.__class__, self.units, self.properties)
 
-
+# Representation of Conv2D Layers. 
 class Conv2D(Layer):
     # Initialize with filter number and convolution kernel.
     def __init__(self, filters, kernel_size):
@@ -62,6 +62,37 @@ class Conv2D(Layer):
     # String Representation of the Layer.
     def __repr__(self):
         return "%s(filters: %r, kernel: %r, properties: %r)" % (self.__class__, self.filters, self.kernel_size, self.properties)
+
+# Representation of MaxPool2D Layers. 
+class MaxPool2D(Layer):
+    # Initialize.
+    def __init__(self):
+        Layer.__init__(self)
+        self.properties = {
+            'pool_size': (2, 2),
+            'strides': None,
+            'padding': 'valid',
+            'data_format': None
+        }
+
+    # String Representation of the Layer.
+    def __repr__(self):
+        return "%s(properties: %r)" % (self.__class__, self.properties)
+
+# Representation of Dropout Layers. 
+class Dropout(Layer):
+    # Initialize with rate.
+    def __init__(self, rate):
+        Layer.__init__(self)
+        self.rate = rate
+        self.properties = {
+            'noise_shape': None,
+            'seed': None
+        }
+
+    # String Representation of the Layer.
+    def __repr__(self):
+        return "%s(units: %r, properties: %r)" % (self.__class__, self.rate, self.properties)
 
 # Try to cast Spec to Bool.
 def try_str_to_bool(s):
