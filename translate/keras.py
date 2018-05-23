@@ -12,6 +12,7 @@ def translate_keras(content):
             check_functional(line, graph)
     print(graph)
     graph.calculate_layer_dimensions([32, 32, 3])
+    print(graph.dimensions_str())
     for layer in graph.layers:
         print(layer)
         print(layer.dimensions)

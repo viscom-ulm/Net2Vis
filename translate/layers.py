@@ -90,7 +90,7 @@ class Conv2D(Layer):
     def calculate_dimensions(self, input_dim):
         if self.properties['padding'] == 'valid': # Check padding Type and calculate Padding. 
             p = [0, 0]
-        else:
+        else: # Same Padding.
             p = [int((self.kernel_size[0]-1)/2), int((self.kernel_size[1]-1)/2)]
         self.dimensions = [calculate_next_layer(p[0], tupelize(self.properties['strides'])[0], input_dim[0][0], self.kernel_size[0]),
             calculate_next_layer(p[1], tupelize(self.properties['strides'])[1], input_dim[0][1], self.kernel_size[1]),
@@ -111,6 +111,20 @@ class MaxPool2D(Layer):
     # String Representation of the Layer.
     def __repr__(self):
         return "%s(properties: %r)" % (self.__class__, self.properties)
+
+    # Dimension Calculation for Pooling Layers.
+    def calculate_dimensions(self, input_dim):
+        if self.properties['padding'] == 'valid': # Check padding Type and calculate Padding. 
+            p = [0, 0]
+        else: # Same Padding
+            p = [int((tupelize(self.properties['pool_size'])[0]-1)/2), int((tupelize(self.properties['pool_size'])[1]-1)/2)]
+        if not self.properties['strides']: # Check if Strides were not set.
+            str = tupelize(self.properties['pool_size'])
+        else: # Strides set.
+            str = tupelize(self.properties['strides'])
+        self.dimensions = [calculate_next_layer(p[0], str[0], input_dim[0][0], tupelize(self.properties['pool_size'])[0]),
+            calculate_next_layer(p[1], str[1], input_dim[0][1], tupelize(self.properties['pool_size'])[1]),
+            input_dim[0][2]]
 
 # Representation of Dropout Layers. 
 class Dropout(Layer):
@@ -140,6 +154,12 @@ class Flatten(Layer):
     def __repr__(self):
         return "%s(properties: %r)" % (self.__class__, self.properties)
 
+    # Dimension Calculation for Flatten Layers.
+    def calculate_dimensions(self, input_dim):
+        self.dimensions = 1
+        for dim in input_dim[0]: # Multiply all Dimensions.
+            self.dimensions = self.dimensions * dim
+
 # Representation of Dropout Layers. 
 class Activation(Layer):
     # Initialize with rate.
@@ -153,13 +173,13 @@ class Activation(Layer):
 
 # Try to cast the Spec.
 def try_cast(s):
-    try:
+    try: # Cast to Bool.
         return try_str_to_bool(s)
     except ValueError:
-        try:
+        try: # Cast to Numeric.
             return try_str_to_number(s)
         except ValueError:
-            try:
+            try: # Cast to Tuple.
                 return try_str_to_tuple(s)
             except ValueError:
                 return s
