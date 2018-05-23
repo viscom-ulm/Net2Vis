@@ -10,7 +10,7 @@ class Layer:
     def add_specs(self, specs):
         for spec in specs: # Update Properties based on Specs. Try to Parse the Specs.
             spec_split = spec.split('=')
-            self.properties[spec_split[0].strip()] = try_str_to_bool(spec_split[1])
+            self.properties[spec_split[0].strip()] = try_cast(spec_split[1])
 
     # String Representation of the Layer.
     def __repr__(self):
@@ -21,7 +21,7 @@ class Dense(Layer):
     # Initialize with unit number.
     def __init__(self, units):
         Layer.__init__(self)
-        self.units = units
+        self.units = try_cast(units)
         self.properties = {
             'activation': None,
             'use_bias': True,
@@ -43,8 +43,8 @@ class Conv2D(Layer):
     # Initialize with filter number and convolution kernel.
     def __init__(self, filters, kernel_size):
         Layer.__init__(self)
-        self.filters = filters
-        self.kernel_size = try_str_to_tuple(kernel_size)
+        self.filters = try_cast(filters)
+        self.kernel_size = try_cast(kernel_size)
         self.properties = {
             'strides': (1, 1),
             'padding': 'valid',
@@ -86,7 +86,7 @@ class Dropout(Layer):
     # Initialize with rate.
     def __init__(self, rate):
         Layer.__init__(self)
-        self.rate = rate
+        self.rate = try_cast(rate)
         self.properties = {
             'noise_shape': None,
             'seed': None
@@ -109,6 +109,30 @@ class Flatten(Layer):
     def __repr__(self):
         return "%s(properties: %r)" % (self.__class__, self.properties)
 
+# Representation of Dropout Layers. 
+class Activation(Layer):
+    # Initialize with rate.
+    def __init__(self, activation):
+        Layer.__init__(self)
+        self.activation = try_cast(activation)
+
+    # String Representation of the Layer.
+    def __repr__(self):
+        return "%s(activation: %r)" % (self.__class__, self.activation)
+
+# Try to cast the Spec.
+def try_cast(s):
+    try:
+        return try_str_to_bool(s)
+    except ValueError:
+        try:
+            return try_str_to_number(s)
+        except ValueError:
+            try:
+                return try_str_to_tuple(s)
+            except ValueError:
+                return s
+
 # Try to cast Spec to Bool.
 def try_str_to_bool(s):
     if s == 'True':
@@ -116,21 +140,15 @@ def try_str_to_bool(s):
     elif s == 'False':
         return False
     else:
-        return try_str_to_number(s)
+        raise ValueError('Could not Cast to Bool.')
 
 # Try to cast Spec to Int or Float.
 def try_str_to_number(s):
     try:
         return int(s)
     except ValueError:
-        try:
-            return float(s)
-        except ValueError:
-            return try_str_to_tuple(s)
-
+        return float(s)
+        
 # Try to cast String to Int-Tuple.
 def try_str_to_tuple(s):
-    try:
-        return tuple(map(int, s[1:-1].split(',')))
-    except ValueError:
-        return s
+    return tuple(map(int, s[1:-1].split(',')))

@@ -11,6 +11,8 @@ def translate_keras(content):
         elif (' = ' in line): # Functional Model
             check_functional(line, graph)
     print(graph)
+    for layer in graph.layers:
+        print(layer)
 
 # If Sequential: Modify the line to be interpretable by the converter.
 def check_sequential(line, graph):
@@ -42,15 +44,14 @@ def add_layer_type(name, spec, graph):
     elif('maxpooling2d' in name): # Max-Pooling Layer 2D.
         layer = layers.MaxPool2D()
         layer.add_specs(specs)
-    elif ('dropout' in name): # Dropout Layer
+    elif ('dropout' in name): # Dropout Layer.
         layer = layers.Dropout(spec_raw(specs[0]))
         layer.add_specs(specs[1:])
-    elif ('flatten' in name): # Flatten Layer
+    elif ('flatten' in name): # Flatten Layer.
         layer = layers.Flatten()
         layer.add_specs(specs)
-    elif ('activation' in name): # Activation Layer, non-existant in our model. Layt layer gets assigned the activation.
-        previous_layer.properties['activation'] = specs[0]
-        return
+    elif ('activation' in name): # Activation Layer.
+        layer = layers.Activation(spec_raw(specs[0]))
     if(previous_layer): # If this is not the first layer.
         # TODO: This does not support real Input/Output definition.
         previous_layer.output.append(layer)

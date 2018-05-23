@@ -25,3 +25,7 @@ class Graph:
     # Build a tree-structure based on the Layers
     def build_tree(self):
         return
+
+    # Find Repeating Patterns in the Graph
+    def find_repetitions(self):
+        return
