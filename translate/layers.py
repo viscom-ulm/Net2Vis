@@ -5,6 +5,7 @@ class Layer:
         self.properties = {}
         self.input = []
         self.output = []
+        self.dimensions = None
 
     # Add Specifications.
     def add_specs(self, specs):
@@ -15,6 +16,22 @@ class Layer:
     # String Representation of the Layer.
     def __repr__(self):
         return "%s(properties: %r)" % (self.__class__, self.properties)
+
+    # Calculate the Dimensions of the Layer recursively.
+    def calculate_dimensions_recursive(self, input_dim):
+        if(len(self.input) == 0): # If no Inputs, use the given input Dimension.
+            self.calculate_dimensions([input_dim])
+        else: 
+            input_dims = []
+            for layer_in in self.input: # Get the input Dimensions of all Inputs.
+                if not self.dimensions: # If Input has no Dimension yet, calculate it.
+                    layer_in.calculate_dimensions_recursive(input_dim)
+                input_dims.append(layer_in.dimensions)
+            self.calculate_dimensions(input_dims) # Calculate the Dimensions of the current Layer.
+
+    # Basic Dimension Calculation outputting the identity of the first input dimension.
+    def calculate_dimensions(self, input_dim):
+        self.dimensions = input_dim[0]
 
 # Representation of Dense Layers. 
 class Dense(Layer):
@@ -38,13 +55,17 @@ class Dense(Layer):
     def __repr__(self):
         return "%s(units: %r, properties: %r)" % (self.__class__, self.units, self.properties)
 
+    # Dimension Calculation for a Dense Layer.
+    def calculate_dimensions(self, input_dim):
+        self.dimensions = self.units
+
 # Representation of Conv2D Layers. 
 class Conv2D(Layer):
     # Initialize with filter number and convolution kernel.
     def __init__(self, filters, kernel_size):
         Layer.__init__(self)
         self.filters = try_cast(filters)
-        self.kernel_size = try_cast(kernel_size)
+        self.kernel_size = tupelize(try_cast(kernel_size))
         self.properties = {
             'strides': (1, 1),
             'padding': 'valid',
@@ -64,6 +85,16 @@ class Conv2D(Layer):
     # String Representation of the Layer.
     def __repr__(self):
         return "%s(filters: %r, kernel: %r, properties: %r)" % (self.__class__, self.filters, self.kernel_size, self.properties)
+
+    # Dimension Calculation for Convolution Layers.
+    def calculate_dimensions(self, input_dim):
+        if self.properties['padding'] == 'valid': # Check padding Type and calculate Padding. 
+            p = [0, 0]
+        else:
+            p = [int((self.kernel_size[0]-1)/2), int((self.kernel_size[1]-1)/2)]
+        self.dimensions = [calculate_next_layer(p[0], tupelize(self.properties['strides'])[0], input_dim[0][0], self.kernel_size[0]),
+            calculate_next_layer(p[1], tupelize(self.properties['strides'])[1], input_dim[0][1], self.kernel_size[1]),
+            self.filters]
 
 # Representation of MaxPool2D Layers. 
 class MaxPool2D(Layer):
@@ -152,3 +183,14 @@ def try_str_to_number(s):
 # Try to cast String to Int-Tuple.
 def try_str_to_tuple(s):
     return tuple(map(int, s[1:-1].split(',')))
+
+# Convert Variable to Tuple.
+def tupelize(s):
+    if not isinstance(s, tuple):
+        return (s, s)
+    else:
+        return s
+
+# Calculate the Size of the Next Layer with Padding, Strides, Input Size and Kernel Size
+def calculate_next_layer(padding, stride, input_size, kernel_size):
+    return int((input_size + (2 * padding) - kernel_size) / stride) + 1

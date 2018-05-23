@@ -24,8 +24,16 @@ class Graph:
 
     # Build a tree-structure based on the Layers
     def build_tree(self):
+        # TODO: Implement
         return
 
     # Find Repeating Patterns in the Graph
     def find_repetitions(self):
+        # TODO: Implement
         return
+
+    # Calculates the dimensions for each Layer based on an input dimension.
+    def calculate_layer_dimensions(self, input_dim):
+        for layer in self.layers: # Calculate for all Layers.
+            if not layer.dimensions: # Only if no Dimension was set.
+                layer.calculate_dimensions_recursive(input_dim)
