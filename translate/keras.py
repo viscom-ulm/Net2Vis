@@ -10,8 +10,12 @@ def translate_keras(content):
             check_sequential(line, graph)
         elif (' = ' in line): # Functional Model
             check_functional(line, graph)
+    print(graph)
+    graph.calculate_layer_dimensions([32, 32, 3])
+    print(graph.dimensions_str())
     for layer in graph.layers:
         print(layer)
+        print(layer.dimensions)
 
 # If Sequential: Modify the line to be interpretable by the converter.
 def check_sequential(line, graph):
@@ -32,28 +36,30 @@ def check_functional(line, graph):
 # Add a Layer for the line. Layers are identified by their name and equipped using the spec.
 def add_layer_type(name, spec, graph):
     specs = split_specs(spec) # Split the spec variable to obtain a list of specs.
+    layer = None
+    previous_layer = graph.layers[-1] if len(graph.layers) > 0 else None
     if('dense' in name): # Dense Layer.
         layer = layers.Dense(spec_raw(specs[0]))
         layer.add_specs(specs[1:])
-        graph.add_layer(layer)
     elif('conv2d' in name): # Convolution Layer 2D.
         layer = layers.Conv2D(spec_raw(specs[0]), spec_raw(specs[1]))
         layer.add_specs(specs[2:])
-        graph.add_layer(layer)
     elif('maxpooling2d' in name): # Max-Pooling Layer 2D.
         layer = layers.MaxPool2D()
         layer.add_specs(specs)
-        graph.add_layer(layer)
-    elif ('dropout' in name): # Dropout Layer
+    elif ('dropout' in name): # Dropout Layer.
         layer = layers.Dropout(spec_raw(specs[0]))
         layer.add_specs(specs[1:])
-        graph.add_layer(layer)
-    elif ('flatten' in name): # Flatten Layer
+    elif ('flatten' in name): # Flatten Layer.
         layer = layers.Flatten()
         layer.add_specs(specs)
-        graph.add_layer(layer)
-    elif ('activation' in name): # Activation Layer, non-existant in our model. Layt layer gets assigned the activation.
-        graph.layers[-1].properties['activation'] = specs[0]
+    elif ('activation' in name): # Activation Layer.
+        layer = layers.Activation(spec_raw(specs[0]))
+    if(previous_layer): # If this is not the first layer.
+        # TODO: This does not support real Input/Output definition.
+        previous_layer.output.append(layer)
+        layer.input.append(previous_layer)
+    graph.add_layer(layer)
 
 # Splits the Specification String into a List of Specifications. 
 def split_specs(spec):
