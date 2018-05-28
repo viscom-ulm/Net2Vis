@@ -1,10 +1,9 @@
 {
-  "name": "NetViz",
+  "name": "netviz",
   "version": "0.0.1",
   "description": "Visualization for neural networks that allows an aggragation of layers.",
   "main": "index.js",
   "dependencies": {
-    "d3": "^5.4.0",
     "gulp-sourcemaps": "^2.6.4",
     "jquery": "^3.3.1",
     "vinyl-buffer": "^1.0.1"
