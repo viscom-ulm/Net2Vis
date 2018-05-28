@@ -1,0 +1,10 @@
+html, body {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important; }
+
+main {
+  height: 100%; }
+
+.mainContainer {
+  height: 100%; }
