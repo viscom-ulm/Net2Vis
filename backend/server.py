@@ -53,9 +53,8 @@ def network():
     file_input = open('examples/keras/cifar', 'r') # Get the input File.
     content = file_input.readlines() # Read the Input File
     content = [x.strip() for x in content] # Strip the input File Lines.
-    net = make_jsonifyable(translate_keras(content))
-    test = {'layers': net}
-    result = jsonify({'success': True, 'data': test})
+    net = {'layers': make_jsonifyable(translate_keras(content))}
+    result = jsonify({'success': True, 'data': net})
     return  result, ok_status, json_type
 
 app.run(debug=True)
