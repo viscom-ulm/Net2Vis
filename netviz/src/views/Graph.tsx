@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-import Network from './Network';
+import NetworkComponent from './Network';
 
-class Graph extends React.Component {
+class GraphComponent extends React.Component {
 
   render() {  
     return (
       <svg width="800" height="600">
-        <Network />
+        <NetworkComponent />
       </svg>
     );
   }
 }
   
-export default Graph;
+export default GraphComponent;

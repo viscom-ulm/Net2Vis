@@ -48,7 +48,7 @@ def replace_references(net):
 # Basic Serving 
 ###############
 # Get the Network.
-@app.route('/network')
+@app.route('/api/network')
 def network():
     file_input = open('examples/keras/cifar', 'r') # Get the input File.
     content = file_input.readlines() # Read the Input File
