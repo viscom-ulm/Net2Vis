@@ -54,6 +54,8 @@ def network():
     content = file_input.readlines() # Read the Input File
     content = [x.strip() for x in content] # Strip the input File Lines.
     net = make_jsonifyable(translate_keras(content))
-    return jsonify(net)
+    test = {'layers': net}
+    result = jsonify({'success': True, 'data': test})
+    return  result, ok_status, json_type
 
 app.run(debug=True)
