@@ -22,9 +22,9 @@ class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
     this.loadNetwork();
   }
 
-  render() {  
+  render() {
     return (
-        <g />
+      <g />
     );
   }
 

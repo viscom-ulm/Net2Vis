@@ -1,7 +1,7 @@
 import { Network } from './NetworkTypes';
 
 export interface StoreProps {
-    network: Network;
+  network: Network;
 }
 
 export { NetworkState } from './NetworkTypes';

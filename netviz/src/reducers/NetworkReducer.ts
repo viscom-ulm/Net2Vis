@@ -4,13 +4,12 @@ import { GET_NETWORK_ACTION } from '../constants';
 
 export const initialNetworkState: Network = new Network();
 
-function networkReducer(state: Network = initialNetworkState,
-                        action: NetworkAction): Network {
+function networkReducer(state: Network = initialNetworkState, action: NetworkAction): Network {
   switch (action.type) {
-  case GET_NETWORK_ACTION:
-    return state.with(action.payload);
-  default:
-    return state;
+    case GET_NETWORK_ACTION:
+      return state.with(action.payload);
+    default:
+      return state;
   }
 }
 

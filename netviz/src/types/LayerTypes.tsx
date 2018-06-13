@@ -1,24 +1,22 @@
 import { Record } from 'immutable';
 
 const layerDefaults = {
-    id: 0
+  id: 0,
+  name: ''
 };
 
 export interface LayerState {
-    id?: number;
+  id?: number;
+  name?: string;
 }
 
 export const LayerRecord = Record(layerDefaults);
 
 export class Layer extends LayerRecord implements LayerState {
-    id: number;
-
-    constructor(props?: LayerState) {
-        props ? super(props) : super(layerDefaults);
-    }
-
-    with(params: LayerState) {
-        console.log(params);
-        return this.mergeDeep(params) as this;
-    }
+  id: number;
+  name: string;
+  
+  constructor(props?: LayerState) {
+    props ? super(props) : super(layerDefaults);
+  }
 }
