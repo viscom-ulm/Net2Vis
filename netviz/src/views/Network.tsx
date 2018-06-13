@@ -7,6 +7,8 @@ import { NetworkAction } from '../actions';
 import * as actions from '../actions';
 import { StoreProps } from '../types';
 
+import LayerComponent from './Layer';
+
 interface StateProps {
   network: Network;
 }
@@ -24,7 +26,13 @@ class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
 
   render() {
     return (
-      <g />
+      <g>
+        {this.props.network.layers.map(layer =>
+          <LayerComponent
+            key={layer!.id}
+          />
+        )}
+      </g>
     );
   }
 
