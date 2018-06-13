@@ -34,7 +34,6 @@ class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
       url: '/api/network',
       contentType: 'application/json'
     }).done(data => {
-      console.log(data);
       this.props.getNetwork(data.data);
     }).fail((jqXHR, textStatus, error) => {
       console.warn(`Request failed! status: ${textStatus} error: ${error}`);
