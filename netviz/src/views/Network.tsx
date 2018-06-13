@@ -1,35 +1,56 @@
 import * as React from 'react';
+import { ajax } from 'jquery';
+import { connect, Dispatch } from 'react-redux';
 
-class Network extends React.Component {
+import { Network, NetworkState } from '../types/NetworkTypes';
+import { NetworkAction } from '../actions';
+import * as actions from '../actions';
+import { StoreProps } from '../types';
 
-  render() {  
+interface StateProps {
+  network: Network;
+}
+
+interface DispatchProps {
+  getNetwork: (network: NetworkState) => NetworkAction;
+}
+
+class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
+  
+  constructor(props: StateProps & DispatchProps) {
+    super(props);
+    this.loadNetwork();
+  }
+
+  render() {
     return (
-        <g>
-          <line 
-            x1="20"
-            y1="500"
-            x2="820"
-            y2="500"
-            stroke="green"
-            stroke-width="2"
-          />
-          <line 
-            x1="20"
-            y1="0"
-            x2="20"
-            y2="500"
-            stroke="green"
-            stroke-width="2"
-          />
-          <path 
-            d="M 20 500 L 40 440 L 60 400 L 80 460 L 100 180 L 380 400" 
-            stroke="orange" 
-            stroke-width="1"
-            fill="none"
-          />
-        </g>
+      <g />
     );
+  }
+
+  loadNetwork = () => {
+    ajax({
+      method: 'GET',
+      url: '/api/network',
+      contentType: 'application/json'
+    }).done(data => {
+      this.props.getNetwork(data.data);
+    }).fail((jqXHR, textStatus, error) => {
+      console.warn(`Request failed! status: ${textStatus} error: ${error}`);
+    });
   }
 }
   
-export default Network;
+const mapStateToProps = ({
+  network
+}: StoreProps) => ({
+  network
+});
+
+const mapDispatchToProps = (
+  dispatch: Dispatch<NetworkAction>
+) => ({
+  getNetwork: (network: NetworkState) => dispatch(actions.getNetwork(network))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NetworkComponent);

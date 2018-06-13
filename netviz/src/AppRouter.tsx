@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
-import Graph from './views/Graph';
+import GraphComponent from './views/Graph';
 
 class AppRouter extends React.Component {
     render() {
@@ -9,7 +9,7 @@ class AppRouter extends React.Component {
             <div>
                 <Router>
                     <div>
-                        <Route exact={true} path="/" component={Graph} />
+                        <Route exact={true} path="/" component={GraphComponent} />
                     </div>
                 </Router>
             </div>

@@ -6,8 +6,9 @@ class Node:
 
 # Representation of the Graph that gets extracted from Code.
 class Graph:
-    layers = []
-    root = Node()
+    def __init__(self):
+        self.layers = []
+        self.root = Node()
 
     # Add a new Layer to the Graph.
     def add_layer(self, layer):
