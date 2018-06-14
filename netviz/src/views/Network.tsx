@@ -27,7 +27,7 @@ class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
   render() {
     return (
       <g>
-        {this.props.network.layers.map(layer =>
+        {this.props.network.layers.map(layer => 
           <LayerComponent
             key={layer!.id}
           />
