@@ -1,8 +1,9 @@
 import { List, Record } from 'immutable';
+
 import { Layer } from './LayerTypes';
 
 const networkDefaults = {
-  layers: []
+  layers: List()
 };
 
 export interface NetworkState {
@@ -19,14 +20,16 @@ export class Network extends NetworkRecord implements NetworkState {
   }
   
   with(params: NetworkState) {
+
+    let newLayers = List<Layer>();
     if (params.layers) {
       for (var i in params.layers) {
         if (params.layers.hasOwnProperty(i)) {
-          var lay = new Layer(params.layers[i]);
-          this.layers.push(lay);
+          var lay = new Layer().with(params.layers[i]);
+          newLayers = newLayers.push(lay);
         }
       }
     }
-    return this;
+    return this.mergeDeep({layers: newLayers}) as this;
   }
 }

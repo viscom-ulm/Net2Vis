@@ -1,3 +1,1 @@
-export const NETWORK_ACTION = 'NETWORK';
-
 export const GET_NETWORK_ACTION = 'GET_NETWORK';
