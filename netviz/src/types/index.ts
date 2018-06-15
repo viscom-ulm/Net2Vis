@@ -5,4 +5,3 @@ export interface StoreProps {
 }
 
 export { NetworkState } from './NetworkTypes';
-export { LayerState } from './LayerTypes';

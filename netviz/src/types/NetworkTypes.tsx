@@ -30,7 +30,6 @@ export class Network extends NetworkRecord implements NetworkState {
         }
       }
     }
-    console.log(newLayers);
     return this.mergeDeep({layers: newLayers}) as this;
   }
 }
