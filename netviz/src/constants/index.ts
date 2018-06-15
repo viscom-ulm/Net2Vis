@@ -1,3 +1,2 @@
-export const NETWORK_ACTION = 'NETWORK';
-
 export const GET_NETWORK_ACTION = 'GET_NETWORK';
+export const GET_LAYER_ACTION = 'GET_LAYER';

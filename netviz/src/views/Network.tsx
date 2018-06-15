@@ -29,7 +29,7 @@ class NetworkComponent extends React.Component<StateProps & DispatchProps, {}> {
       <g>
         {this.props.network.layers.map(layer => 
           <LayerComponent
-            key={layer}
+            key={layer!.id}
           />
         )}
       </g>
