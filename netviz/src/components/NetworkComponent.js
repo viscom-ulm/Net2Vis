@@ -16,7 +16,7 @@ class Network extends React.Component {
   render() {
     const layers = this.props.layers;
     return (
-      <svg width="800" height="600" >
+      <svg width="100%" height="100%" >
        <LayerList layers={layers} />
       </svg>
     );

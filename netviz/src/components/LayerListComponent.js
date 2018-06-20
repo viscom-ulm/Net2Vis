@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Layer from './LayerComponent'
+
 const LayerList = ({layers}) => {
   return (
       <g>
         {layers.map(layer => 
-          <rect width="300" height="100" x="100" y="100" />
+          <Layer layer={layer} />
         )}
       </g>
   );
