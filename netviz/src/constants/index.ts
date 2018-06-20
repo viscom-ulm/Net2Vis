@@ -1,1 +1,0 @@
-export const GET_NETWORK_ACTION = 'GET_NETWORK';
