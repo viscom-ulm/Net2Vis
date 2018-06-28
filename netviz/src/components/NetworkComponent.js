@@ -1,12 +1,40 @@
-import React from 'react'
+import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types'
 
-import * as actions from '../actions/Loaders'
+import * as actions from '../actions'
 import LayerList from './LayerListComponent'
 
 class Network extends React.Component {
+
+  handleMouseDown = (e) => {
+    this.coords = {
+      x: e.pageX,
+      y: e.pageY
+    }
+    document.addEventListener('mousemove', this.handleMouseMove);
+  };
+  
+  handleMouseUp = () => {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    this.coords = {};
+  };
+  
+  handleMouseMove = (e) => {
+    const xDiff = this.coords.x - e.pageX;
+    const yDiff = this.coords.y - e.pageY;
+
+    this.coords.x = e.pageX;
+    this.coords.y = e.pageY;
+
+    this.props.actions.moveGroup([xDiff,yDiff]);
+  };
+
+  handleScroll = (e) => {
+    this.props.actions.zoomGroup(e.deltaY);
+  }
+
   componentWillMount() {
     if (this.props.layers === []) {
       this.props.actions.loadNetwork();
@@ -14,11 +42,10 @@ class Network extends React.Component {
   }
 
   render() {
-    const layers = this.props.layers;
     return (
-      <svg width="800" height="600" >
-       <LayerList layers={layers} />
-      </svg>
+      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+        <LayerList />
+      </svg> 
     );
   }
 }

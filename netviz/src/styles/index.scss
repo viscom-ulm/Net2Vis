@@ -1,0 +1,57 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    color: white;
+    background-color: #A32638;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #A32638;
+}
+
+li {
+    float: left;
+    border-right: 1px solid #bbb;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    width: 100px;
+    text-decoration: none;
+    height: 50px;
+    line-height: 50px;
+}
+
+li a:hover {
+    background-color: #111;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.content {
+    padding: 50px 0px 0px 0px;
+    height: calc(100% - 50px);
+}
+
+.full {
+    width: 100%;
+    height: 100%;
+}
