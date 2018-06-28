@@ -34,7 +34,7 @@ function mapStateToProps(state, ownProps) {
   } else {
     return {
       layers: [],
-      group_transform: {x:0, y:0, scale: 1}
+      group_transform: state.group_transform
     };
   }
 }

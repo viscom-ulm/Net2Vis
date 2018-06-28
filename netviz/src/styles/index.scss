@@ -15,35 +15,39 @@ header {
     height: 50px;
     color: white;
     background-color: #A32638;
-}
+    
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #A32638;
+    }
+    
+    li {
+        float: left;
+        border-right: 1px solid #bbb;
+    }
+    
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        width: 100px;
+        text-decoration: none;
+        height: 50px;
+        line-height: 50px;
+    }
+    
+    li a:hover {
+        background-color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #A32638;
-}
-
-li {
-    float: left;
-    border-right: 1px solid #bbb;
-}
-
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    width: 100px;
-    text-decoration: none;
-    height: 50px;
-    line-height: 50px;
-}
-
-li a:hover {
-    background-color: #111;
-    text-decoration: none;
-    cursor: pointer;
+    .selected {
+        background-color: #111;
+    }
 }
 
 .content {

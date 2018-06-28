@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types'
 
 import * as actions from '../actions'
-import LayerList from './LayerListComponent'
+import LayerList from './layers/LayerListComponent'
 
 class Network extends React.Component {
 
