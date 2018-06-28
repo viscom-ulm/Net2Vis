@@ -45,7 +45,7 @@ class Network extends React.Component {
     return (
       <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
         <LayerList />
-      </svg>
+      </svg> 
     );
   }
 }

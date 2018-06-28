@@ -6,7 +6,7 @@ import Network from './components/NetworkComponent';
 class AppRouter extends React.Component {
   render() {
     return (
-      <div className='full'>
+      <div className='content'>
         <Router>
           <div className='full'>
             <Route exact={true} path="/" component={Network} />

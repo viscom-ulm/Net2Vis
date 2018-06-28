@@ -3,9 +3,10 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
-import AppRouter from './AppRouter.js';
+import AppRouter from './AppRouter';
+import Controls from './components/ControlsComponent'
 import combinedReducers from './reducers';
-import { loadNetwork } from './actions/Loaders.js';
+import { loadNetwork } from './actions/Loaders';
 
 const store = createStore(
   combinedReducers,
@@ -16,7 +17,12 @@ store.dispatch(loadNetwork());
 
 const App = () => (
   <Provider store={store}>
-    <AppRouter />
+    <div className='full'>
+      <header>
+        <Controls/>
+      </header>
+      <AppRouter />
+    </div>
   </Provider>
 );
 
