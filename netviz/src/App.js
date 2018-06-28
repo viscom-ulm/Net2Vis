@@ -12,7 +12,7 @@ const store = createStore(
   combinedReducers,
   applyMiddleware(thunk)
 )
-
+console.log(store.getState()); 
 store.dispatch(loadNetwork());
 
 const App = () => (

@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Controls extends React.Component {
   render() {
@@ -14,4 +16,14 @@ class Controls extends React.Component {
   }
 }
 
-export default Controls;
+Controls.propTypes = {
+  display: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+  return {
+    display: state.display
+  };
+}
+
+export default connect(mapStateToProps, undefined)(Controls);

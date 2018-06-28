@@ -39,4 +39,4 @@ function mapStateToProps(state, ownProps) {
   }
 }
 
-export default connect(mapStateToProps)(LayerList);
+export default connect(mapStateToProps, undefined)(LayerList);
