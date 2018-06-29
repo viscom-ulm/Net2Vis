@@ -5,6 +5,9 @@ import PropTypes from 'prop-types'
 
 import * as actions from '../actions'
 import LayerList from './layers/LayerListComponent'
+import Legend from './legend/LegendComponent'
+import Preferences from './preferences/PreferencesComponent';
+import Code from './code/CodeComponent'
 
 class Network extends React.Component {
 
@@ -43,9 +46,14 @@ class Network extends React.Component {
 
   render() {
     return (
-      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
-        <LayerList />
-      </svg> 
+      <div id='networkComponent' className='full'>
+        <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+          <LayerList />
+        </svg> 
+        <Legend />
+        <Preferences />
+        <Code />
+      </div>
     );
   }
 }

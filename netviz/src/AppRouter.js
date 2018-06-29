@@ -8,9 +8,7 @@ class AppRouter extends React.Component {
     return (
       <div className='content'>
         <Router>
-          <div className='full'>
-            <Route exact={true} path="/" component={Network} />
-          </div>
+          <Route exact={true} path="/" component={Network} />
         </Router>
       </div>
     );
