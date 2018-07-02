@@ -46,13 +46,15 @@ class Network extends React.Component {
 
   render() {
     return (
-      <div id='networkComponent' className='full'>
-        <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
-          <LayerList />
-        </svg> 
+      <div id='networkComponent' className='flexvertical'>
+        <div className='flexhorizontal'>
+          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+            <LayerList />
+          </svg> 
+          <Preferences />
+          <Code />
+        </div>
         <Legend />
-        <Preferences />
-        <Code />
       </div>
     );
   }
