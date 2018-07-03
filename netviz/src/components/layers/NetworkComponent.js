@@ -1,10 +1,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import {bindActionCreators} from 'redux';
 
+import * as actions from '../../actions';
 import Layer from './LayerComponent'
 
 class LayerList extends React.Component {
+  componentWillMount() {
+    if(this.props.layers.length === 0) {
+      this.props.actions.loadNetwork();
+    }
+  }
 
   render() {
     const layers = this.props.layers;
@@ -34,9 +41,13 @@ function mapStateToProps(state, ownProps) {
   } else {
     return {
       layers: [],
-      group_transform: {x:0, y:0, scale: 1}
+      group_transform: state.group_transform
     };
   }
 }
 
-export default connect(mapStateToProps, undefined)(LayerList);
+function mapDispatchToProps(dispatch) {
+  return {actions: bindActionCreators(actions, dispatch)}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LayerList);

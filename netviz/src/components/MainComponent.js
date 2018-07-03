@@ -1,12 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import PropTypes from 'prop-types'
 
 import * as actions from '../actions'
-import LayerList from './LayerListComponent'
+import LayerList from './layers/NetworkComponent'
+import Legend from './legend/LegendComponent'
+import Preferences from './preferences/PreferencesComponent';
+import Code from './code/CodeComponent'
 
-class Network extends React.Component {
+class Main extends React.Component {
 
   handleMouseDown = (e) => {
     this.coords = {
@@ -35,34 +37,19 @@ class Network extends React.Component {
     this.props.actions.zoomGroup(e.deltaY);
   }
 
-  componentWillMount() {
-    if (this.props.layers === []) {
-      this.props.actions.loadNetwork();
-    }
-  }
-
   render() {
     return (
-      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
-        <LayerList />
-      </svg> 
+      <div id='networkComponent' className='flexvertical'>
+        <div className='flexhorizontal'>
+          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+            <LayerList />
+          </svg> 
+          <Preferences />
+          <Code />
+        </div>
+        <Legend />
+      </div>
     );
-  }
-}
-
-Network.propTypes = {
-  layers: PropTypes.array.isRequired
-}
-
-function mapStateToProps(state, ownProps) {
-  if (state.network.layers) {
-    return {
-      layers: state.network.layers
-    };
-  } else {
-    return {
-      layers: []
-    };
   }
 }
 
@@ -70,4 +57,4 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(actions, dispatch)}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Network);
+export default connect(undefined, mapDispatchToProps)(Main);

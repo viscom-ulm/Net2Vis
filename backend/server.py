@@ -8,6 +8,7 @@ from translate_keras import translate_keras
 app = Flask(__name__)
 ok_status = 200
 json_type = {'ContentType': 'application/json'}
+text_type = {'ContentType': 'text/plain'}
 
 ##################
 # Helper Functions 
@@ -48,13 +49,22 @@ def replace_references(net):
 # Basic Serving 
 ###############
 # Get the Network.
-@app.route('/api/network')
-def network():
+@app.route('/api/get_network')
+def get_network():
     file_input = open('examples/keras/cifar', 'r') # Get the input File.
     content = file_input.readlines() # Read the Input File
     content = [x.strip() for x in content] # Strip the input File Lines.
     net = {'layers': make_jsonifyable(translate_keras(content))}
     result = jsonify({'success': True, 'data': net})
     return  result, ok_status, json_type
+
+# Get the Code.
+@app.route('/api/get_code')
+def get_code():
+    file_input = open('examples/keras/cifar', 'r') # Get the input File.
+    content = file_input.readlines() # Read the Input File
+    content = [x.strip() for x in content] # Strip the input File Lines.
+    content = "\n".join(content)
+    return content, ok_status, text_type
 
 app.run(debug=True)

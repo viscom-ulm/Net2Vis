@@ -1,6 +1,6 @@
 class NetworkApi {
   static getNetwork() {
-    const request = new Request('/api/network', {
+    const request = new Request('/api/get_network', {
       method: 'GET'
     });
     
