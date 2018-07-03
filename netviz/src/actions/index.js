@@ -8,6 +8,7 @@ export const ZOOM_GROUP = 'ZOOM_GROUP';
 export const TOGGLE_CODE = 'TOGGLE_CODE';
 export const TOGGLE_PREFERENCES = 'TOGGLE_PREFERENCES';
 export const TOGGLE_LEGEND = 'TOGGLE_LEGEND';
+export const ADD_LAYER_SETTING = 'ADD_LAYER_SETTING';
 
 export function moveGroup(group_displacement) {
   return {type: MOVE_GROUP, group_displacement};
@@ -29,12 +30,16 @@ export function toggleLegend() {
   return {type: TOGGLE_LEGEND};
 }
 
+export function addLayerSetting(setting) {
+  return {type: ADD_LAYER_SETTING, setting};
+}
+
 export function loadNetworkSuccess(network) {
   return {type: LOAD_NETWORK_SUCCESS, network};
 }
 
 export function loadCodeSuccess(code) {
-  return { type: LOAD_CODE_SUCCESS, code };
+  return {type: LOAD_CODE_SUCCESS, code};
 }
 
 export function loadNetwork() {

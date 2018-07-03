@@ -10,5 +10,13 @@ export default {
         code_toggle: false,
         preferences_toggle: false,
         legend_toggle: false
+    },
+    layer_settings: {
+        Conv2D: {
+            color: 'green'
+        },
+        Activation: {
+            color: 'red'
+        }
     }
 }
