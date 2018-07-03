@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
-import * as actions from '../../actions/Loaders';
+import * as actions from '../../actions';
 import Layer from './LayerComponent'
 
 class LayerList extends React.Component {

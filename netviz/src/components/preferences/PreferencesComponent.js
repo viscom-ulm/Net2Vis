@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class Preferences extends React.Component {
   render() {
-    if(this.props.preferences) {
+    if(this.props.preferences_toggle) {
       return(
         <div id='Preferences'/>
       );
@@ -15,12 +15,12 @@ class Preferences extends React.Component {
 }
 
 Preferences.propTypes = {
-  preferences: PropTypes.bool.isRequired
+  preferences_toggle: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
-    preferences: state.display.preferences
+    preferences_toggle: state.display.preferences_toggle
   };
 }
 

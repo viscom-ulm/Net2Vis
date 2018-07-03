@@ -12,9 +12,9 @@ class Controls extends React.Component {
     const display = this.props.display;
     return(
       <ul>
-        <ToggleButton name="Code" state={display.code} action={this.props.actions.toggleCode}/>
-        <ToggleButton name="Preferences" state={display.preferences} action={this.props.actions.togglePreferences}/>
-        <ToggleButton name="Legend" state={display.legend} action={this.props.actions.toggleLegend}/>
+        <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
+        <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
+        <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
       </ul>
     );
   }

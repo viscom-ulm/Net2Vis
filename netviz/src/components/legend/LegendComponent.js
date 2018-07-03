@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class Legend extends React.Component {
   render() {
-    if(this.props.legend) {
+    if(this.props.legend_toggle) {
       return(
         <div id='Legend'/>
       );
@@ -15,12 +15,12 @@ class Legend extends React.Component {
 }
 
 Legend.propTypes = {
-  legend: PropTypes.bool.isRequired
+  legend_toggle: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
-    legend: state.display.legend
+    legend_toggle: state.display.legend_toggle
   };
 }
 
