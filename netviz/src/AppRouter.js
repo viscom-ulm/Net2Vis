@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 
-import Network from './components/NetworkComponent';
+import Main from './components/MainComponent';
 
 class AppRouter extends React.Component {
   render() {
     return (
       <div className='content'>
         <Router>
-          <Route exact={true} path="/" component={Network} />
+          <Route exact={true} path="/" component={Main} />
         </Router>
       </div>
     );

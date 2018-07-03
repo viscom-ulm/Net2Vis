@@ -6,14 +6,11 @@ import thunk from 'redux-thunk';
 import AppRouter from './AppRouter';
 import Controls from './components/controls/ControlsComponent'
 import combinedReducers from './reducers';
-import { loadNetwork } from './actions/Loaders';
 
 const store = createStore(
   combinedReducers,
   applyMiddleware(thunk)
 )
-
-store.dispatch(loadNetwork());
 
 const App = () => (
   <Provider store={store}>
