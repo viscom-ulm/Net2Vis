@@ -1,25 +1,38 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
-const Layer = ({layer, settings}) => {
-  var set = {
-    color: 'white'
+import * as actions from '../../actions';
+
+class Layer extends React.Component {  
+  componentWillMount() {
+    if(!this.props.settings) {
+      var setting = {};
+      setting.color = 'blue';
+      this.props.actions.addSettingForLayer(setting, this.props.layer.name);
+    }
   }
-
-  if(settings) {
-    set = settings;
+  
+  render() {
+    var set = {
+      color: 'white'
+    }
+  
+    if(this.props.settings) {
+      set = this.props.settings;
+    }
+  
+    return (
+      <g transform={`translate(${100 + (20 * this.props.layer.id)}, 100)`}>
+        <rect width="150" height="150" x="0" y="0" rx ="10" ry ="10" style={{fill:set.color, stroke: 'black'}} transform="skewY(-10)"/>
+        <text x="75" y="25" textAnchor="middle" alignmentBaseline="middle" transform="skewY(-10)">{this.props.layer.name[0]}</text>
+      </g>
+    );
   }
-
-  return (
-    <g transform={`translate(${100 + (20 * layer.id)}, 100)`}>
-      <rect width="150" height="150" x="0" y="0" rx ="10" ry ="10" style={{fill:set.color, stroke: 'black'}} transform="skewY(-10)"/>
-      <text x="75" y="25" textAnchor="middle" alignmentBaseline="middle" transform="skewY(-10)">{layer.name[0]}</text>
-    </g>
-  );
 };
 
-Layer.propTypes = {
-  layer: PropTypes.object.isRequired
-};
+function mapDispatchToProps(dispatch) {
+  return {actions: bindActionCreators(actions, dispatch)}
+}
 
-export default Layer;
+export default connect(undefined, mapDispatchToProps)(Layer);

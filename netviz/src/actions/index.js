@@ -30,8 +30,8 @@ export function toggleLegend() {
   return {type: TOGGLE_LEGEND};
 }
 
-export function addLayerSetting(setting) {
-  return {type: ADD_LAYER_SETTING, setting};
+export function addSettingForLayer(setting, name) {
+  return {type: ADD_LAYER_SETTING, setting, name};
 }
 
 export function loadNetworkSuccess(network) {
