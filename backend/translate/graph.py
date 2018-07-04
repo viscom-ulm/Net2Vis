@@ -47,3 +47,9 @@ class Graph:
             if(i != (len(self.layers)-1)):
                 dim = dim + ' -> '
         return dim
+
+    def dimensions(self):
+        dim = []
+        for i in range(len(self.layers)):
+            dim.append(self.layers[i].dimensions)
+        return dim

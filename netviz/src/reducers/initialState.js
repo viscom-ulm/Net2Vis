@@ -18,5 +18,15 @@ export default {
         Activation: {
             color: 'red'
         }
+    },
+    layers_settings: {
+        layer_display_size: {
+            min_size: 50,
+            max_size: 200
+        },
+        layer_extreme_dimensions: {
+            max_size: 2,
+            min_size: 1
+        }
     }
 }
