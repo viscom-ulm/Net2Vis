@@ -2,12 +2,14 @@ import NetworkApi from '../api/NetworkApi';
 import CodeApi from '../api/CodeApi';
 
 export const LOAD_NETWORK_SUCCESS = 'LOAD_NETWORK_SUCCESS';
+export const SET_LAYERS_EXTREMES = 'SET_LAYERS_EXTREMES';
 export const LOAD_CODE_SUCCESS = 'LOAD_CODE_SUCCESS';
 export const MOVE_GROUP = 'MOVE_GROUP';
 export const ZOOM_GROUP = 'ZOOM_GROUP';
 export const TOGGLE_CODE = 'TOGGLE_CODE';
 export const TOGGLE_PREFERENCES = 'TOGGLE_PREFERENCES';
 export const TOGGLE_LEGEND = 'TOGGLE_LEGEND';
+export const ADD_LAYER_SETTING = 'ADD_LAYER_SETTING';
 
 export function moveGroup(group_displacement) {
   return {type: MOVE_GROUP, group_displacement};
@@ -29,22 +31,31 @@ export function toggleLegend() {
   return {type: TOGGLE_LEGEND};
 }
 
+export function addSettingForLayer(setting, name) {
+  return {type: ADD_LAYER_SETTING, setting, name};
+}
+
 export function loadNetworkSuccess(network) {
   return {type: LOAD_NETWORK_SUCCESS, network};
 }
 
-export function loadCodeSuccess(code) {
-  return { type: LOAD_CODE_SUCCESS, code };
+export function setLayersExtremes(network) {
+  return {type: SET_LAYERS_EXTREMES, network}
 }
 
 export function loadNetwork() {
   return function(dispatch) {
     return NetworkApi.getNetwork().then(network => {
       dispatch(loadNetworkSuccess(network.data));
+      dispatch(setLayersExtremes(network.data));
     }).catch(error => {
       throw(error);
     })
   };
+}
+
+export function loadCodeSuccess(code) {
+  return {type: LOAD_CODE_SUCCESS, code};
 }
 
 export function loadCode() {
