@@ -11,7 +11,7 @@ export default {
         preferences_toggle: false,
         legend_toggle: false
     },
-    layer_settings: {
+    layer_types_settings: {
         Conv2D: {
             color: 'green'
         },

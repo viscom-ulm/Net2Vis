@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const ToggleButton = ({name, state, action}) => {
   if(state) {
     return (
@@ -13,6 +14,7 @@ const ToggleButton = ({name, state, action}) => {
   }
 };
 
+// Proptypes of ToggleBurttons
 ToggleButton.propTypes = {
   name: PropTypes.string.isRequired,
   state: PropTypes.bool.isRequired,

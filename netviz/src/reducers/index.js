@@ -3,7 +3,7 @@ import network from './NetworkReducer';
 import code from './CodeReducer';
 import group_transform from './TransformReducer';
 import display from './DisplayReducer';
-import layer_settings from './LayerSettingsReducer';
+import layer_types_settings from './LayerTypesSettingsReducer';
 import layers_settings from './LayersSettingsReducer';
 
 export default combineReducers({
@@ -11,6 +11,6 @@ export default combineReducers({
     code,
     group_transform,
     display,
-    layer_settings,
+    layer_types_settings,
     layers_settings
 })
