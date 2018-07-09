@@ -19,7 +19,6 @@ class Layer:
 
   # Calculate the Dimensions of the Layer recursively.
   def calculate_dimensions_recursive(self, input_dim):
-    print(input_dim)
     if(len(self.input) == 0): # If no Inputs, use the given input Dimension.
       self.calculate_dimensions([input_dim])
     else: 
