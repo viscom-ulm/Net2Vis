@@ -12,7 +12,7 @@ class CodeApi {
     }    
 
     static updateCode(code) {
-      const request = new Request('/api/change_code', {
+      const request = new Request('/api/update_code', {
         method: 'POST',
         body: code
       });
