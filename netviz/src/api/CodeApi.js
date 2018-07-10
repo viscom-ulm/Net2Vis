@@ -1,28 +1,31 @@
+// Class for calling Backend functions related to Code 
 class CodeApi {
-    static getCode() {
-      const request = new Request('/api/get_code', {
-        method: 'GET'
-      });
-      
-      return fetch(request).then(response => {
-        return response.text();
-      }).catch(error => {
-        return error;
-      });
-    }    
+  // Get the code from the Backend
+  static getCode() {
+    const request = new Request('/api/get_code', { // Prepare the Request
+      method: 'GET'
+    });
 
-    static updateCode(code) {
-      const request = new Request('/api/update_code', {
-        method: 'POST',
-        body: code
-      });
-      
-      return fetch(request).then(response => {
-        return response.text();
-      }).catch(error => {
-        return error;
-      });
-    }
+    return fetch(request).then(response => { // Return the result of the Request
+      return response.text();
+    }).catch(error => {
+      return error;
+    });
+  }    
+
+  // Update the Code on the Backend
+  static updateCode(code) {
+    const request = new Request('/api/update_code', { // Prepare the Request
+      method: 'POST',
+      body: code
+    });
+    
+    return fetch(request).then(response => { // Return the Result of the Request
+      return response.text();
+    }).catch(error => {
+      return error;
+    });
   }
+}
   
   export default CodeApi;
