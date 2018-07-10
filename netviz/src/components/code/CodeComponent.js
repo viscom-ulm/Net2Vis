@@ -25,7 +25,7 @@ class Code extends React.Component {
       const code = this.props.code;
       return(
         <div id='Code'>
-          <textarea value={code} onChange={this.handleOnChange}/>
+          <textarea id='CodeArea' value={code} onChange={this.handleOnChange}/>
         </div>
       );
     } else {
