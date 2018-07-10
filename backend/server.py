@@ -69,4 +69,9 @@ def get_code():
     content = "\n".join(content)
     return content, ok_status, text_type
 
+@app.route('/api/update_code', methods=['POST'])
+def update_code():
+    content = request.data
+    return content, ok_status, text_type
+
 app.run(debug=True)
