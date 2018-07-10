@@ -7,7 +7,6 @@ export default function layersSettignsReducer(state = initialState.layers_settin
       const layers = action.network.layers;
       for (var i in layers) {
         const dimensions = layers[i].properties.dimensions;
-        console.log(dimensions)
         if (Array.isArray(dimensions.out)) {
           for (let j = 0; j < dimensions.out.length - 1; j++) {
             max = dimensions.out[j] > max ? dimensions.out[j] : max;

@@ -12,12 +12,16 @@ class Code extends React.Component {
     }
   }
 
+  handleOnChange = (e) => {
+    this.props.actions.updateCode(e.target.value)    
+  };
+
   render() {
     if(this.props.code_toggle) {
       const code = this.props.code;
       return(
         <div id='Code'>
-          {code}
+          <textarea value={code} onChange={this.handleOnChange}/>
         </div>
       );
     } else {
