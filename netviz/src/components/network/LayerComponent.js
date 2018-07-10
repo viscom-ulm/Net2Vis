@@ -30,14 +30,21 @@ class Layer extends React.Component {
       var perc = [(dimensions.in[0] - extreme_layer.min_size) / lay_diff, (dimensions.out[0] - extreme_layer.min_size) / lay_diff]; // Calculate the interpolation factor for boths sides of the Glyph 
       height = [perc[0] * dim_diff + extreme_dimensions.min_size, perc[1] * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph
     }
-    var y_diff = (extreme_dimensions.max_size - height[1]) / 2; // Calculate the vertical difference to center the Glyph
+    var y_diff = [(extreme_dimensions.max_size - height[0]) / 2, (extreme_dimensions.max_size - height[1]) / 2]; // Calculate the vertical difference to center the Glyph
+    var y_pos = [y_diff[0], y_diff[1], y_diff[1]+height[1], y_diff[0]+height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points  
+    var pathData = [ // Path data for the Glyph
+      'M', 0, y_pos[0], // Move to initial Location
+      'L', 100, y_pos[1], // Draw Line to top-right
+      'L', 100, y_pos[2], // Draw Line to bottom-right
+      'L', 0, y_pos[3], // Draw Line to bottom-left
+      'L', 0, y_pos[0], // Draw Line to top-left
+    ].join(' ')
     // Return a Shape with the calculated parameters
     return (
-      <g transform={`translate(${100 + (20 * this.props.layer.id)}, 100)`}>
-        <rect width={100} height={height[1]} x="0" y={y_diff} rx ="10" ry ="10" style={{fill:set.color, stroke: 'black'}} transform="skewY(-10)"/>
+      <g transform={`translate(${100 + (100 * this.props.layer.id)}, 100)`}>
+        <path d={pathData} style={{fill:set.color, stroke: 'black'}} />
       </g>
     );
-    //<text x="75" y="25" textAnchor="middle" alignmentBaseline="middle" transform="skewY(-10)">{this.props.layer.name[0]}</text>
   }
 };
 
