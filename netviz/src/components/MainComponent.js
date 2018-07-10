@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import * as actions from '../actions'
-import Network from './layers/NetworkComponent'
+import Network from './network/NetworkComponent'
 import Legend from './legend/LegendComponent'
 import Preferences from './preferences/PreferencesComponent';
 import Code from './code/CodeComponent'
