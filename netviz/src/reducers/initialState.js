@@ -18,6 +18,15 @@ export default {
         },
         Activation: {
             color: 'red'
+        },
+        Dropout: {
+            color: 'yellow'
+        },
+        Flatten: {
+            color: 'purple'
+        },
+        MaxPool2D: {
+            color: 'blue'
         }
     },
     layers_settings: {
