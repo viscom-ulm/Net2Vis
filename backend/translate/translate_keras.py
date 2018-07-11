@@ -1,98 +1,44 @@
+import json
 from graph import Graph
-import layers
+import layers_representations
 
-# Called to translate Keras code.
-def translate_keras(content):
+# Called to translate Keras JSON Representation.
+def translate_keras(filename):
     graph = Graph()
-    # Translate Line by Line.
-    for line in content:
-        if('.add(' in line): # Sequential Model
-            check_sequential(line, graph)
-        elif (' = ' in line): # Functional Model
-            check_functional(line, graph)
+    with open(filename, 'r') as myfile:
+        keras_code=myfile.read()
+        exec(keras_code, globals())
+        model = get_model()
+        model_json = json.loads(model.to_json())
+        layers_extracted = model_json['config']['layers']
+        for layer in layers_extracted:
+            add_layer_type(layer, graph)
+    graph.resolve_input_names()
     return graph
 
-# If Sequential: Modify the line to be interpretable by the converter.
-def check_sequential(line, graph):
-    properties = line.split('.add(')[1]
-    name = properties.split('(')[0]
-    spec = properties.replace(name, '').strip('(')
-    name = name.strip().lower()
-    add_layer_type(name, spec, graph)
-
-# If Finctional: Modify the line to be interpretable by the converter.
-def check_functional(line, graph):
-    properties = line[(line.find('=')+1):]
-    name = properties.split('(')[0]
-    spec = properties.replace(name, '').strip('(')    
-    name = name.strip().lower()
-    add_layer_type(name, spec, graph)
-
 # Add a Layer for the line. Layers are identified by their name and equipped using the spec.
-def add_layer_type(name, spec, graph):
-    specs = split_specs(spec) # Split the spec variable to obtain a list of specs.
-    layer = None
-    previous_layer = graph.layers[-1] if len(graph.layers) > 0 else None
-    if('dense' in name): # Dense Layer.
-        layer = layers.Dense(spec_raw(specs[0]))
-        layer.add_specs(specs[1:])
-    elif('conv2d' in name): # Convolution Layer 2D.
-        layer = layers.Conv2D(spec_raw(specs[0]), spec_raw(specs[1]))
-        layer.add_specs(specs[2:])
-    elif('maxpooling2d' in name): # Max-Pooling Layer 2D.
-        layer = layers.MaxPool2D()
-        layer.add_specs(specs)
-    elif ('dropout' in name): # Dropout Layer.
-        layer = layers.Dropout(spec_raw(specs[0]))
-        layer.add_specs(specs[1:])
-    elif ('flatten' in name): # Flatten Layer.
-        layer = layers.Flatten()
-        layer.add_specs(specs)
-    elif ('activation' in name): # Activation Layer.
-        layer = layers.Activation(spec_raw(specs[0]))
-    if(previous_layer): # If this is not the first layer.
-        # TODO: This does not support real Input/Output definition.
-        previous_layer.output.append(layer)
-        layer.input.append(previous_layer)
-    graph.add_layer(layer)
+def add_layer_type(layer, graph):
+    if('Dense' in layer['class_name']): # Dense Layer.
+        new_layer = layers_representations.Dense(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif('Conv2D' in layer['class_name']): # Convolution Layer 2D.
+        new_layer = layers_representations.Conv2D(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif('MaxPooling2D' in layer['class_name']): # Max-Pooling Layer 2D.
+        new_layer = layers_representations.MaxPool2D(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('Dropout' in layer['class_name']): # Dropout Layer.
+        new_layer = layers_representations.Dropout(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('Flatten' in layer['class_name']):
+        new_layer = layers_representations.Flatten(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('Activation' in layer['class_name']): # Activation Layer.
+        new_layer = layers_representations.Activation(layer['name'])
+        add_to_graph(new_layer, layer, graph)
 
-# Splits the Specification String into a List of Specifications. 
-def split_specs(spec):
-    specs = []
-    current = ''
-    level = 0
-    for letter in spec: # Going through the string letter by letter.
-        if(letter == '('): # Open Brackets, signals Tuple.
-            current = current + letter
-            level = level+1
-        elif(letter == ')'): # Closing Brackets, indicate Tuple or Specification end.
-            if(level>0): # Only add Bracket if belonging to Tuple.
-                current = current + letter
-            level = level-1
-            if(level < 0): # Check if Specification already ended.
-                break
-        elif(letter == ','): # Comma either separates Specifications or Tuple Values. 
-            if(level == 0): # If in Specification Mode, save Spec and begin new one.
-                specs.append(current)
-                current = ''
-            else: # If in Tuple Mode, add the Comma.
-                current = current + letter
-        elif(letter == ' '): # Skip Blankspaces.
-            pass
-        elif(letter == '\''): # Skip Quotation Marks.
-            pass
-        elif(letter == '"'): # Skip Quotation Marks.
-            pass
-        else: # Add the Letter to the current Spec.
-            current = current + letter
-    if(current != ''): # Append the last Spec if existant.
-        specs.append(current)
-    return specs
-
-# Get the Raw-Value of a Spec.
-def spec_raw(spec):
-    split = spec.split('=')
-    if(len(split) > 1): # If Name defined, return raw value separately.
-        return split[1]
-    else: # Return Raw value.
-        return spec
+# Takes a new layer, adds the Properties and then adds the Layer to the Graph.
+def add_to_graph(new_layer, layer, graph):
+    new_layer.add_specs(layer['config'])
+    new_layer.add_input_names(layer['inbound_nodes'])
+    graph.add_layer(new_layer)

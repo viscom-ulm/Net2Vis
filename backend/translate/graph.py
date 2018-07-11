@@ -33,6 +33,15 @@ class Graph:
         # TODO: Implement
         return
 
+    # Generate references between the Layers based on the Input names.
+    def resolve_input_names(self):
+        for i in range(len(self.layers)):
+            for name in self.layers[i].input_names:
+                for j in range(len(self.layers)):
+                    if(self.layers[j].name == name):
+                        self.layers[i].input.append(j)
+                        self.layers[j].output.append(i)
+
     # Calculates the dimensions for each Layer based on an input dimension.
     def calculate_layer_dimensions(self, input_dim):
         input_dim = {

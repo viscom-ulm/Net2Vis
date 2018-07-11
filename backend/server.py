@@ -51,10 +51,7 @@ def replace_references(net):
 # Get the Network.
 @app.route('/api/get_network')
 def get_network():
-    file_input = open('examples/keras/cifar', 'r') # Get the input File. TODO: Remove this hardcoded part!
-    content = file_input.readlines() # Read the Input File
-    content = [x.strip() for x in content] # Strip the input File Lines.
-    graph = translate_keras(content)
+    graph = translate_keras('../examples/keras/full.py')
     graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
@@ -64,7 +61,7 @@ def get_network():
 @app.route('/api/get_code')
 def get_code():
     file_input = open('examples/keras/cifar', 'r') # Get the input File.
-    content = file_input.readlines() # Read the Input File
+    content = file_input.readlines() # Read the Input File # TODO: Change to read(), see translate_keras
     content = [x.strip() for x in content] # Strip the input File Lines.
     content = "\n".join(content)
     return content, ok_status, text_type
