@@ -39,8 +39,8 @@ class Graph:
             for name in self.layers[i].input_names:
                 for j in range(len(self.layers)):
                     if(self.layers[j].name == name):
-                        self.layers[i].input.append(j)
-                        self.layers[j].output.append(i)
+                        self.layers[i].input.append(self.layers[j])
+                        self.layers[j].output.append(self.layers[i])
 
     # Calculates the dimensions for each Layer based on an input dimension.
     def calculate_layer_dimensions(self, input_dim):

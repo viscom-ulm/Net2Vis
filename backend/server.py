@@ -51,7 +51,7 @@ def replace_references(net):
 # Get the Network.
 @app.route('/api/get_network')
 def get_network():
-    graph = translate_keras('../examples/keras/full.py')
+    graph = translate_keras('examples/keras/full.py')
     graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
