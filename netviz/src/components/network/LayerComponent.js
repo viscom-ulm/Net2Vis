@@ -11,7 +11,7 @@ class Layer extends React.Component {
   componentWillMount() {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
-      setting.color = 'blue';
+      setting.color = 'gray';
       this.props.actions.addSettingForLayerType(setting, this.props.layer.name);
     }
   }
