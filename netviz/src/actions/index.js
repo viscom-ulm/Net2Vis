@@ -91,6 +91,12 @@ export function updateCode(code) {
   return function(dispatch) {
     return CodeApi.updateCode(code).then(code => {
       dispatch(updateCodeSuccess(code));
+      return NetworkApi.getNetwork().then(network => {
+        dispatch(loadNetworkSuccess(network.data));
+        dispatch(setLayersExtremes(network.data));
+      }).catch(error => {
+        throw(error);
+      })
     }).catch(error => {
       throw(error);
     });

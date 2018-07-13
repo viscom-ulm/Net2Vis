@@ -19,6 +19,5 @@ def get_model():
     x = layers.Dropout(0.5)(x)
     x = layers.Dense(10, activation='softmax')(x)
 
-    #merged = layers.Add()([img_input,x])
     model = models.Model(img_input, x)
     return model

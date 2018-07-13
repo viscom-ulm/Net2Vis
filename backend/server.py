@@ -51,7 +51,7 @@ def replace_references(net):
 # Get the Network.
 @app.route('/api/get_network')
 def get_network():
-    graph = translate_keras('examples/keras/full.py')
+    graph = translate_keras('current/model_current.py')
     graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
@@ -60,15 +60,16 @@ def get_network():
 # Get the Code.
 @app.route('/api/get_code')
 def get_code():
-    file_input = open('examples/keras/cifar', 'r') # Get the input File.
-    content = file_input.readlines() # Read the Input File # TODO: Change to read(), see translate_keras
-    content = [x.strip() for x in content] # Strip the input File Lines.
-    content = "\n".join(content)
-    return content, ok_status, text_type
+    with open('current/model_current.py', 'r') as myfile:# Get the input File.
+        keras_code=myfile.read()
+        return keras_code, ok_status, text_type
 
 @app.route('/api/update_code', methods=['POST'])
 def update_code():
     content = request.data
+    print(content)
+    file = open('current/model_current.py','w')
+    file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 
 app.run(debug=True)
