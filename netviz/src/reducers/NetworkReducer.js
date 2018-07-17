@@ -1,8 +1,9 @@
 import initialState from './initialState';
+import * as types from '../actions/types';
 
 export default function networkReducer(state = initialState.network, action) {
   switch (action.type) {
-    case 'LOAD_NETWORK_SUCCESS':
+    case types.LOAD_NETWORK_SUCCESS:
       return action.network;
     default:
       return state;

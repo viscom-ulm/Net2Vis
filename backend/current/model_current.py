@@ -14,7 +14,6 @@ def get_model():
     x = layers.Conv2D(63, (3,3), activation='relu')(x)
     x = layers.MaxPool2D(pool_size=(2,2))(x)
     x = layers.Conv2D(63, (3,3), activation='relu')(x)
-    x = layers.MaxPool2D(pool_size=(2,2))(x)
     x = layers.Dropout(0.25)(x)
     x = layers.Flatten()(x)
     x = layers.Dense(128, activation='relu')(x)    
@@ -23,4 +22,3 @@ def get_model():
 
     model = models.Model(img_input, x)
     return model
-uni ulm share

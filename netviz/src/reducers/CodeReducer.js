@@ -1,10 +1,11 @@
 import initialState from './initialState';
+import * as types from '../actions/types';
 
 export default function codeReducer(state = initialState.code, action) {
   switch (action.type) {
-    case 'LOAD_CODE_SUCCESS':
+    case types.LOAD_CODE_SUCCESS:
       return action.code;
-    case 'UPDATE_CODE_SUCCESS':
+    case types.UPDATE_CODE_SUCESS:
       return action.code;
     default:
       return state;
