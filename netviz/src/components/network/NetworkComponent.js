@@ -34,6 +34,7 @@ class Network extends React.Component {
 // PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Laye Types 
 Network.propTypes = {
   layers: PropTypes.array.isRequired,
+  network_graph: PropTypes.object.isRequired,
   group_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired
 };
@@ -43,12 +44,14 @@ function mapStateToProps(state, ownProps) {
   if (state.network.layers) { // Check if the Network has already been loaded
     return {
       layers: state.network.layers,
+      network_graph: state.network_graph,
       group_transform: state.group_transform,
       layer_types_settings: state.layer_types_settings
     };
   } else { // If not, no Layers are present
     return {
       layers: [],
+      network_graph: state.network_graph,
       group_transform: state.group_transform,
       layer_types_settings: state.layer_types_settings
     };
