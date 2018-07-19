@@ -153,13 +153,40 @@ class Flatten(Layer):
 
 # Representation of Dropout Layers. 
 class Activation(Layer):
-  # Initialize with rate.
   def __init__(self, name):
     Layer.__init__(self)
     self.name = name
     self.properties = {
       'activation': None
     }
+
+# Representation of LeakyReLU Layers. 
+class LeakyReLU(Layer):
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
+    self.properties = {
+      'alpha': 0.3
+    }
+
+# Representation of BatchNormalization Layers. 
+class BatchNormalization(Layer):
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
+    self.properties = {
+      'axis': -1,
+      'momentum': 0.99,
+      'epsilon': 0.001,
+      'center': True,
+      'scale': True
+    }
+
+# Representation of Add Layers. 
+class Add(Layer):
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
 
 # Calculate the Size of the Next Layer with Padding, Strides, Input Size and Kernel Size
 def calculate_next_layer(padding, stride, input_size, kernel_size):

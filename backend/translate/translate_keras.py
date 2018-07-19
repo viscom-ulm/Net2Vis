@@ -36,6 +36,15 @@ def add_layer_type(layer, graph):
     elif ('Activation' in layer['class_name']): # Activation Layer.
         new_layer = layers_representations.Activation(layer['name'])
         add_to_graph(new_layer, layer, graph)
+    elif ('LeakyReLU' in layer['class_name']): # LeakyReLU Layer.
+        new_layer = layers_representations.LeakyReLU(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('BatchNormalization' in layer['class_name']): # BatchNormalization Layer.
+        new_layer = layers_representations.BatchNormalization(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('Add' in layer['class_name']): # Add Layer.
+        new_layer = layers_representations.Add(layer['name'])
+        add_to_graph(new_layer, layer, graph)
 
 # Takes a new layer, adds the Properties and then adds the Layer to the Graph.
 def add_to_graph(new_layer, layer, graph):
