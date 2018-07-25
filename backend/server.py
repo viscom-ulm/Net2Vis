@@ -67,7 +67,6 @@ def get_code():
 @app.route('/api/update_code', methods=['POST'])
 def update_code():
     content = request.data
-    print(content)
     file = open('current/model_current.py','w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
