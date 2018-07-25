@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import AceEditor from 'react-ace'
 import 'brace/mode/python';
+import 'brace/snippets/python';
+import 'brace/ext/language_tools';
 import 'brace/theme/monokai';
 
 import * as actions from '../../actions';
@@ -26,14 +28,18 @@ class Code extends React.Component {
   render() {
     if(this.props.code_toggle) {
       const code = this.props.code;
-      return(
+      return(// Editor with Syntax highlighting
         <div id='Code'>
           <AceEditor
             mode="python"
             theme="monokai"
+            wrapEnabled={true}
+            enableBasicAutocompletion={true}
+            enableLiveAutocompletion={true}
+            enableSnippets={true}
             onChange={this.handleOnChange}
             name="code_ace_editor"
-            editorProps={{$blockScrolling: true}}
+            editorProps={{$blockScrolling: Infinity}}
             height = '100%'
             width = '100%'
             value = {code}

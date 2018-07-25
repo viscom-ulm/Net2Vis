@@ -98,7 +98,7 @@ export function updateCode(code) {
         throw(error);
       })
     }).catch(error => {
-      throw(error);
+      console.warn('Current Network not executable.')
     });
   }
 }

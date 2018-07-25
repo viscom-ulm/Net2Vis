@@ -18,8 +18,8 @@ def get_model():
     x = layers.Dropout(0.25)(x)
     x = layers.Flatten()(x)
     x = layers.Dense(128, activation='relu')(x)    
-    x = layers.Dropout(0.5)(x)
-    x = layers.Dense(10, activation='softmax')(x)
+    x = layers.Dropout(0.5)(x) 
+    x = layers.Dense(10, activation='softmax')(x)    
 
     model = models.Model(img_input, x)
     return model
