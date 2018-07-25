@@ -23,4 +23,3 @@ def get_model():
 
     model = models.Model(img_input, x)
     return model
-uni ulm share

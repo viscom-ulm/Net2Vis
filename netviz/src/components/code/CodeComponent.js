@@ -2,6 +2,9 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import AceEditor from 'react-ace'
+import 'brace/mode/python';
+import 'brace/theme/monokai';
 
 import * as actions from '../../actions';
 
@@ -15,8 +18,8 @@ class Code extends React.Component {
   }
 
   // When the Code changes, Update it on the Backend
-  handleOnChange = (e) => {
-    this.props.actions.updateCode(e.target.value)    
+  handleOnChange = (newValue) => {
+    this.props.actions.updateCode(newValue)    
   };
 
   // Render the Code into the Code View if Toggled
@@ -25,7 +28,16 @@ class Code extends React.Component {
       const code = this.props.code;
       return(
         <div id='Code'>
-          <textarea id='CodeArea' value={code} onChange={this.handleOnChange}/>
+          <AceEditor
+            mode="python"
+            theme="monokai"
+            onChange={this.handleOnChange}
+            name="code_ace_editor"
+            editorProps={{$blockScrolling: true}}
+            height = '100%'
+            width = '100%'
+            value = {code}
+          />
         </div>
       );
     } else {
