@@ -31,7 +31,7 @@ class Network extends React.Component {
   }
 }
 
-// PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Laye Types 
+// PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Layer Types 
 Network.propTypes = {
   network_graph: PropTypes.array.isRequired,
   group_transform: PropTypes.object.isRequired,
