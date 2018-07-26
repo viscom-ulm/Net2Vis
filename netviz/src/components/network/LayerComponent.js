@@ -12,7 +12,7 @@ class Layer extends React.Component {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
       setting.color = 'gray';
-      this.props.actions.addSettingForLayerType(setting, this.props.layer.name);
+      this.props.actions.addSettingForLayerType(setting, this.props.layer.node.name);
     }
   }
   
@@ -20,7 +20,7 @@ class Layer extends React.Component {
   render() {
     // Get the Properties to use them in the Rendering
     var set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if nor already set
-    var dimensions = this.props.layer.properties.dimensions; // Get the Dimensions of the current Layer
+    var dimensions = this.props.layer.node.properties.dimensions; // Get the Dimensions of the current Layer
     var extreme_dimensions = this.props.layers_settings.layer_display_size; // Get the Extremes of the Display Size for the Glyphs
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights of the Glyph
     if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer only if multidimensional Tensor
@@ -41,7 +41,7 @@ class Layer extends React.Component {
     ].join(' ')
     // Return a Shape with the calculated parameters
     return (
-      <g transform={`translate(${100 + (100 * this.props.layer.id)}, 100)`}>
+      <g transform={`translate(${100 + (100 * this.props.layer.column)}, 100)`}>
         <path d={pathData} style={{fill:set.color, stroke: 'black'}} />
       </g>
     );
