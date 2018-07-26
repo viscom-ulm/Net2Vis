@@ -1,8 +1,9 @@
 import initialState from './initialState';
+import * as types from '../actions/types';
 
 export default function layersSettignsReducer(state = initialState.layers_settings, action) {
   switch(action.type) {
-    case 'SET_LAYERS_EXTREMES':
+    case types.SET_LAYERS_EXTREMES:
       var max = 0, min = Infinity;
       const layers = action.network.layers;
       for (var i in layers) {
