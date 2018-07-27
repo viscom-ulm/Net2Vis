@@ -47,7 +47,7 @@ class Layer extends React.Component {
     for (var i in keys) {
       properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
     }
-    // Return a Shape with the calculated parameters
+    // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g transform={`translate(${100 + (100 * this.props.layer.column)}, 100)`}>
         <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
