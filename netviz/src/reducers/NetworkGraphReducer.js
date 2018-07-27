@@ -1,6 +1,7 @@
 import initialState from './initialState';
 import * as types from '../actions/types';
 
+// Reducer for building the NetworkGraph state.
 export default function networkGraphReducer(state = initialState.network_graph, action) {
   switch (action.type) {
     case types.INITIALIZE_NETWORK_GRAPH:    
@@ -21,8 +22,8 @@ function build_graph_from_network(network) {
 // Find the input Layer of the Network
 function find_input_layers(network) {
   var layers = [];
-  for (var i in network.layers) {
-    if (network.layers[i].properties.input.length === 0) {
+  for (var i in network.layers) { // Go over all layers
+    if (network.layers[i].properties.input.length === 0) { // Check if the Layer is an input Layer
       layers.push(network.layers[i]);
     }
   }
@@ -35,15 +36,16 @@ function find_longest_path(network, inputs) {
     nodes: [],
     length: 0
   };
-  for (var i in inputs) {
+  for (var i in inputs) { // For all input Nodes, traverse the Graph
     var path = check_path_recursive(network, inputs[i]);
-    if (path.length > longest.length) {
+    if (path.length > longest.length) { // Return only the longest Graph
       longest = path;
     }
   }
   return longest;
 }
 
+// Recursively traverse the graph, going in all direction from one node.
 function check_path_recursive(network, start) {
   if (start.properties.output.length === 0) { // Path ends here, just return this Node.
     return { 
@@ -63,7 +65,7 @@ function check_path_recursive(network, start) {
     }
     for (var i in start.properties.output) { // Go in all split directions.
       var path = check_path_recursive(network, network.layers[start.properties.output[i]]);
-      if (path.length > longest.length) {
+      if (path.length > longest.length) { // Only return the longest of the Splits
         longest = path;
       }
     }
@@ -74,9 +76,10 @@ function check_path_recursive(network, start) {
   }
 }
 
+// Add the longest Path to the Graph
 function add_longest_path(path) {
   var graph = [];
-  for (var j in path.nodes) {
+  for (var j in path.nodes) { // Add each Node
     graph.push({
       column: j,
       row: 0,
