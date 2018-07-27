@@ -5,18 +5,31 @@ import * as types from '../actions/types';
 export default function networkGraphReducer(state = initialState.network_graph, action) {
   switch (action.type) {
     case types.INITIALIZE_NETWORK_GRAPH:    
-      return build_graph_from_network(action.network);
+    return build_graph_from_network(action.network);
     default:
-      return state;
+    return state;
   }
 }
 
 // Build the network graph upon the Network representation
-function build_graph_from_network(network) {  
-  var inputs = find_input_layers(network);
-  var longest_path = find_longest_path(network, inputs);
-  var graph = add_longest_path(longest_path);
+function build_graph_from_network(network) {
+  var graph = [];  
+  add_longest_path(graph, network);
+  add_missing_splits(graph, network);
   return graph;
+}
+
+// Add the longest Path to the Graph
+function add_longest_path(graph, network) {
+  var inputs = find_input_layers(network); // Get the inpout Layers
+  var longest_path = find_longest_path(network, inputs); // Get the longest Path
+  for (var j in longest_path.nodes) { // Add each Node
+    graph.push({
+      column: j,
+      row: 0,
+      node: longest_path.nodes[j]
+    });
+  }
 }
 
 // Find the input Layer of the Network
@@ -76,15 +89,18 @@ function check_path_recursive(network, start) {
   }
 }
 
-// Add the longest Path to the Graph
-function add_longest_path(path) {
-  var graph = [];
-  for (var j in path.nodes) { // Add each Node
-    graph.push({
-      column: j,
-      row: 0,
-      node: path.nodes[j]
-    });
+// Add the missing nodes where the graph has split.
+function add_missing_splits(graph, network) {
+  var node_missing = true;
+  while(node_missing) {
+    node_missing = false;
+    for (var i in graph) {
+      if(graph[i].node.properties.output.length > 1) {
+        check_in_graph(graph[i].node.properties.output);
+      }
+      if(graph[i].node.properties.input.length > 1) {
+        check_in_graph(graph[i].node.properties.input);
+      }
+    }
   }
-  return graph;
 }
