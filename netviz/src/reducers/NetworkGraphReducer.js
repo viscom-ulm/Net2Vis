@@ -25,7 +25,7 @@ function add_longest_path(graph, network) {
   var longest_path = find_longest_path(network, inputs); // Get the longest Path
   for (var j in longest_path.nodes) { // Add each Node
     graph.push({
-      column: j,
+      column: parseInt(j, 10),
       row: 0,
       node: longest_path.nodes[j]
     });
@@ -91,15 +91,57 @@ function check_path_recursive(network, start) {
 
 // Add the missing nodes where the graph has split.
 function add_missing_splits(graph, network) {
-  var node_missing = true;
-  while(node_missing) {
-    node_missing = false;
-    for (var i in graph) {
-      if(graph[i].node.properties.output.length > 1) {
-        check_in_graph(graph[i].node.properties.output);
+  var missin_nodes = find_missing_nodes(graph, network);
+  var depths = Array.apply(null, Array(graph.length)).map(Number.prototype.valueOf,1);
+  while (missin_nodes.length > 0) {
+    add_connected_node(missin_nodes, graph, depths);
+  }
+  console.log(graph);
+}
+
+// Find all nodes of the Network that have not been added to the Graph yet.
+function find_missing_nodes(graph, network) {
+  var missing = [];
+  for (var i in network.layers) { // For all Layers
+    var in_graph = false;
+    for (var j in graph) { // And all Graph Elements
+      if (network.layers[i] === graph[j].node) { // Check if Layer in Graph
+        in_graph = true;
       }
-      if(graph[i].node.properties.input.length > 1) {
-        check_in_graph(graph[i].node.properties.input);
+    }
+    if (!in_graph) missing.push(network.layers[i]); // If Layer is missing, add it to the missing List
+  }
+  return missing;
+}
+
+function add_connected_node(missin_nodes, graph, depths) {
+  for (var i in missin_nodes) {
+    for (var j in graph) {
+      for (var k_in in missin_nodes[i].properties.input) {
+        if (graph[j].node.id === missin_nodes[i].properties.input[k_in]) {
+          var column_in = graph[j].column;
+          graph.push({
+            column: column_in + 1,
+            row: depths[column_in + 1],
+            node: missin_nodes[i]
+          });
+          depths[column_in + 1] = depths[column_in + 1] + 1;
+          missin_nodes.splice(i, 1);
+          return;
+        }
+      }
+      for (var k_out in missin_nodes[i].properties.output) {
+        if (graph[j].node.id === missin_nodes[i].properties.output[k_out]) {
+          var column_out = graph[j].column;
+          graph.push({
+            column: column_out - 1,
+            row: depths[column_out - 1],
+            node: missin_nodes[i]
+          });
+          depths[column_out - 1] = depths[column_out - 1] + 1;
+          missin_nodes.splice(i, 1);
+          return;
+        }
       }
     }
   }
