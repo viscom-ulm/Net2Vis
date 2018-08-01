@@ -14,11 +14,33 @@ export default function layersSettignsReducer(state = initialState.layers_settin
             min = dimensions.out[j] < min ? dimensions.out[j] : min;  
           }
         }
+        if (Array.isArray(dimensions.in)) {
+          for (let j = 0; j < dimensions.in.length - 1; j++) {
+            max = dimensions.in[j] > max ? dimensions.in[j] : max;
+            min = dimensions.in[j] < min ? dimensions.in[j] : min;  
+          }
+        }
       }
       return Object.assign({}, state, {
         layer_extreme_dimensions: {
           max_size: max,
           min_size: min
+        }
+      });
+    case types.CHANGE_LAYERS_MIN_HEIGHT:
+      var max_size = state.layer_display_height.max_size;
+      return Object.assign({}, state, {
+        layer_display_height: {
+          min_size: action.min_height,
+          max_size: max_size
+        }
+      });
+    case types.CHANGE_LAYERS_MAX_HEIGHT:
+      var min_size = state.layer_display_height.min_size;
+      return Object.assign({}, state, {
+        layer_display_height: {
+          min_size: min_size,
+          max_size: action.max_height
         }
       });
     default:

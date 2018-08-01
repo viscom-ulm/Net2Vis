@@ -31,7 +31,7 @@ export default {
         }
     },
     layers_settings: {
-        layer_display_size: {
+        layer_display_height: {
             min_size: 50,
             max_size: 200
         },

@@ -97,3 +97,13 @@ export function updateCode(code) {
     });
   }
 }
+
+// Updating Code was Succesful
+export function changeLayersMinHeight(min_height) {
+  return {type: types.CHANGE_LAYERS_MIN_HEIGHT, min_height}
+}
+
+// Updating Code was Succesful
+export function changeLayersMaxHeight(max_height) {
+  return {type: types.CHANGE_LAYERS_MAX_HEIGHT, max_height}
+}

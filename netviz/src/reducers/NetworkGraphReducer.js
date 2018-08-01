@@ -93,10 +93,9 @@ function check_path_recursive(network, start) {
 function add_missing_splits(graph, network) {
   var missin_nodes = find_missing_nodes(graph, network);
   var depths = Array.apply(null, Array(graph.length)).map(Number.prototype.valueOf,1);
-  while (missin_nodes.length > 0) {
+  while (missin_nodes.length > 0) { // Add all missing Nodes
     add_connected_node(missin_nodes, graph, depths);
   }
-  console.log(graph);
 }
 
 // Find all nodes of the Network that have not been added to the Graph yet.
