@@ -48,7 +48,9 @@ class Layer extends React.Component {
     const keys = Object.keys(properties_object); // Get the Keys from the Object
     var properties = []; // Get all Properties
     for (var i in keys) {
-      properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
+      if(properties_object[keys[i]]) {
+        properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
+      }
     }
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (

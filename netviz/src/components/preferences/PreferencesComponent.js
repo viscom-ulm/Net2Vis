@@ -7,11 +7,11 @@ import * as actions from '../../actions';
 
 class Preferences extends React.Component {
   handleMinChange = (e) => {
-    this.props.actions.changeLayersMinHeight(e.currentTarget.value);
+    this.props.actions.changeLayersMinHeight(parseInt(e.currentTarget.value, 10));
   }
 
   handleMaxChange = (e) => {
-    this.props.actions.changeLayersMaxHeight(e.currentTarget.value);
+    this.props.actions.changeLayersMaxHeight(parseInt(e.currentTarget.value, 10));
   }
 
   render() {
