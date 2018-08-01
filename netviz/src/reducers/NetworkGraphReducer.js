@@ -114,33 +114,34 @@ function find_missing_nodes(graph, network) {
   return missing;
 }
 
+// Add a missing node that is connected to the Graph at some Point.
 function add_connected_node(missin_nodes, graph, depths) {
-  for (var i in missin_nodes) {
-    for (var j in graph) {
-      for (var k_in in missin_nodes[i].properties.input) {
-        if (graph[j].node.id === missin_nodes[i].properties.input[k_in]) {
+  for (var i in missin_nodes) { // For all missing Nodes
+    for (var j in graph) { // And all nodes of the Graph
+      for (var k_in in missin_nodes[i].properties.input) { // Iterate over all the inputs of the missing node
+        if (graph[j].node.id === missin_nodes[i].properties.input[k_in]) { // If the current input is Part of the Graph
           var column_in = graph[j].column;
-          graph.push({
+          graph.push({ // Add a new node a column after the input in a new row 
             column: column_in + 1,
             row: depths[column_in + 1],
             node: missin_nodes[i]
           });
-          depths[column_in + 1] = depths[column_in + 1] + 1;
-          missin_nodes.splice(i, 1);
-          return;
+          depths[column_in + 1] = depths[column_in + 1] + 1; // Make sure that the row count for this column gets incremented
+          missin_nodes.splice(i, 1); // Remove the node from missing nodes
+          return; // Return from the Function
         }
       }
-      for (var k_out in missin_nodes[i].properties.output) {
-        if (graph[j].node.id === missin_nodes[i].properties.output[k_out]) {
+      for (var k_out in missin_nodes[i].properties.output) { // Iterate over all the outputs of the missing node
+        if (graph[j].node.id === missin_nodes[i].properties.output[k_out]) { // If the current output is Part of the Graph
           var column_out = graph[j].column;
-          graph.push({
+          graph.push({ // Add a new node a column before the output in a new row 
             column: column_out - 1,
             row: depths[column_out - 1],
             node: missin_nodes[i]
           });
-          depths[column_out - 1] = depths[column_out - 1] + 1;
-          missin_nodes.splice(i, 1);
-          return;
+          depths[column_out - 1] = depths[column_out - 1] + 1; // Make sure that the row count for this column gets incremented
+          missin_nodes.splice(i, 1); // Remove the node from missing nodes
+          return; // Return from the Function
         }
       }
     }
