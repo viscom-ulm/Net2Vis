@@ -11,7 +11,7 @@ def get_model():
         kernel_size=(3,3), 
         activation='relu', 
         input_shape=input_shape)(img_input)
-    x = layers.Conv2D(63, (3,3), activation='relu')(x)
+    x = layers.Conv2D(63, (3,3), activation='relu')(x)  
     x = layers.MaxPool2D(pool_size=(2,2))(x)
     x = layers.Dropout(0.25)(x)
     x = layers.Flatten()(x)

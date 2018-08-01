@@ -89,6 +89,7 @@ export function updateCode(code) {
       return NetworkApi.getNetwork().then(network => {
         dispatch(loadNetworkSuccess(network.data));
         dispatch(setLayersExtremes(network.data));
+        dispatch(initializeNetworkGraph(network.data));
       }).catch(error => {
         throw(error);
       })

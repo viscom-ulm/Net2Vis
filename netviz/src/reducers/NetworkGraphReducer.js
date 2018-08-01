@@ -4,7 +4,8 @@ import * as types from '../actions/types';
 // Reducer for building the NetworkGraph state.
 export default function networkGraphReducer(state = initialState.network_graph, action) {
   switch (action.type) {
-    case types.INITIALIZE_NETWORK_GRAPH:    
+    case types.INITIALIZE_NETWORK_GRAPH:
+      console.log('init')    
       return build_graph_from_network(action.network);
     default:
       return state;
