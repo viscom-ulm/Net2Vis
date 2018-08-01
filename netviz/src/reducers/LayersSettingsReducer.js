@@ -43,6 +43,18 @@ export default function layersSettignsReducer(state = initialState.layers_settin
           max_size: action.max_height
         }
       });
+    case types.CHANGE_LAYERS_WIDTH:
+      return Object.assign({}, state, {
+        layer_display_width: action.width
+      });
+    case types.CHANGE_LAYERS_SPACING_HORIZONTAL:
+      return Object.assign({}, state, {
+        layers_spacing_horizontal: action.spacing
+      });
+    case types.CHANGE_LAYERS_SPACING_VERTICAL:
+      return Object.assign({}, state, {
+        layers_spacing_vertical: action.spacing
+      });
     default:
       return state;
   }

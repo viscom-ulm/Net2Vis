@@ -5,7 +5,6 @@ import * as types from '../actions/types';
 export default function networkGraphReducer(state = initialState.network_graph, action) {
   switch (action.type) {
     case types.INITIALIZE_NETWORK_GRAPH:
-      console.log('init')    
       return build_graph_from_network(action.network);
     default:
       return state;
@@ -14,7 +13,7 @@ export default function networkGraphReducer(state = initialState.network_graph, 
 
 // Build the network graph upon the Network representation
 function build_graph_from_network(network) {
-  var graph = [];  
+  var graph = [];
   add_longest_path(graph, network);
   add_missing_splits(graph, network);
   return graph;

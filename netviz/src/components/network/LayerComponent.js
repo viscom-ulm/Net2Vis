@@ -23,6 +23,7 @@ class Layer extends React.Component {
     const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if nor already set
     const dimensions = this.props.layer.node.properties.dimensions; // Get the Dimensions of the current Layer
     const extreme_dimensions = this.props.layers_settings.layer_display_height; // Get the Extremes of the Display Size for the Glyphs
+    const layer_width = this.props.layers_settings.layer_display_width; // Get the Width of the Layers
     // Calculate the height of the Layer
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights of the Glyph
     if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer only if multidimensional Tensor
@@ -37,7 +38,7 @@ class Layer extends React.Component {
     const y_pos = [y_diff[0], y_diff[1], y_diff[1]+height[1], y_diff[0]+height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points  
     const pathData = [ // Path data for the Glyph
       'M', 0, y_pos[0], // Move to initial Location
-      'L', 100, y_pos[1], // Draw Line to top-right
+      'L', layer_width, y_pos[1], // Draw Line to top-right
       'V', y_pos[2], // Draw Line to bottom-right
       'L', 0, y_pos[3], // Draw Line to bottom-left
       'Z', // Draw Line to Starting Point
@@ -54,7 +55,7 @@ class Layer extends React.Component {
     }
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
-      <g transform={`translate(${100 + (100 * this.props.layer.column)}, ${100 + (100 * this.props.layer.row)})`}>
+      <g transform={`translate(${100 + (layer_width * this.props.layer.column) + (this.props.layer.column * this.props.layers_settings.layers_spacing_horizontal)}, ${100 + ((extreme_dimensions.max_size + this.props.layers_settings.layers_spacing_vertical) * this.props.layer.row)})`}>
         <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
         <Tooltip for={tooltipRef}>
           <rect

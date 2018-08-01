@@ -99,12 +99,27 @@ export function updateCode(code) {
   }
 }
 
-// Updating Code was Succesful
+// Updating Layers Min Height
 export function changeLayersMinHeight(min_height) {
   return {type: types.CHANGE_LAYERS_MIN_HEIGHT, min_height}
 }
 
-// Updating Code was Succesful
+// Updating Layers Max Height
 export function changeLayersMaxHeight(max_height) {
   return {type: types.CHANGE_LAYERS_MAX_HEIGHT, max_height}
+}
+
+// Updating Layers Width
+export function changeLayersWidth(width) {
+  return {type: types.CHANGE_LAYERS_WIDTH, width}
+}
+
+// Updating Layers Spacing
+export function changeLayersSpacingHorizontal(spacing) {
+  return {type: types.CHANGE_LAYERS_SPACING_HORIZONTAL, spacing}
+}
+
+// Updating Layers Spacing
+export function changeLayersSpacingVertical(spacing) {
+  return {type: types.CHANGE_LAYERS_SPACING_VERTICAL, spacing}
 }
