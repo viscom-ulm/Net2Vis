@@ -77,18 +77,21 @@ header {
 #Legend {
     height: 400px;
     width: 100%;
+    flex-shrink: 0;
     background-color: green;
 }
 
 #Code {
-    width: 500px;
+    width: 400px;
     height: 100%;
+    flex-shrink: 0;
     order: -1;
 }
 
 #Preferences {
     width: 300px;
     height: 100%;
+    flex-shrink: 0;
     background-color: lightgray;
     order: 1;
 }
