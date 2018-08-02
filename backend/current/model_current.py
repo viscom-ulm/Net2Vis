@@ -28,5 +28,3 @@ def get_model():
     x = layers.LeakyReLU()(x)
     model = models.Model(img_input, x)
     return model
-
-model = get_model()
