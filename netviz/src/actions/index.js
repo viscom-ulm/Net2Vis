@@ -47,13 +47,28 @@ export function initializeNetworkGraph(network) {
   return {type: types.INITIALIZE_NETWORK_GRAPH, network}
 }
 
+// Add an error to the Code.
+export function addError(data) {
+  return {type: types.ADD_ERROR, data}
+}
+
+// Removes all error from the Code.
+export function removeError() {
+  return {type: types.REMOVE_ERROR}
+}
+
 // Called to load the Network
 export function loadNetwork() {
   return function(dispatch) {
     return NetworkApi.getNetwork().then(network => {
-      dispatch(loadNetworkSuccess(network.data));
-      dispatch(setLayersExtremes(network.data));
-      dispatch(initializeNetworkGraph(network.data));
+      if(network.success === true) {
+        dispatch(removeError());
+        dispatch(loadNetworkSuccess(network.data));
+        dispatch(setLayersExtremes(network.data));
+        dispatch(initializeNetworkGraph(network.data));
+      } else {
+        dispatch(addError(network.data));
+      }
     }).catch(error => {
       throw(error);
     })
@@ -87,10 +102,15 @@ export function updateCode(code) {
     return CodeApi.updateCode(code).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork().then(network => {
-        dispatch(loadNetworkSuccess(network.data));
-        dispatch(setLayersExtremes(network.data));
-        dispatch(initializeNetworkGraph(network.data));
-      }).catch(error => {
+        if(network.success === true) {
+          dispatch(removeError());
+          dispatch(loadNetworkSuccess(network.data));
+          dispatch(setLayersExtremes(network.data));
+          dispatch(initializeNetworkGraph(network.data));       
+        } else {
+          dispatch(addError(network.data));
+        }
+     }).catch(error => {
         throw(error);
       })
     }).catch(error => {

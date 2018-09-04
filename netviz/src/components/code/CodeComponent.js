@@ -28,6 +28,10 @@ class Code extends React.Component {
   render() {
     if(this.props.code_toggle) {
       const code = this.props.code;
+      var annotations = [];
+      if(this.props.error.hasOwnProperty('line_number')) {
+        annotations = [{row: (this.props.error.line_number - 1), column: 0, text: this.props.error.error_class + ': ' + this.props.error.detail, type: 'error'}];
+      }
       return(// Editor with Syntax highlighting
         <div id='Code'>
           <AceEditor
@@ -43,6 +47,7 @@ class Code extends React.Component {
             height = '100%'
             width = '100%'
             value = {code}
+            annotations = {annotations}
           />
         </div>
       );
@@ -55,7 +60,8 @@ class Code extends React.Component {
 // Code PropTypes are the toggle state and the code
 Code.propTypes = {
   code_toggle: PropTypes.bool.isRequired,
-  code: PropTypes.string.isRequired
+  code: PropTypes.string.isRequired,
+  error: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component 
@@ -63,12 +69,14 @@ function mapStateToProps(state, ownProps) {
   if (state.code) { // Check if the Code is already available
     return {
       code: state.code,
-      code_toggle: state.display.code_toggle
+      code_toggle: state.display.code_toggle,
+      error: state.error      
     };
   } else {
     return {
       code: '',
-      code_toggle: state.display.code_toggle
+      code_toggle: state.display.code_toggle,
+      error: state.error
     };
   }
 }

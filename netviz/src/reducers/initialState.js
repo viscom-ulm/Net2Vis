@@ -42,5 +42,6 @@ export default {
         },
         layers_spacing_horizontal: 0,
         layers_spacing_vertical: 0
-    }
+    },
+    error: {}
 }

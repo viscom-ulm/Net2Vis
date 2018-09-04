@@ -7,6 +7,7 @@ import group_transform from './TransformReducer';
 import display from './DisplayReducer';
 import layer_types_settings from './LayerTypesSettingsReducer';
 import layers_settings from './LayersSettingsReducer';
+import error from './ErrorReducer';
 
 // Combine all Reducers
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
     group_transform,
     display,
     layer_types_settings,
-    layers_settings
+    layers_settings,
+    error
 })
