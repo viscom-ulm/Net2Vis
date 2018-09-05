@@ -9,7 +9,7 @@ export default {
         scale: 1
     },
     display: {
-        code_toggle: false,
+        code_toggle: true,
         preferences_toggle: false,
         legend_toggle: false
     },
@@ -30,7 +30,7 @@ export default {
             color: 'blue'
         }
     },
-    layers_settings: {
+    preferences: {
         layer_display_height: {
             min_size: 50,
             max_size: 200
