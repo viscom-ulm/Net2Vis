@@ -31,13 +31,17 @@ export default {
         }
     },
     layers_settings: {
-        layer_display_size: {
+        layer_display_height: {
             min_size: 50,
             max_size: 200
         },
+        layer_display_width: 100,
         layer_extreme_dimensions: {
             max_size: 2,
             min_size: 1
-        }
-    }
+        },
+        layers_spacing_horizontal: 0,
+        layers_spacing_vertical: 0
+    },
+    error: {}
 }

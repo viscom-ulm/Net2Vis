@@ -4,16 +4,16 @@ import * as types from '../actions/types';
 // Reducer for building the NetworkGraph state.
 export default function networkGraphReducer(state = initialState.network_graph, action) {
   switch (action.type) {
-    case types.INITIALIZE_NETWORK_GRAPH:    
-    return build_graph_from_network(action.network);
+    case types.INITIALIZE_NETWORK_GRAPH:
+      return build_graph_from_network(action.network);
     default:
-    return state;
+      return state;
   }
 }
 
 // Build the network graph upon the Network representation
 function build_graph_from_network(network) {
-  var graph = [];  
+  var graph = [];
   add_longest_path(graph, network);
   add_missing_splits(graph, network);
   return graph;
@@ -93,10 +93,9 @@ function check_path_recursive(network, start) {
 function add_missing_splits(graph, network) {
   var missin_nodes = find_missing_nodes(graph, network);
   var depths = Array.apply(null, Array(graph.length)).map(Number.prototype.valueOf,1);
-  while (missin_nodes.length > 0) {
+  while (missin_nodes.length > 0) { // Add all missing Nodes
     add_connected_node(missin_nodes, graph, depths);
   }
-  console.log(graph);
 }
 
 // Find all nodes of the Network that have not been added to the Graph yet.

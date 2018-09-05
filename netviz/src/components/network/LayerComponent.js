@@ -22,7 +22,9 @@ class Layer extends React.Component {
     // Get the Properties to use them in the Rendering
     const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if nor already set
     const dimensions = this.props.layer.node.properties.dimensions; // Get the Dimensions of the current Layer
-    const extreme_dimensions = this.props.layers_settings.layer_display_size; // Get the Extremes of the Display Size for the Glyphs
+    const extreme_dimensions = this.props.layers_settings.layer_display_height; // Get the Extremes of the Display Size for the Glyphs
+    const layer_width = this.props.layers_settings.layer_display_width; // Get the Width of the Layers
+    // Calculate the height of the Layer
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights of the Glyph
     if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer only if multidimensional Tensor
       const extreme_layer = this.props.layers_settings.layer_extreme_dimensions; // Get the Extremes of the Dimensions of the current Layer
@@ -31,25 +33,29 @@ class Layer extends React.Component {
       const perc = [(dimensions.in[0] - extreme_layer.min_size) / lay_diff, (dimensions.out[0] - extreme_layer.min_size) / lay_diff]; // Calculate the interpolation factor for boths sides of the Glyph 
       height = [perc[0] * dim_diff + extreme_dimensions.min_size, perc[1] * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph
     }
+    // Calculate the Positions of the Layer
     const y_diff = [(extreme_dimensions.max_size - height[0]) / 2, (extreme_dimensions.max_size - height[1]) / 2]; // Calculate the vertical difference to center the Glyph
     const y_pos = [y_diff[0], y_diff[1], y_diff[1]+height[1], y_diff[0]+height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points  
     const pathData = [ // Path data for the Glyph
       'M', 0, y_pos[0], // Move to initial Location
-      'L', 100, y_pos[1], // Draw Line to top-right
-      'L', 100, y_pos[2], // Draw Line to bottom-right
+      'L', layer_width, y_pos[1], // Draw Line to top-right
+      'V', y_pos[2], // Draw Line to bottom-right
       'L', 0, y_pos[3], // Draw Line to bottom-left
-      'L', 0, y_pos[0], // Draw Line to top-left
+      'Z', // Draw Line to Starting Point
     ].join(' ')
+    // Get Information for the Tooltip
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.node.properties.properties; // Get the layer Properties
     const keys = Object.keys(properties_object); // Get the Keys from the Object
     var properties = []; // Get all Properties
     for (var i in keys) {
-      properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
+      if(properties_object[keys[i]]) {
+        properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
+      }
     }
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
-      <g transform={`translate(${100 + (100 * this.props.layer.column)}, ${100 + (100 * this.props.layer.row)})`}>
+      <g transform={`translate(${100 + (layer_width * this.props.layer.column) + (this.props.layer.column * this.props.layers_settings.layers_spacing_horizontal)}, ${100 + ((extreme_dimensions.max_size + this.props.layers_settings.layers_spacing_vertical) * this.props.layer.row)})`}>
         <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
         <Tooltip for={tooltipRef}>
           <rect

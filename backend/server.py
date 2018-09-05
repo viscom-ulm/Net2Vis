@@ -1,9 +1,11 @@
 from flask import Flask, send_file, request, jsonify
 import copy
 import sys
+import inspect
 
 sys.path.append('translate')
 from translate_keras import translate_keras
+from graph import Graph
 
 app = Flask(__name__)
 ok_status = 200
@@ -52,11 +54,15 @@ def replace_references(net):
 @app.route('/api/get_network')
 def get_network():
     graph = translate_keras('current/model_current.py')
-    graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
-    net = {'layers': make_jsonifyable(graph)}
-    result = jsonify({'success': True, 'data': net})
-    return  result, ok_status, json_type
-
+    if(isinstance(graph, Graph)):
+        graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
+        net = {'layers': make_jsonifyable(graph)}
+        result = jsonify({'success': True, 'data': net})
+        return  result, ok_status, json_type
+    else:
+        result = jsonify({'success': False, 'data': graph})
+        return  result, ok_status, json_type
+    
 # Get the Code.
 @app.route('/api/get_code')
 def get_code():

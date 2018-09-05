@@ -1,21 +1,30 @@
 import json
 from graph import Graph
 import layers_representations
+import sys
+import traceback
 
 # Called to translate Keras JSON Representation.
 def translate_keras(filename):
     graph = Graph()
     with open(filename, 'r') as myfile:
         keras_code=myfile.read()
-        exec(keras_code, globals())
-        model = get_model()
-        model_json = json.loads(model.to_json())
-        layers_extracted = model_json['config']['layers']
-        for layer in layers_extracted:
-            add_layer_type(layer, graph)
-    graph.resolve_input_names()
-    return graph
-
+        try:
+            exec(keras_code, globals())
+            model = get_model()
+            model_json = json.loads(model.to_json())
+            layers_extracted = model_json['config']['layers']
+            for layer in layers_extracted:
+                add_layer_type(layer, graph)
+            graph.resolve_input_names()
+            return graph
+        except SyntaxError as err:
+            return {'error_class': err.__class__.__name__, 'line_number': err.lineno, 'detail': err.args[0]}
+        except Exception as err:
+            cl, exc, tb = sys.exc_info()
+            ln = traceback.extract_tb(tb)[-1][1]
+            return {'error_class': err.__class__.__name__, 'line_number': ln, 'detail': err.args[0]}
+        
 # Add a Layer for the line. Layers are identified by their name and equipped using the spec.
 def add_layer_type(layer, graph):
     if('Dense' in layer['class_name']): # Dense Layer.

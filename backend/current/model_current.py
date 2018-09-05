@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.python.keras import models
 from tensorflow.python.keras import layers
+from tensorflow.python.keras import utils
 
 def get_model():
     img_height = 224
