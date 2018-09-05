@@ -53,6 +53,9 @@ class Layer extends React.Component {
         properties.push({key: keys[i], prop: properties_object[keys[i]].toString()});
       }
     }
+    // Add Dimensions to Properties
+    properties.push({key: 'Dimensions in', prop: dimensions.in.toString()})
+    properties.push({key: 'Dimensions out', prop: dimensions.out.toString()})
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g transform={`translate(${100 + (layer_width * this.props.layer.column) + (this.props.layer.column * this.props.layers_settings.layers_spacing_horizontal)}, ${100 + ((extreme_dimensions.max_size + this.props.layers_settings.layers_spacing_vertical) * this.props.layer.row)})`}>
