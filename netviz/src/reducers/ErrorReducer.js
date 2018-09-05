@@ -11,4 +11,3 @@ export default function errorReducer(state = initialState.error, action) {
       return state;
   }
 }
-

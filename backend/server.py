@@ -55,7 +55,7 @@ def replace_references(net):
 def get_network():
     graph = translate_keras('current/model_current.py')
     if(isinstance(graph, Graph)):
-        graph.calculate_layer_dimensions([32,32,3]) # TODO: Remove this hardcoded part!
+        graph.calculate_layer_dimensions()
         net = {'layers': make_jsonifyable(graph)}
         result = jsonify({'success': True, 'data': net})
         return  result, ok_status, json_type
@@ -70,6 +70,7 @@ def get_code():
         keras_code=myfile.read()
         return keras_code, ok_status, text_type
 
+# Update the Code.
 @app.route('/api/update_code', methods=['POST'])
 def update_code():
     content = request.data
