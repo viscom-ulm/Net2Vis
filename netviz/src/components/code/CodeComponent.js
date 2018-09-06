@@ -48,6 +48,7 @@ class Code extends React.Component {
             width = '100%'
             value = {code}
             annotations = {annotations}
+            scrollMargin = {[10,0,0,0]}
           />
         </div>
       );
