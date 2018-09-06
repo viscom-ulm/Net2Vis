@@ -1,3 +1,4 @@
+// General Properties
 html,
 body {
     margin: 0;
@@ -6,8 +7,10 @@ body {
     height: 100%;
     overflow: hidden;
     font: 15px arial, sans-serif;
+    color: white;
 }
 
+// Header only Properties (For Menu Bar)
 header {
     position: fixed;
     top: 0;
@@ -16,7 +19,6 @@ header {
     height: 50px;
     color: white;
     background-color: #A32638;
-    font: 15px arial, sans-serif;
     
     ul {
         list-style-type: none;
@@ -62,6 +64,7 @@ header {
     }
 }
 
+// Some Content Helpers
 .content {
     padding: 50px 0px 0px 0px;
     height: 100%;
@@ -86,11 +89,20 @@ header {
     height: 100%;
 }
 
+// Different Areas
 #Legend {
-    height: 400px;
+    height: 300px;
     width: 100%;
     flex-shrink: 0;
-    background-color: green;
+    background-color: #2f3129;
+}
+
+#Preferences {
+    width: 300px;
+    height: 100%;
+    flex-shrink: 0;
+    background-color: #272822;
+    order: 1;
 }
 
 #Code {
@@ -100,20 +112,13 @@ header {
     order: -1;
 }
 
-#Preferences {
-    width: 300px;
-    height: 100%;
-    flex-shrink: 0;
-    background-color: lightgray;
-    order: 1;
-}
-
 #CodeArea {
     width: 100%;
     height: 100%;
     resize: none;
 }
 
+// Classes for Styling of individual Elements
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -121,4 +126,13 @@ header {
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.preferenceItem {
+    padding: 10px;
+}
+
+.inputElement {
+    width: calc(100% - 20px);
+    height: 30px;
 }

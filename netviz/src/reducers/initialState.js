@@ -11,7 +11,7 @@ export default {
     display: {
         code_toggle: true,
         preferences_toggle: false,
-        legend_toggle: false
+        legend_toggle: true 
     },
     layer_types_settings: {
         Conv2D: {

@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 const InputField = ({value, type, description, action}) => {
   if(type === 'number') {
     return (
-      <div>
+      <div className='preferenceItem'>
         {description}:
-        <input type="number" step="10" value={value} onChange={(e) => action(e)}/>
+        <input className='inputElement' type="number" step="10" value={value} onChange={(e) => action(e)}/>
       </div>
     );
   }
