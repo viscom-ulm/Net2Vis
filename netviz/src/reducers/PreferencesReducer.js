@@ -3,57 +3,25 @@ import * as types from '../actions/types';
 
 export default function pereferencesReducer(state = initialState.preferences, action) {
   switch(action.type) {
-    case types.SET_LAYERS_EXTREMES:
-      var max = 0, min = Infinity;
-      const layers = action.network.layers;
-      for (var i in layers) {
-        const dimensions = layers[i].properties.dimensions;
-        if (Array.isArray(dimensions.out)) {
-          for (let j = 0; j < dimensions.out.length - 1; j++) {
-            max = dimensions.out[j] > max ? dimensions.out[j] : max;
-            min = dimensions.out[j] < min ? dimensions.out[j] : min;  
-          }
-        }
-        if (Array.isArray(dimensions.in)) {
-          for (let j = 0; j < dimensions.in.length - 1; j++) {
-            max = dimensions.in[j] > max ? dimensions.in[j] : max;
-            min = dimensions.in[j] < min ? dimensions.in[j] : min;  
-          }
-        }
-      }
-      return Object.assign({}, state, {
-        layer_extreme_dimensions: {
-          max_size: max,
-          min_size: min
-        }
-      });
     case types.CHANGE_LAYERS_MIN_HEIGHT:
-      var max_size = state.layer_display_height.max_size;
       return Object.assign({}, state, {
-        layer_display_height: {
-          min_size: action.min_height,
-          max_size: max_size
-        }
+        layer_display_min_height: {value: action.min_height, type: state.layer_display_min_height.type, description: state.layer_display_min_height.description}
       });
     case types.CHANGE_LAYERS_MAX_HEIGHT:
-      var min_size = state.layer_display_height.min_size;
       return Object.assign({}, state, {
-        layer_display_height: {
-          min_size: min_size,
-          max_size: action.max_height
-        }
+        layer_display_max_height: {value: action.max_height, type: state.layer_display_max_height.type, description: state.layer_display_max_height.description}
       });
     case types.CHANGE_LAYERS_WIDTH:
       return Object.assign({}, state, {
-        layer_display_width: action.width
+        layer_display_width: {value: action.width, type: state.layer_display_width.type, description: state.layer_display_width.description}
       });
     case types.CHANGE_LAYERS_SPACING_HORIZONTAL:
       return Object.assign({}, state, {
-        layers_spacing_horizontal: action.spacing
+        layers_spacing_horizontal: {value: action.spacing, type: state.layers_spacing_horizontal.type, description: state.layers_spacing_horizontal.description}
       });
     case types.CHANGE_LAYERS_SPACING_VERTICAL:
       return Object.assign({}, state, {
-        layers_spacing_vertical: action.spacing
+        layers_spacing_vertical: {value: action.spacing, type: state.layers_spacing_vertical.type, description: state.layers_spacing_vertical.description}
       });
     default:
       return state;

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
+import InputField from './InputField'
 import * as actions from '../../actions';
 
 // Component for displaying the Preferences of the Visualization
@@ -37,27 +38,12 @@ class Preferences extends React.Component {
     if(this.props.preferences_toggle) {
       return(
         <div id='Preferences'>
-          <div>
-            Minimum Layer Height:
-            <input type="number" step="10" value={this.props.preferences.layer_display_height.min_size} onChange={this.handleMinChange}/>
-          </div>
-          <div>
-            Maximum Layer Height:
-            <input type="number" step="10" value={this.props.preferences.layer_display_height.max_size} onChange={this.handleMaxChange}/>
-          </div>
-          <div>
-            Layer Width:
-            <input type="number" step="10" value={this.props.preferences.layer_display_width} onChange={this.handleWidthChange}/>
-          </div>
-          <div>
-            Horizontal Layer Spacing:
-            <input type="number" step="10" value={this.props.preferences.layers_spacing_horizontal} onChange={this.handleSpacingHorizontalChange}/>
-          </div>
-          <div>
-            Vertical Layer Spacing:
-            <input type="number" step="10" value={this.props.preferences.layers_spacing_vertical} onChange={this.handleSpacingVerticalChange}/>
-          </div>
-        </div>
+          <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
+          <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
+          <InputField value={this.props.preferences.layer_display_width.value} type={this.props.preferences.layer_display_width.type} description={this.props.preferences.layer_display_width.description} action={this.handleWidthChange}/>
+          <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
+          <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+       </div>
       );
     } else {
       return null;

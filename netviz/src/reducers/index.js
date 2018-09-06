@@ -8,6 +8,7 @@ import display from './DisplayReducer';
 import layer_types_settings from './LayerTypesSettingsReducer';
 import preferences from './PreferencesReducer';
 import error from './ErrorReducer';
+import layer_extreme_dimensions from './LayerExtremeDimensionsReducer'
 
 // Combine all Reducers
 export default combineReducers({
@@ -18,5 +19,6 @@ export default combineReducers({
     display,
     layer_types_settings,
     preferences,
-    error
+    error,
+    layer_extreme_dimensions
 })
