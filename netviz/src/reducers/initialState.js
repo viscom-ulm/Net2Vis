@@ -9,9 +9,9 @@ export default {
         scale: 1
     },
     display: {
-        code_toggle: false,
+        code_toggle: true,
         preferences_toggle: false,
-        legend_toggle: false
+        legend_toggle: true 
     },
     layer_types_settings: {
         Conv2D: {
@@ -30,18 +30,16 @@ export default {
             color: 'blue'
         }
     },
-    layers_settings: {
-        layer_display_height: {
-            min_size: 50,
-            max_size: 200
-        },
-        layer_display_width: 100,
-        layer_extreme_dimensions: {
-            max_size: 2,
-            min_size: 1
-        },
-        layers_spacing_horizontal: 0,
-        layers_spacing_vertical: 0
+    preferences: {
+        layer_display_min_height: {value: 30, type: 'number', description: 'Minimum Layer Height'},
+        layer_display_max_height: {value: 150, type: 'number', description: 'Maximum Layer Height'},
+        layer_display_width: {value: 80, type: 'number', description: 'Width of Layers'},
+        layers_spacing_horizontal: {value: 0, type: 'number', description: 'Horizontal spacing between Layers'},
+        layers_spacing_vertical: {value: 0, type: 'number', description: 'Vertical spacing between Layers'}
+    },
+    layer_extreme_dimensions: {
+        max_size: 2,
+        min_size: 1
     },
     error: {}
 }

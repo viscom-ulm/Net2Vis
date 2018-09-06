@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 const ToggleButton = ({name, state, action}) => {
   if(state) {
     return (
-      <li><a className='selected' onClick={() => action()}>{name}</a></li>
+      <li className='noselect'><a className='selected' onClick={() => action()}>{name}</a></li>
     );
   } else {
     return (
-      <li><a onClick={() => action()}>{name}</a></li>      
+      <li className='noselect'><a onClick={() => action()}>{name}</a></li>      
     );
   }
 };

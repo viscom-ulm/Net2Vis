@@ -1,3 +1,4 @@
+// General Properties
 html,
 body {
     margin: 0;
@@ -5,8 +6,11 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    font: 15px arial, sans-serif;
+    color: white;
 }
 
+// Header only Properties (For Menu Bar)
 header {
     position: fixed;
     top: 0;
@@ -26,30 +30,41 @@ header {
     
     li {
         float: left;
-        border-right: 1px solid #bbb;
+    }
+
+    li.header {
+        display: block;
+        color: white;
+        text-align: center;
+        font-size: 25px;
+        width: 150px;
+        height: 50px;
+        line-height: 50px;
     }
     
     li a {
         display: block;
         color: white;
         text-align: center;
-        width: 100px;
-        text-decoration: none;
-        height: 50px;
+        height: 48px;
         line-height: 50px;
+        padding-left: 12px;
+        padding-right: 12px;
+        border-bottom: 2px solid #A32638;
     }
     
     li a:hover {
-        background-color: #bbb;
+        background-color: rgb(141, 47, 61);
         text-decoration: none;
         cursor: pointer;
     }
 
     .selected {
-        background-color: #111;
+        border-bottom: 2px solid #ffffff;
     }
 }
 
+// Some Content Helpers
 .content {
     padding: 50px 0px 0px 0px;
     height: 100%;
@@ -74,11 +89,20 @@ header {
     height: 100%;
 }
 
+// Different Areas
 #Legend {
-    height: 400px;
+    height: 300px;
     width: 100%;
     flex-shrink: 0;
-    background-color: green;
+    background-color: #2f3129;
+}
+
+#Preferences {
+    width: 300px;
+    height: 100%;
+    flex-shrink: 0;
+    background-color: #272822;
+    order: 1;
 }
 
 #Code {
@@ -88,16 +112,27 @@ header {
     order: -1;
 }
 
-#Preferences {
-    width: 300px;
-    height: 100%;
-    flex-shrink: 0;
-    background-color: lightgray;
-    order: 1;
-}
-
 #CodeArea {
     width: 100%;
     height: 100%;
     resize: none;
+}
+
+// Classes for Styling of individual Elements
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.preferenceItem {
+    padding: 10px;
+}
+
+.inputElement {
+    width: calc(100% - 20px);
+    height: 30px;
 }

@@ -14,6 +14,7 @@ def translate_keras(filename):
             model = get_model()
             model_json = json.loads(model.to_json())
             layers_extracted = model_json['config']['layers']
+            graph.set_input_shape(layers_extracted[0]['config']['batch_input_shape'][1:])
             for layer in layers_extracted:
                 add_layer_type(layer, graph)
             graph.resolve_input_names()

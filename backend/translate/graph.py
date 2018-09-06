@@ -9,10 +9,14 @@ class Graph:
     def __init__(self):
         self.layers = []
         self.root = Node()
+        self.input_shape = []
 
     # Add a new Layer to the Graph.
     def add_layer(self, layer):
         self.layers.append(layer)
+
+    def set_input_shape(self, input_shape):
+        self.input_shape = input_shape
     
     # Return the Graph representation.
     def __repr__(self):
@@ -22,16 +26,6 @@ class Graph:
             if(i != (len(self.layers)-1)):
                 str = str + ' -> '
         return str
-
-    # Build a tree-structure based on the Layers
-    def build_tree(self):
-        # TODO: Implement
-        return
-
-    # Find Repeating Patterns in the Graph
-    def find_repetitions(self):
-        # TODO: Implement
-        return
 
     # Generate references between the Layers based on the Input names.
     def resolve_input_names(self):
@@ -43,11 +37,11 @@ class Graph:
                         self.layers[j].output.append(self.layers[i])
 
     # Calculates the dimensions for each Layer based on an input dimension.
-    def calculate_layer_dimensions(self, input_dim):
+    def calculate_layer_dimensions(self):
         input_dim = {
-            'in': input_dim,
-            'out': input_dim
-        }   
+            'in': self.input_shape,
+            'out': self.input_shape
+        }
         for layer in self.layers: # Calculate for all Layers.
             if not layer.dimensions: # Only if no Dimension was set.
                 layer.calculate_dimensions_recursive(input_dim)
@@ -61,6 +55,7 @@ class Graph:
                 dim = dim + ' -> '
         return dim
 
+    # Return the Layer Dimensions as Array.
     def dimensions(self):
         dim = []
         for i in range(len(self.layers)):
