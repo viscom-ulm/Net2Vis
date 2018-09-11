@@ -58,7 +58,6 @@ class Layer extends React.Component {
     properties.push({key: 'Dimensions out', prop: dimensions.out.toString()})
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
-      //<g transform={`translate(${100 + (layer_width * this.props.layer.column) + (this.props.layer.column * this.props.preferences.layers_spacing_horizontal.value)}, ${100 + ((extreme_dimensions.max_size + this.props.preferences.layers_spacing_vertical.value) * this.props.layer.row)})`}>
       <g transform={`translate(${this.props.x}, ${this.props.y})`}>
         <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
         <Tooltip for={tooltipRef}>

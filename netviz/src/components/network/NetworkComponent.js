@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
-import * as dagre from 'dagre';
 
 import * as actions from '../../actions';
 import Layer from './LayerComponent'
