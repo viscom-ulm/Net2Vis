@@ -21,10 +21,10 @@ function build_graph_from_network(network) {
     var layer = network.layers[i];
     graph.setNode(layer.id, {width: 80, height: 100, layer: layer})
   }
-  for (var i in network.layers) {
-    var layer = network.layers[i];
-    for (var j in layer.properties.output) {
-      graph.setEdge(layer.id, layer.properties.output[j]);
+  for (var j in network.layers) {
+    var layer_current = network.layers[j];
+    for (var k in layer_current.properties.output) {
+      graph.setEdge(layer_current.id, layer_current.properties.output[k]);
     }
   }
   dagre.layout(graph);

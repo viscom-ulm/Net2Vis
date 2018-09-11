@@ -7,6 +7,7 @@ def get_model():
     img_height = 224
     img_width = 224
     img_channels = 3
+    
     input_shape = (img_height, img_width, img_channels)
     img_input = tf.keras.Input(shape=input_shape)
     x = layers.Conv2D(64, kernel_size=(7, 7), strides=(2, 2), padding='same')(img_input)
