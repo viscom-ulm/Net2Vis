@@ -89,9 +89,13 @@ header {
     height: 100%;
 }
 
+.flexlegend {
+    justify-content: center;
+}
+
 // Different Areas
 #Legend {
-    height: 300px;
+    height: 200px;
     width: 100%;
     flex-shrink: 0;
     background-color: #2f3129;
@@ -135,4 +139,13 @@ header {
 .inputElement {
     width: calc(100% - 20px);
     height: 30px;
+}
+
+.legendItem {
+    width: 200px;
+    height: 50px;
+    margin: 10px;
+    line-height: 50px;
+    text-align: center;
+    color: black;
 }

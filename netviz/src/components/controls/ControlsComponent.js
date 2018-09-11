@@ -15,8 +15,8 @@ class Controls extends React.Component {
       <ul>
         <li className='header noselect'>NetViz</li>
         <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
-        <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
         <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
+        <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
       </ul>
     );
   }
