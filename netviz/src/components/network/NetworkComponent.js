@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
+import * as dagre from 'dagre';
 
 import * as actions from '../../actions';
 import Layer from './LayerComponent'
@@ -18,17 +19,32 @@ class Network extends React.Component {
   // Render the individual Network Layers
   render() {
     const item = this.props.network_graph;
+    var g = new dagre.graphlib.Graph();
+    g.setGraph({rankdir: 'LR', ranksep: 0});
+    g.setDefaultEdgeLabel(function() { return {}; });
+    for (var i in item) {
+      var layer = item[i];
+      g.setNode(layer.node.id, {width: 80, height: 100, layer: layer})
+    }
+    for (var i in item) {
+      var layer = item[i];
+      for (var j in layer.node.properties.output) {
+        g.setEdge(layer.node.id, layer.node.properties.output[j]);
+      }
+    }
+    dagre.layout(g);
+    const nodes = Object.values(g._nodes);
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
     return(
       <g transform={transform}>
-        {item.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.node.name]} key={layer.node.id}/>
+        {nodes.map(layer => 
+          <Layer layer={layer.layer} settings={layer_types_settings[layer.layer.node.name]} key={layer.layer.node.id} x={layer.x} y={layer.y}/>
         )}
       </g>
     );
-  }
+}
 }
 
 // PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Layer Types 
