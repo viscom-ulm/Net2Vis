@@ -13,7 +13,7 @@ class Layer extends React.Component {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
       setting.color = 'gray';
-      this.props.actions.addSettingForLayerType(setting, this.props.layer.node.name);
+      this.props.actions.addSettingForLayerType(setting, this.props.layer.name);
     }
   }
 
@@ -21,7 +21,7 @@ class Layer extends React.Component {
   render() {
     // Get the Properties to use them in the Rendering
     const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if nor already set
-    const dimensions = this.props.layer.node.properties.dimensions; // Get the Dimensions of the current Layer
+    const dimensions = this.props.layer.properties.dimensions; // Get the Dimensions of the current Layer
     const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const layer_width = this.props.preferences.layer_display_width.value; // Get the Width of the Layers
     // Calculate the height of the Layer
@@ -45,7 +45,7 @@ class Layer extends React.Component {
     ].join(' ')
     // Get Information for the Tooltip
     const tooltipRef = React.createRef(); // Reference for the Tooltip
-    const properties_object = this.props.layer.node.properties.properties; // Get the layer Properties
+    const properties_object = this.props.layer.properties.properties; // Get the layer Properties
     const keys = Object.keys(properties_object); // Get the Keys from the Object
     var properties = []; // Get all Properties
     for (var i in keys) {
@@ -72,7 +72,7 @@ class Layer extends React.Component {
             fill="black"
             fillOpacity="0.6"
           />
-          <text x={13} y={20} fontSize={10} fill="white">Type: {this.props.layer.node.name}</text>
+          <text x={13} y={20} fontSize={10} fill="white">Type: {this.props.layer.name}</text>
           {properties.map((pro, index) =>
             <text x={13} y={35 + (index * 15)} fontSize={10} key={index} fill="white">{pro.key}: {pro.prop}</text>  
           )}
