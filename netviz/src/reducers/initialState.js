@@ -1,6 +1,6 @@
 // Set the initial State of the Application
 export default {
-    network: [],
+    network: {},
     network_graph: {},
     code: '',
     group_transform: {

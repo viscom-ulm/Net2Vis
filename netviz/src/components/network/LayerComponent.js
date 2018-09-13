@@ -20,11 +20,11 @@ class Layer extends React.Component {
   // Render the Layer
   render() {
     // Get the Properties to use them in the Rendering
-    const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if nor already set
+    const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
     const dimensions = this.props.layer.properties.dimensions; // Get the Dimensions of the current Layer
-    const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const layer_width = this.props.preferences.layer_display_width.value; // Get the Width of the Layers
     // Calculate the height of the Layer
+    const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights of the Glyph
     if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer only if multidimensional Tensor
       const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of the current Layer

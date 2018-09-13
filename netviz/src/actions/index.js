@@ -38,13 +38,8 @@ export function loadNetworkSuccess(network) {
 }
 
 // Set the Extreme dimensions of the Layers in the Network
-export function setLayersExtremes(network) {
-  return {type: types.SET_LAYERS_EXTREMES, network}
-}
-
-// Initializes the Network Graph for drawing positions.
-export function initializeNetworkGraph(network) {
-  return {type: types.INITIALIZE_NETWORK_GRAPH, network}
+export function setLayersExtremes(network, preferences, initializeNetworkGraph) {
+  return {type: types.SET_LAYERS_EXTREMES, network, preferences, initializeNetworkGraph}
 }
 
 // Add an error to the Code.
@@ -57,23 +52,27 @@ export function removeError() {
   return {type: types.REMOVE_ERROR}
 }
 
+// Helper Function to be called once a Network has been Loaded.
+export function networkLoaded(network, dispatch) {
+  if(network.success === true) {
+    dispatch(removeError());
+    dispatch(loadNetworkSuccess(network.data));
+    dispatch(setLayersExtremes(network.data));
+  } else {
+    dispatch(addError(network.data));
+  }
+}
+
 // Called to load the Network
 export function loadNetwork() {
   return function(dispatch) {
     return NetworkApi.getNetwork().then(network => {
-      if(network.success === true) {
-        dispatch(removeError());
-        dispatch(loadNetworkSuccess(network.data));
-        dispatch(setLayersExtremes(network.data));
-        dispatch(initializeNetworkGraph(network.data));
-      } else {
-        dispatch(addError(network.data));
-      }
+      networkLoaded(network, dispatch);      
     }).catch(error => {
       throw(error);
-    })
-  };
-}
+    })  
+  };  
+}  
 
 // Loading Code was Successful
 export function loadCodeSuccess(code) {
@@ -101,16 +100,9 @@ export function updateCode(code) {
   return function(dispatch) {
     return CodeApi.updateCode(code).then(code => {
       dispatch(updateCodeSuccess(code));
-      return NetworkApi.getNetwork().then(network => {
-        if(network.success === true) {
-          dispatch(removeError());
-          dispatch(loadNetworkSuccess(network.data));
-          dispatch(setLayersExtremes(network.data));
-          dispatch(initializeNetworkGraph(network.data));       
-        } else {
-          dispatch(addError(network.data));
-        }
-     }).catch(error => {
+      return NetworkApi.getNetwork().then(network => { // TODO: Check if could be reused from above
+        networkLoaded(network, dispatch);      
+      }).catch(error => {
         throw(error);
       })
     }).catch(error => {
