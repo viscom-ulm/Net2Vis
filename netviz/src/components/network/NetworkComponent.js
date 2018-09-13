@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
+import * as dagre from 'dagre';
 
 import * as actions from '../../actions';
 import Layer from './LayerComponent'
@@ -10,21 +11,49 @@ import Layer from './LayerComponent'
 class Network extends React.Component {
   // When this Component mounts, load the Network from the Backend
   componentWillMount() {
-    if(this.props.network_graph.length === 0) {
+    if (!('layers' in this.props.network)) {
       this.props.actions.loadNetwork();
     }
   }
 
+  // Build the network graph upon the Network representation
+  build_graph_from_network = (network, layer_extreme_dimensions, preferences) => {
+    var graph = new dagre.graphlib.Graph(); // Initialize the dagre Graph
+    graph.setGraph({rankdir: 'LR', ranksep: 0, nodesep: 100});
+    graph.setDefaultEdgeLabel(function() { return {}; }); 
+    for (var i in network.layers) { // Add all Layers to the Graph
+      const layer = network.layers[i]; // Get the current Layer
+      const max_layer_dim = Math.max(layer.properties.dimensions.in[0], layer.properties.dimensions.out[0]) // Get the maximum dimension of the layer (in vs out)
+      const lay_diff =  layer_extreme_dimensions.max_size - layer_extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Layer
+      const dim_diff = preferences.layer_display_max_height.value - preferences.layer_display_min_height.value; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
+      const perc = (max_layer_dim - layer_extreme_dimensions.min_size) / lay_diff; // Calculate the interpolation factor for boths sides of the Glyph 
+      const height = perc * dim_diff + preferences.layer_display_min_height.value; // Calculate the height for both sides of the Glyph 
+      graph.setNode(layer.id, {width: preferences.layer_display_width.value, height: height, layer: layer}); // Add a Node to the Graph
+    }
+    for (var j in network.layers) { // Add all Edges to the Graph
+      var layer_current = network.layers[j]; // Get the current Layer
+      for (var k in layer_current.properties.output) { // Go over all outputs of the current Layer
+        graph.setEdge(layer_current.id, layer_current.properties.output[k]); // Add the Edge to the Graph
+      }
+    }
+    dagre.layout(graph); // Layout the graph to be displayed in a nice fashion
+    return graph;
+  }
+
   // Render the individual Network Layers
   render() {
-    const item = this.props.network_graph;
+    const graph = this.build_graph_from_network(this.props.network, this.props.layer_extreme_dimensions, this.props.preferences);
+    var nodes = [];
+    if ('_nodes' in graph) {
+      nodes = Object.values(graph._nodes);
+    }
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
     return(
       <g transform={transform}>
-        {item.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.node.name]} key={layer.node.id}/>
+        {nodes.map(layer => 
+          <Layer layer={layer.layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} x={layer.x} y={layer.y}/>
         )}
       </g>
     );
@@ -33,17 +62,21 @@ class Network extends React.Component {
 
 // PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Layer Types 
 Network.propTypes = {
-  network_graph: PropTypes.array.isRequired,
+  network: PropTypes.object.isRequired,
   group_transform: PropTypes.object.isRequired,
-  layer_types_settings: PropTypes.object.isRequired
+  layer_types_settings: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired,
+  layer_extreme_dimensions: PropTypes.object.isRequired
 };
 
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    network_graph: state.network_graph,
+    network: state.network,
     group_transform: state.group_transform,
-    layer_types_settings: state.layer_types_settings
+    layer_types_settings: state.layer_types_settings,
+    preferences: state.preferences,
+    layer_extreme_dimensions: state.layer_extreme_dimensions
   };
 }
 

@@ -20,8 +20,10 @@ def translate_keras(filename):
             graph.resolve_input_names()
             return graph
         except SyntaxError as err:
+            print(err)
             return {'error_class': err.__class__.__name__, 'line_number': err.lineno, 'detail': err.args[0]}
         except Exception as err:
+            print(err)
             cl, exc, tb = sys.exc_info()
             ln = traceback.extract_tb(tb)[-1][1]
             return {'error_class': err.__class__.__name__, 'line_number': ln, 'detail': err.args[0]}
