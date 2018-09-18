@@ -2,6 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
+import { saveAs } from 'file-saver';
 
 import ToggleButton from './ToggleButton';
 import ClickableButton from './ClickableButton';
@@ -10,6 +11,11 @@ import * as actions from '../../actions';
 // Controls at top of the Application
 class Controls extends React.Component {
   downloadSVG = () => {
+    var svg_text = document.getElementById('main_group').innerHTML;
+    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='2000' height='2000'>" + svg_text + "</svg>"
+    var filename = 'model.svg'
+    var blob = new Blob([svg_text], {type: "text/svg;charset=utf-8"});
+    saveAs(blob, filename);
     console.log('Download should happen.')    
   }
 
