@@ -51,7 +51,7 @@ class Network extends React.Component {
     const layer_types_settings = this.props.layer_types_settings;
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
     return(
-      <g transform={transform}>
+      <g id='main_group' transform={transform}>
         {nodes.map(layer => 
           <Layer layer={layer.layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} x={layer.x} y={layer.y}/>
         )}
