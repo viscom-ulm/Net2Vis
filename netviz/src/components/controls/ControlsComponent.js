@@ -3,11 +3,16 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 
-import ToggleButton from './ToggleButton'
-import * as actions from '../../actions'
+import ToggleButton from './ToggleButton';
+import ClickableButton from './ClickableButton';
+import * as actions from '../../actions';
 
 // Controls at top of the Application
 class Controls extends React.Component {
+  downloadSVG = () => {
+    console.log('Download should happen.')    
+  }
+
   // Render the Controls
   render() {
     const display = this.props.display;
@@ -17,6 +22,7 @@ class Controls extends React.Component {
         <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
         <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
         <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
+        <ClickableButton name="Download" action={this.downloadSVG}/>
       </ul>
     );
   }
