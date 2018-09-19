@@ -19,8 +19,8 @@ class Network extends React.Component {
   // Build the network graph upon the Network representation
   build_graph_from_network = (network, layer_extreme_dimensions, preferences) => {
     var graph = new dagre.graphlib.Graph(); // Initialize the dagre Graph
-    graph.setGraph({rankdir: 'LR', ranksep: 0, nodesep: 100});
-    graph.setDefaultEdgeLabel(function() { return {}; }); 
+    graph.setGraph({rankdir: 'LR', ranksep: 0, nodesep: (layer_extreme_dimensions.max_size/2)}); // Set Graph Properties
+    graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
     for (var i in network.layers) { // Add all Layers to the Graph
       const layer = network.layers[i]; // Get the current Layer
       const max_layer_dim = Math.max(layer.properties.dimensions.in[0], layer.properties.dimensions.out[0]) // Get the maximum dimension of the layer (in vs out)
@@ -53,7 +53,7 @@ class Network extends React.Component {
     return(
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} />
+          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes}/>
         )}
       </g>
     );
