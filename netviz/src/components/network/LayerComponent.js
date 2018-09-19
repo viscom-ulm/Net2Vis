@@ -59,7 +59,7 @@ class Layer extends React.Component {
       const y_off = this.props.layer.y - this.props.nodes[inputs[i]].y; // Calculate the Offset of the current Input Layer to this Layer
       pathData = this.addLeftEnd(pathData, y_pos[0] + y_off, y_pos[3] + y_off); // Add a left End for this Input
       if(i < inputs.length - 1) { // More Iputs to follow
-        const y_off2 = this.props.layer.y - this.props.nodes[inputs[(parseInt(i)+1)]].y; // Calculate the Offset of the next Input Layer to this Layer
+        const y_off2 = this.props.layer.y - this.props.nodes[inputs[(parseInt(i, 10)+1)]].y; // Calculate the Offset of the next Input Layer to this Layer
         pathData = this.addIntersection(pathData, 0, y_pos[0] + y_off, layer_width, y_pos[1], 0, y_pos[3] + y_off2, layer_width, y_pos[2]); // Add an Intersection Point for both Layers
       }
     }
@@ -75,7 +75,7 @@ class Layer extends React.Component {
       const y_off = this.props.layer.y - this.props.nodes[outputs[i]].y; // Calculate the Offset of the current Output Layer to this Layer
       pathData = this.addRightEnd(pathData, y_pos[1] + y_off, y_pos[2] + y_off, layer_width); // Add a right End for this Output
       if(i < outputs.length - 1) { // More Outputs to follow
-        const y_off2 = this.props.layer.y - this.props.nodes[outputs[(parseInt(i)+1)]].y; // Calculate the Offset of the next Output Layer to this Layer
+        const y_off2 = this.props.layer.y - this.props.nodes[outputs[(parseInt(i, 10)+1)]].y; // Calculate the Offset of the next Output Layer to this Layer
         pathData = this.addIntersection(pathData, layer_width, y_pos[2] + y_off, 0, y_pos[3], 0, y_pos[0], layer_width, y_pos[1] + y_off2); // Add an Intersection Point for both Layers
       }
     }
