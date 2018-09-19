@@ -5,7 +5,8 @@ import {bindActionCreators} from 'redux';
 import * as dagre from 'dagre';
 
 import * as actions from '../../actions';
-import Layer from './LayerComponent'
+import Layer from './LayerComponent';
+import EdgeComponent from './EdgeComponent';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
@@ -44,9 +45,22 @@ class Network extends React.Component {
   render() {
     const graph = this.build_graph_from_network(this.props.network, this.props.layer_extreme_dimensions, this.props.preferences);
     var nodes = [];
-    if ('_nodes' in graph) {
-      nodes = Object.values(graph._nodes);
-    }
+    graph.nodes().forEach(function(e) {
+      nodes.push(graph.node(e));
+    });
+    var edges = [];
+    graph.edges().forEach(function(e) {
+      var points = graph.edge(e).points;
+      var distinct = [];
+      for(var i in points) {
+        if(!distinct.includes(points[i].x)) {
+          distinct.push(points[i].x);
+        }
+      }
+      if(distinct.length > 1) {
+        edges.push(graph.edge(e));
+      }
+    });
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
@@ -54,6 +68,9 @@ class Network extends React.Component {
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 
           <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes}/>
+        )}
+        {edges.map((edge, index) =>
+          <EdgeComponent edge={edge} key={index}/>
         )}
       </g>
     );
