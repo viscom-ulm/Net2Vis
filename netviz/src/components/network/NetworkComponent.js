@@ -53,7 +53,7 @@ class Network extends React.Component {
     return(
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 
-          <Layer layer={layer.layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} x={layer.x} y={layer.y}/>
+          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} />
         )}
       </g>
     );
