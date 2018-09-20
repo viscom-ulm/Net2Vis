@@ -6,7 +6,6 @@ import * as dagre from 'dagre';
 
 import * as actions from '../../actions';
 import Layer from './LayerComponent';
-import EdgeComponent from './EdgeComponent';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
@@ -20,7 +19,7 @@ class Network extends React.Component {
   // Build the network graph upon the Network representation
   build_graph_from_network = (network, layer_extreme_dimensions, preferences) => {
     var graph = new dagre.graphlib.Graph(); // Initialize the dagre Graph
-    graph.setGraph({rankdir: 'LR', ranksep: 0, nodesep: (layer_extreme_dimensions.max_size/2)}); // Set Graph Properties
+    graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: 0, nodesep: (layer_extreme_dimensions.max_size/2)}); // Set Graph Properties
     graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
     for (var i in network.layers) { // Add all Layers to the Graph
       const layer = network.layers[i]; // Get the current Layer
@@ -50,27 +49,15 @@ class Network extends React.Component {
     });
     var edges = [];
     graph.edges().forEach(function(e) {
-      var points = graph.edge(e).points;
-      var distinct = [];
-      for(var i in points) {
-        if(!distinct.includes(points[i].x)) {
-          distinct.push(points[i].x);
-        }
-      }
-      if(distinct.length > 2) {
-        edges.push(graph.edge(e));
-      }
+      edges.push({v: e.v, w: e.w, points: graph.edge(e)});
     });
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
     return(
       <g id='main_group' transform={transform}>
-        {edges.map((edge, index) =>
-          <EdgeComponent edge={edge} layer_max_height={this.props.preferences.layer_display_max_height.value} layer_width={this.props.preferences.layer_display_width.value} key={index}/>
-        )}
         {nodes.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes}/>
+          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes} edges={edges}/>
         )}
       </g>
     );

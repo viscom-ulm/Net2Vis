@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 
 import TooltipComponent from './TooltipComponent';
 import * as actions from '../../actions';
+import EdgeComponent from './EdgeComponent';
 
 // Layer Component providing individual Layer Visualizations
 class Layer extends React.Component {  
@@ -37,7 +38,7 @@ class Layer extends React.Component {
     if(this.props.layer.layer.properties.input.length > 1) { // Multiple Inputs
       return this.calculateMultiInputPath(y_pos, layer_width); // Caculate a Path with multiple Inputs
     } else if(this.props.layer.layer.properties.output.length > 1) { // Multiple Outputs
-      return this.calculateMultiOutputPath(y_pos, layer_width); // Calculate a Path with multiple Outputs
+      return this.calculateMultiOutputPath(y_pos, layer_width); // Calculate a Path with Multiple Outputs
     } else { // Trivial case
       return this.calculateTrivialPath(y_pos, layer_width); // Calculate a Path for the trivial Glyph
     }
@@ -53,13 +54,14 @@ class Layer extends React.Component {
   
   // Multi Input Layer
   calculateMultiInputPath = (y_pos, layer_width) => {
-    const inputs = this.props.layer.layer.properties.input; // TODO: Sort by y value descending
+    const position_reduced = this.reducePosition(this.getIncomingEdges());
+    position_reduced.sort((a,b) => b - a); // Sort them by y value descending
     var pathData = 'M ' + layer_width + ' ' + y_pos[2]; // Move to initial location (bottom right)
-    for(var i in inputs) { // For each Input
-      const y_off = this.props.layer.y - this.props.nodes[inputs[i]].y; // Calculate the Offset of the current Input Layer to this Layer
+    for(var i in position_reduced) { // For each Input
+      const y_off = position_reduced[i] - this.props.layer.y; // Calculate the Offset of the current Input Layer to this Layer
       pathData = this.addLeftEnd(pathData, y_pos[0] + y_off, y_pos[3] + y_off); // Add a left End for this Input
-      if(i < inputs.length - 1) { // More Iputs to follow
-        const y_off2 = this.props.layer.y - this.props.nodes[inputs[(parseInt(i, 10)+1)]].y; // Calculate the Offset of the next Input Layer to this Layer
+      if(i < position_reduced.length - 1) { // More Iputs to follow
+        const y_off2 = position_reduced[(parseInt(i, 10)+1)] - this.props.layer.y; // Calculate the Offset of the next Input Layer to this Layer
         pathData = this.addIntersection(pathData, 0, y_pos[0] + y_off, layer_width, y_pos[1], 0, y_pos[3] + y_off2, layer_width, y_pos[2]); // Add an Intersection Point for both Layers
       }
     }
@@ -69,13 +71,14 @@ class Layer extends React.Component {
 
   // Multi Output Layer
   calculateMultiOutputPath = (y_pos, layer_width) => {
-    const outputs = this.props.layer.layer.properties.output; // TODO: Sort by y value ascending
+    const position_reduced = this.reducePosition(this.getOutgoingEdges()); // Get the y positions of the straight parts of alloutgoing edges
+    position_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
     var pathData = 'M 0 ' + y_pos[0]; // Move to initial Location (top left)
-    for(var i in outputs) { // For each Output
-      const y_off = this.props.layer.y - this.props.nodes[outputs[i]].y; // Calculate the Offset of the current Output Layer to this Layer
+    for(var i in position_reduced) { // For each outgoing Edge
+      const y_off = position_reduced[i] - this.props.layer.y; // Calculate the Offset of the current Output Layer to this Edge
       pathData = this.addRightEnd(pathData, y_pos[1] + y_off, y_pos[2] + y_off, layer_width); // Add a right End for this Output
-      if(i < outputs.length - 1) { // More Outputs to follow
-        const y_off2 = this.props.layer.y - this.props.nodes[outputs[(parseInt(i, 10)+1)]].y; // Calculate the Offset of the next Output Layer to this Layer
+      if(i < position_reduced.length - 1) { // More Outputs to follow
+        const y_off2 = position_reduced[(parseInt(i, 10)+1)] - this.props.layer.y; // Calculate the Offset of the next Output Layer to this Layer
         pathData = this.addIntersection(pathData, layer_width, y_pos[2] + y_off, 0, y_pos[3], 0, y_pos[0], layer_width, y_pos[1] + y_off2); // Add an Intersection Point for both Layers
       }
     }
@@ -106,6 +109,45 @@ class Layer extends React.Component {
     return pathData;
   }
 
+  // Get all outgoing Edges for the current Node
+  getOutgoingEdges = () => {
+    var current = [];
+    for(var i in this.props.edges) { // Go over all Edges
+      if(this.props.layer.layer.id === parseInt(this.props.edges[i].v, 10)) { // Check if current node is source of edge
+        current.push(this.props.edges[i]); // Add the edge
+      }
+    }
+    return current;
+  }
+
+  // Get all incoming Edges for the current Node
+  getIncomingEdges = () => {
+    var current = [];
+    for(var i in this.props.edges) { // Go over all Edges
+      if(this.props.layer.layer.id === parseInt(this.props.edges[i].w, 10)) { // Check if current node is sink of edge
+        current.push(this.props.edges[i]); // Add the edge
+      }
+    }
+    return current;
+  }
+
+  // Reduces the position elements of an Edge to just one, that represents the part with no inclination
+  reducePosition = (edges) => {
+    var positions = [];
+    for(var i in edges) { // For all Edges
+      var prev = edges[i].points.points[0].y; // Initialize the previous point Placeholder
+      for(var j = 1; j < edges[i].points.points.length; j++) { // For all other Points
+        if(prev === edges[i].points.points[j].y) { // The previous point had the same y value
+          j = edges[i].points.points.length; // Break the Loop
+        } else { // Not the same y value
+          prev = edges[i].points.points[j].y; // Update the Previous point Placeholder
+        }
+      }
+      positions.push(prev); // Add the value to the positions of the edge
+    }
+    return positions;
+  }
+
   // Render the Layer
   render() {
     // Get the Properties to use them in the Rendering
@@ -117,11 +159,17 @@ class Layer extends React.Component {
     const pathData = this.calculateGlyphPath(extreme_dimensions, layer_height, layer_width); // Calculate the Path of the Layer
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
+    const current_edges = this.getOutgoingEdges(); // Get relevant Edges going out from the current Layer
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
-      <g transform={`translate(${this.props.layer.x}, ${this.props.layer.y})`}>
-        <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
-        <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={this.props.layer.layer.name}/>
+      <g>
+        {current_edges.map((edge, index) =>
+          <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} layer_width={this.props.preferences.layer_display_width.value} key={index}/>
+        )}
+        <g transform={`translate(${this.props.layer.x}, ${this.props.layer.y})`}>
+          <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
+          <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={this.props.layer.layer.name}/>
+        </g>
       </g>
     );
   }
