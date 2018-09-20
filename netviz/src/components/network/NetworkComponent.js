@@ -57,7 +57,7 @@ class Network extends React.Component {
           distinct.push(points[i].x);
         }
       }
-      if(distinct.length > 1) {
+      if(distinct.length > 2) {
         edges.push(graph.edge(e));
       }
     });
@@ -66,11 +66,11 @@ class Network extends React.Component {
     const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
     return(
       <g id='main_group' transform={transform}>
+        {edges.map((edge, index) =>
+          <EdgeComponent edge={edge} layer_max_height={this.props.preferences.layer_display_max_height.value} layer_width={this.props.preferences.layer_display_width.value} key={index}/>
+        )}
         {nodes.map(layer => 
           <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes}/>
-        )}
-        {edges.map((edge, index) =>
-          <EdgeComponent edge={edge} key={index}/>
         )}
       </g>
     );
