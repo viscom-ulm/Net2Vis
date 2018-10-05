@@ -13,6 +13,7 @@ def translate_keras(filename):
             exec(keras_code, globals())
             model = get_model()
             model_json = json.loads(model.to_json())
+            print(model_json)
             layers_extracted = model_json['config']['layers']
             graph.set_input_shape(layers_extracted[0]['config']['batch_input_shape'][1:])
             for layer in layers_extracted:
@@ -20,9 +21,11 @@ def translate_keras(filename):
             graph.resolve_input_names()
             return graph
         except SyntaxError as err:
+            print('Syntax Error')
             print(err)
             return {'error_class': err.__class__.__name__, 'line_number': err.lineno, 'detail': err.args[0]}
         except Exception as err:
+            print('Exception')
             print(err)
             cl, exc, tb = sys.exc_info()
             ln = traceback.extract_tb(tb)[-1][1]
@@ -56,6 +59,12 @@ def add_layer_type(layer, graph):
         add_to_graph(new_layer, layer, graph)
     elif ('Add' in layer['class_name']): # Add Layer.
         new_layer = layers_representations.Add(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('Concatenate' in layer['class_name']): # Concatenation Layer.
+        new_layer = layers_representations.Concatenate(layer['name'])
+        add_to_graph(new_layer, layer, graph)
+    elif ('UpSampling2D' in layer['class_name']): # UpSampling Layer.
+        new_layer = layers_representations.UpSampling2D(layer['name'])
         add_to_graph(new_layer, layer, graph)
 
 # Takes a new layer, adds the Properties and then adds the Layer to the Graph.
