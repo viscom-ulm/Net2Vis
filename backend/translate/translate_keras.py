@@ -13,7 +13,6 @@ def translate_keras(filename):
             exec(keras_code, globals())
             model = get_model()
             model_json = json.loads(model.to_json())
-            print(model_json)
             layers_extracted = model_json['config']['layers']
             graph.set_input_shape(layers_extracted[0]['config']['batch_input_shape'][1:])
             for layer in layers_extracted:

@@ -18,6 +18,15 @@ class Layer extends React.Component {
     }
   }
 
+  // When a layer is clicked, change its selection state
+  handleLayerClicked = (e) => {
+    if (this.props.selection.includes(this.props.layer.layer.id)) { // If selected
+      this.props.actions.deselectLayer(this.props.layer.layer.id); // Deselect
+    } else { // If not selected
+      this.props.actions.selectLayer(this.props.layer.layer.id); // Select
+    }
+  };
+
   // Calculate the height values of the layer (begin and end) based on the spatial resolution
   calculateLayerHeight = (extreme_dimensions, dimensions) => {
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights to max-values for 1D-Layers
@@ -160,6 +169,10 @@ class Layer extends React.Component {
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
     const current_edges = this.getOutgoingEdges(); // Get relevant Edges going out from the current Layer
+    var stroke = "black"; // Set the default stroke color to black
+    if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
+      stroke = "red"; // Set stroke color to red
+    }
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g>
@@ -167,7 +180,7 @@ class Layer extends React.Component {
           <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} layer_width={this.props.preferences.layer_display_width.value} key={index}/>
         )}
         <g transform={`translate(${this.props.layer.x}, ${this.props.layer.y})`}>
-          <path d={pathData} style={{fill:set.color, stroke: 'black'}} ref={tooltipRef}/>
+          <path d={pathData} style={{fill:set.color, stroke: stroke}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
           <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={this.props.layer.layer.name}/>
         </g>
       </g>
@@ -178,14 +191,16 @@ class Layer extends React.Component {
 // PropTypes of this Class, containing the Global Layer Settings
 Layer.propTypes = {
   preferences: PropTypes.object.isRequired,
-  layer_extreme_dimensions: PropTypes.object.isRequired
+  layer_extreme_dimensions: PropTypes.object.isRequired,
+  selection: PropTypes.array.isRequired
 }
 
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
     preferences: state.preferences,
-    layer_extreme_dimensions: state.layer_extreme_dimensions
+    layer_extreme_dimensions: state.layer_extreme_dimensions,
+    selection: state.selection
   };
 }
 

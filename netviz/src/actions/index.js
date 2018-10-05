@@ -135,3 +135,13 @@ export function changeLayersSpacingHorizontal(spacing) {
 export function changeLayersSpacingVertical(spacing) {
   return {type: types.CHANGE_LAYERS_SPACING_VERTICAL, spacing}
 }
+
+// Select Layer
+export function selectLayer(id) {
+  return {type: types.SELECT_LAYER, id}
+}
+
+// Deselect Layer
+export function deselectLayer(id) {
+  return {type: types.DESELECT_LAYER, id}
+}

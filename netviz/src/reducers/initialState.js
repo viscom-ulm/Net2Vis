@@ -41,5 +41,6 @@ export default {
         max_size: 2,
         min_size: 1
     },
-    error: {}
+    error: {},
+    selection: []
 }
