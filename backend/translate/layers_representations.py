@@ -160,6 +160,7 @@ class Activation(Layer):
       'activation': None
     }
 
+
 # Representation of LeakyReLU Layers. 
 class LeakyReLU(Layer):
   def __init__(self, name):
@@ -168,6 +169,7 @@ class LeakyReLU(Layer):
     self.properties = {
       'alpha': 0.3
     }
+
 
 # Representation of BatchNormalization Layers. 
 class BatchNormalization(Layer):
@@ -182,11 +184,36 @@ class BatchNormalization(Layer):
       'scale': True
     }
 
+
 # Representation of Add Layers. 
 class Add(Layer):
   def __init__(self, name):
     Layer.__init__(self)
     self.name = name
+
+
+# Respresentation of Concatenation Layers.
+class Concatenate(Layer):
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
+
+
+class UpSampling2D(Layer):
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
+    self.properties = {
+      'size': [2, 2],
+      'data_format': None,
+    }
+
+  def calculate_dimensions(self, input_dim):
+    self.dimensions = {
+      'in': input_dim[0]['out'],
+      'out': [input_dim[0]['out'][0] * self.properties['size'][0], input_dim[0]['out'][1] * self.properties['size'][1]]
+    }
+
 
 # Calculate the Size of the Next Layer with Padding, Strides, Input Size and Kernel Size
 def calculate_next_layer(padding, stride, input_size, kernel_size):
