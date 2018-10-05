@@ -197,6 +197,18 @@ class Concatenate(Layer):
   def __init__(self, name):
     Layer.__init__(self)
     self.name = name
+    self.properties = {
+      'axis': -1
+    }
+
+  def calculate_dimensions(self, input_dim):
+    out = input_dim[0]['out'].copy()
+    for dim in input_dim[1:]: 
+      out[self.properties['axis']] = out[self.properties['axis']] + dim['out'][self.properties['axis']]
+    self.dimensions = {
+      'in': input_dim[0]['out'],
+      'out': out
+    }
 
 
 class UpSampling2D(Layer):
@@ -211,7 +223,7 @@ class UpSampling2D(Layer):
   def calculate_dimensions(self, input_dim):
     self.dimensions = {
       'in': input_dim[0]['out'],
-      'out': [input_dim[0]['out'][0] * self.properties['size'][0], input_dim[0]['out'][1] * self.properties['size'][1]]
+      'out': [input_dim[0]['out'][0] * self.properties['size'][0], input_dim[0]['out'][1] * self.properties['size'][1], input_dim[0]['out'][2]]
     }
 
 
