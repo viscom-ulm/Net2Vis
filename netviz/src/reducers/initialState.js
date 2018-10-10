@@ -10,7 +10,7 @@ export default {
     },
     display: {
         code_toggle: true,
-        preferences_toggle: false,
+        preferences_toggle: true,
         legend_toggle: true 
     },
     layer_types_settings: {
@@ -42,5 +42,6 @@ export default {
         min_size: 1
     },
     error: {},
-    selection: []
+    selection: [],
+    preferences_mode: 'network'
 }

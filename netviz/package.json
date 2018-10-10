@@ -12,6 +12,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
     "react-ace": "^6.1.4",
+    "react-color": "^2.14.1",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",

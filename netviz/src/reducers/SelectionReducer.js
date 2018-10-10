@@ -7,6 +7,8 @@ export default function selectionReducer(state = initialState.selection, action)
       return state.concat(action.id);
     case types.DESELECT_LAYER:
       return state.filter(item => item !== action.id);
+    case types.DESELECT_LAYERS:
+      return [];
     default:
       return state;
   }

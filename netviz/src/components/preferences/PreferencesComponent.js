@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
+import {SketchPicker} from 'react-color';
 
 import InputField from './InputField'
 import * as actions from '../../actions';
@@ -36,15 +37,31 @@ class Preferences extends React.Component {
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
-      return(
-        <div id='Preferences'>
-          <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
-          <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
-          <InputField value={this.props.preferences.layer_display_width.value} type={this.props.preferences.layer_display_width.type} description={this.props.preferences.layer_display_width.description} action={this.handleWidthChange}/>
-          <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
-          <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
-       </div>
-      );
+      switch (this.props.preferences_mode) {
+        case 'network':
+          return(
+            <div id='Preferences'>
+              <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
+              <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
+              <InputField value={this.props.preferences.layer_display_width.value} type={this.props.preferences.layer_display_width.type} description={this.props.preferences.layer_display_width.description} action={this.handleWidthChange}/>
+              <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
+              <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+           </div>
+          );
+        case 'color':
+          return(
+            <div id='Preferences'>
+                <SketchPicker color={ {
+                  width: '36px',
+                  height: '14px',
+                  borderRadius: '2px',
+                  background: `rgba(${ 255 }, ${ 255 }, ${ 255 }, ${ 255 })`,
+                }} onChange={ this.handleChange } />
+            </div>
+          );
+        default:
+          return null;
+      }
     } else {
       return null;
     }
@@ -53,6 +70,7 @@ class Preferences extends React.Component {
 
 // Prop Types holding all the Preferences
 Preferences.propTypes = {
+  preferences_mode: PropTypes.string.isRequired,
   preferences_toggle: PropTypes.bool.isRequired,
   preferences: PropTypes.object.isRequired
 };
@@ -60,6 +78,7 @@ Preferences.propTypes = {
 // Map the State to the Properties of this Component
 function mapStateToProps(state, ownProps) {
   return {
+    preferences_mode: state.preferences_mode,
     preferences_toggle: state.display.preferences_toggle,
     preferences: state.preferences
   };

@@ -1,7 +1,7 @@
 import initialState from './initialState';
 import * as types from '../actions/types';
 
-export default function pereferencesReducer(state = initialState.layer_extreme_dimensions, action) {
+export default function layerExtremeDimensionsReducer(state = initialState.layer_extreme_dimensions, action) {
   switch(action.type) {
     case types.SET_LAYERS_EXTREMES:
       var max = 0, min = Infinity;

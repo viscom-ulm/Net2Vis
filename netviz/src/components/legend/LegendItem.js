@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
-const LegendItem = ({layer_name, layer_color}) => {
+const LegendItem = ({layer_name, layer_color, action}) => {
   const style = {
     backgroundColor: layer_color
   };  
   return (
-    <div className='legendItem' style={style}>{layer_name}</div>
+    <div className='legendItem' style={style} onClick={() => action(layer_name)}>{layer_name}</div>
   );
 };
 

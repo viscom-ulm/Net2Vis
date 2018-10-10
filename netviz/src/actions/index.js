@@ -145,3 +145,13 @@ export function selectLayer(id) {
 export function deselectLayer(id) {
   return {type: types.DESELECT_LAYER, id}
 }
+
+// Deselect Layer
+export function deselectLayers() {
+  return {type: types.DESELECT_LAYERS}
+}
+
+// Set the item of the Legend that is currently selected.
+export function setPreferenceMode(name) {
+  return {type: types.SET_PREFERENCE_MODE, name}
+}
