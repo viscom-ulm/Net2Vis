@@ -2,6 +2,7 @@ from flask import Flask, send_file, request, jsonify
 import copy
 import sys
 import inspect
+import json
 
 sys.path.append('translate')
 from translate_keras import translate_keras
@@ -75,6 +76,21 @@ def get_code():
 def update_code():
     content = request.data
     file = open('current/model_current.py','w')
+    file.write(content.decode("utf-8"))
+    return content, ok_status, text_type
+
+# Get the Layer_Types.
+@app.route('/api/get_layer_types')
+def get_layer_types():
+    with open('current/layer_types_current.json', 'r') as myfile:
+        layer_types = myfile.read()
+        return layer_types, ok_status, text_type
+
+# Update the Layer_Types.
+@app.route('/api/update_layer_types', methods=['POST'])
+def update_layer_types():
+    content = request.data
+    file = open('current/layer_types_current.json','w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 

@@ -9,6 +9,10 @@ export default function layerTypesSettignsReducer(state = initialState.layer_typ
           color: action.setting.color
         }
       });
+    case types.UPDATE_LAYER_TYPES_SUCCESS:
+      return action.layerTypes;
+    case types.LOAD_LAYER_TYPES_SUCCESS:
+      return action.layerTypes;
     default:
       return state;
   }

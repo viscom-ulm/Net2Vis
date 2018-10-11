@@ -1,7 +1,6 @@
 // Set the initial State of the Application
 export default {
     network: {},
-    network_graph: {},
     code: '',
     group_transform: {
         x: 0,
@@ -13,23 +12,7 @@ export default {
         preferences_toggle: true,
         legend_toggle: true 
     },
-    layer_types_settings: {
-        Conv2D: {
-            color: 'green'
-        },
-        Activation: {
-            color: 'red'
-        },
-        Dropout: {
-            color: 'yellow'
-        },
-        Flatten: {
-            color: 'purple'
-        },
-        MaxPool2D: {
-            color: 'blue'
-        }
-    },
+    layer_types_settings: {},
     preferences: {
         layer_display_min_height: {value: 30, type: 'number', description: 'Minimum Layer Height'},
         layer_display_max_height: {value: 150, type: 'number', description: 'Maximum Layer Height'},
@@ -43,5 +26,6 @@ export default {
     },
     error: {},
     selection: [],
-    preferences_mode: 'network'
+    preferences_mode: 'network',
+    selected_legend_item: ''
 }

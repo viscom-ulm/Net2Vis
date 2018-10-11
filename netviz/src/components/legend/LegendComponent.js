@@ -10,6 +10,7 @@ class Legend extends React.Component {
   // When a layer is clicked, change its selection state
   handleLayerClicked = (e) => {
     this.props.actions.setPreferenceMode('color');
+    this.props.actions.setSelectedLegendItem(e);
   };
   
   render() {

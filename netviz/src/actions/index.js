@@ -1,5 +1,6 @@
 import NetworkApi from '../api/NetworkApi';
 import CodeApi from '../api/CodeApi';
+import LayerTypesApi from '../api/LayerTypesApi';
 import * as types from './types'
 
 // Displace the main SVG group
@@ -30,6 +31,38 @@ export function toggleLegend() {
 // Add setting for a Layer Type
 export function addSettingForLayerType(setting, name) {
   return {type: types.ADD_LAYER_TYPE_SETTING, setting, name};
+}
+
+// Loading LayerTypes was Successful
+export function loadLayerTypesSuccess(layerTypes) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes};
+}
+
+// Called to load the LayerTypes
+export function loadLayerTypes() {
+  return function(dispatch) {
+    return LayerTypesApi.getLayerTypes().then(layerTypes => {
+      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+// Updating LayerTypes was Succesful
+export function updateLayerTypesSuccess(layerTypes) {
+  return {type: types.UPDATE_LAYER_TYPES_SUCCESS, layerTypes}
+}
+
+// Called to update the LayerTypes
+export function updateLayerTypes(layerTypes) {
+  return function(dispatch) {
+    return LayerTypesApi.updateLayerTypes(layerTypes).then(layerTypes => {
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+    }).catch(error => {
+      console.warn('LayerTypes invalid.');
+    });
+  }
 }
 
 // Loading Network was Successful
@@ -151,7 +184,12 @@ export function deselectLayers() {
   return {type: types.DESELECT_LAYERS}
 }
 
-// Set the item of the Legend that is currently selected.
+// Set the mode of the preference pane.
 export function setPreferenceMode(name) {
   return {type: types.SET_PREFERENCE_MODE, name}
+}
+
+// Set the item of the Legend that is currently selected.
+export function setSelectedLegendItem(name) {
+  return {type: types.SET_SELECTED_LEGEND_ITEM, name}
 }

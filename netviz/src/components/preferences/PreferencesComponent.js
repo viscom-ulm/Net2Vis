@@ -34,6 +34,13 @@ class Preferences extends React.Component {
     this.props.actions.changeLayersSpacingVertical(parseInt(e.currentTarget.value, 10));
   }
 
+  // Called when the Color of the Colorpicker changes
+  handleColorChange = (e) => {
+    var layerTypes = this.props.layer_types_settings;
+    layerTypes[this.props.selected_legend_item].color = e.hex;
+    this.props.actions.updateLayerTypes(layerTypes);
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -51,12 +58,7 @@ class Preferences extends React.Component {
         case 'color':
           return(
             <div id='Preferences'>
-                <SketchPicker color={ {
-                  width: '36px',
-                  height: '14px',
-                  borderRadius: '2px',
-                  background: `rgba(${ 255 }, ${ 255 }, ${ 255 }, ${ 255 })`,
-                }} onChange={ this.handleChange } />
+                <SketchPicker color={ this.props.layer_types_settings[this.props.selected_legend_item].color } onChange={ this.handleColorChange } />
             </div>
           );
         default:
@@ -72,7 +74,9 @@ class Preferences extends React.Component {
 Preferences.propTypes = {
   preferences_mode: PropTypes.string.isRequired,
   preferences_toggle: PropTypes.bool.isRequired,
-  preferences: PropTypes.object.isRequired
+  preferences: PropTypes.object.isRequired,
+  selected_legend_item: PropTypes.string.isRequired,
+  layer_types_settings: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -80,7 +84,9 @@ function mapStateToProps(state, ownProps) {
   return {
     preferences_mode: state.preferences_mode,
     preferences_toggle: state.display.preferences_toggle,
-    preferences: state.preferences
+    preferences: state.preferences,
+    selected_legend_item: state.selected_legend_item,
+    layer_types_settings: state.layer_types_settings
   };
 }
 
