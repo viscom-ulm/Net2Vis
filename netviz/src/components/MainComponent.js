@@ -12,10 +12,7 @@ import Code from './code/CodeComponent'
 class Main extends React.Component {
   componentWillReceiveProps(newProps) {
     const { id } = newProps.match.params;
-    this.props.actions.setID(id)
-    this.props.actions.loadNetwork(id);
-    this.props.actions.loadLayerTypes(id);
-    this.props.actions.loadPreferences(id);
+    this.props.actions.reloadAllState(id);
   }
 
   componentWillMount() {

@@ -206,3 +206,25 @@ export function setPreferenceMode(name) {
 export function setSelectedLegendItem(name) {
   return {type: types.SET_SELECTED_LEGEND_ITEM, name}
 }
+
+// Check that all components are reloaded from the Server in the correct order.
+export function reloadAllState(id) {
+  return function(dispatch) {
+    return CodeApi.getCode(id).then(code => {
+      dispatch(loadCodeSuccess(code));
+      return NetworkApi.getNetwork(id).then(network => { 
+        networkLoaded(network, dispatch);      
+        return PreferencesApi.getPreferences(id).then(preferences => {
+          dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
+          return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+            dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+          });
+        });
+      }).catch(error => {
+        throw(error);
+      })
+    }).catch(error => {
+      console.warn('Current Network not executable.')
+    });
+  }
+}

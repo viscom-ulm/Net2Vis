@@ -9,8 +9,8 @@ import EdgeComponent from './EdgeComponent';
 
 // Layer Component providing individual Layer Visualizations
 class Layer extends React.Component {  
-  // When the Component mounts and no Setting is there, initialize it
-  componentWillMount() {
+  // When the Component updates and no Setting is there, initialize it
+  componentDidUpdate() {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
       setting.color = '#808080';
