@@ -1,5 +1,6 @@
 // Import all Reducers
 import { combineReducers } from 'redux';
+import id from './IDReducer';
 import network from './NetworkReducer';
 import code from './CodeReducer';
 import group_transform from './TransformReducer';
@@ -14,6 +15,7 @@ import selected_legend_item from './SelectedLegendItemReducer'
 
 // Combine all Reducers
 export default combineReducers({
+    id,
     network,
     code,
     group_transform,

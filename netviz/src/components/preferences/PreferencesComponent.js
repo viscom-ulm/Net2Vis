@@ -12,42 +12,42 @@ class Preferences extends React.Component {
   handleMinChange = (e) => {
     var preferences = this.props.preferences;
     preferences.layer_display_min_height.value = parseInt(e.currentTarget.value, 10);
-    this.props.actions.updatePreferences(preferences);
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
   // Max Height of a Layer Changes
   handleMaxChange = (e) => {
     var preferences = this.props.preferences;
     preferences.layer_display_max_height.value = parseInt(e.currentTarget.value, 10);
-    this.props.actions.updatePreferences(preferences);
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
   // Width of a Layer Changes
   handleWidthChange = (e) => {
     var preferences = this.props.preferences;
     preferences.layer_display_width.value = parseInt(e.currentTarget.value, 10);
-    this.props.actions.updatePreferences(preferences);
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
   // Spacing of the Layers Changes
   handleSpacingHorizontalChange = (e) => {
     var preferences = this.props.preferences;
     preferences.layers_spacing_horizontal.value = parseInt(e.currentTarget.value, 10);
-    this.props.actions.updatePreferences(preferences);
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
   
   // Spacing of the Layers Changes
   handleSpacingVerticalChange = (e) => {
     var preferences = this.props.preferences;
     preferences.changeLayersSpacingVertical.value = parseInt(e.currentTarget.value, 10);
-    this.props.actions.updatePreferences(preferences);
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
   // Called when the Color of the Colorpicker changes
   handleColorChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].color = e.hex;
-    this.props.actions.updateLayerTypes(layerTypes);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.id);
   }
 
   // Render the Preferences of the Visualization
@@ -81,6 +81,7 @@ class Preferences extends React.Component {
 
 // Prop Types holding all the Preferences
 Preferences.propTypes = {
+  id: PropTypes.string.isRequired,
   preferences_mode: PropTypes.string.isRequired,
   preferences_toggle: PropTypes.bool.isRequired,
   preferences: PropTypes.object.isRequired,
@@ -91,6 +92,7 @@ Preferences.propTypes = {
 // Map the State to the Properties of this Component
 function mapStateToProps(state, ownProps) {
   return {
+    id: state.id,
     preferences_mode: state.preferences_mode,
     preferences_toggle: state.display.preferences_toggle,
     preferences: state.preferences,

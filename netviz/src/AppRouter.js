@@ -9,7 +9,7 @@ class AppRouter extends React.Component {
     return (
       <div className='content'>
         <Router>
-          <Route exact={true} path="/" component={Main} />
+          <Route exact={true} path="/:id" component={Main} />
         </Router>
       </div>
     );

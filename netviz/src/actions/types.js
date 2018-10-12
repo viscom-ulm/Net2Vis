@@ -1,4 +1,5 @@
 // Constants for Action calls
+export const SET_ID = 'SET_ID';
 export const LOAD_NETWORK_SUCCESS = 'LOAD_NETWORK_SUCCESS';
 export const SET_LAYERS_EXTREMES = 'SET_LAYERS_EXTREMES';
 export const LOAD_CODE_SUCCESS = 'LOAD_CODE_SUCCESS';

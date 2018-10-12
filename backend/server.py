@@ -3,6 +3,8 @@ import copy
 import sys
 import inspect
 import json
+import os
+from shutil import copyfile
 
 sys.path.append('translate')
 from translate_keras import translate_keras
@@ -48,13 +50,22 @@ def replace_references(net):
                     outp.append(i)
         layer.output = outp
 
+# Check if the desired model already exists.
+def check_exists(id):
+    if(not os.path.exists(os.path.join('models', id))):
+        os.mkdir(os.path.join('models', id))
+        copyfile(os.path.join('default', 'model_current.py'), os.path.join('models', id, 'model_current.py'))
+        copyfile(os.path.join('default', 'layer_types_current.json'), os.path.join('models', id, 'layer_types_current.json'))
+        copyfile(os.path.join('default', 'preferences.json'), os.path.join('models', id, 'preferences.json'))
+
 ###############
 # Basic Serving 
 ###############
 # Get the Network.
-@app.route('/api/get_network')
-def get_network():
-    graph = translate_keras('current/model_current.py')
+@app.route('/api/get_network/<id>')
+def get_network(id):
+    check_exists(id)
+    graph = translate_keras(os.path.join('models', id, 'model_current.py'))
     if(isinstance(graph, Graph)):
         graph.calculate_layer_dimensions()
         net = {'layers': make_jsonifyable(graph)}
@@ -65,47 +76,53 @@ def get_network():
         return  result, ok_status, json_type
     
 # Get the Code.
-@app.route('/api/get_code')
-def get_code():
-    with open('current/model_current.py', 'r') as myfile:# Get the input File.
+@app.route('/api/get_code/<id>')
+def get_code(id):
+    check_exists(id)
+    with open(os.path.join('models', id, 'model_current.py'), 'r') as myfile:# Get the input File.
         keras_code=myfile.read()
         return keras_code, ok_status, text_type
 
 # Update the Code.
-@app.route('/api/update_code', methods=['POST'])
-def update_code():
+@app.route('/api/update_code/<id>', methods=['POST'])
+def update_code(id):
+    check_exists(id)
     content = request.data
-    file = open('current/model_current.py','w')
+    file = open(os.path.join('models', id, 'model_current.py'),'w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 
 # Get the Layer_Types.
-@app.route('/api/get_layer_types')
-def get_layer_types():
-    with open('current/layer_types_current.json', 'r') as myfile:
+@app.route('/api/get_layer_types/<id>')
+def get_layer_types(id):
+    check_exists(id)
+    with open(os.path.join('models', id, 'layer_types_current.json'), 'r') as myfile:
         layer_types = myfile.read()
         return layer_types, ok_status, text_type
 
 # Update the Layer_Types.
-@app.route('/api/update_layer_types', methods=['POST'])
-def update_layer_types():
+@app.route('/api/update_layer_types/<id>', methods=['POST'])
+def update_layer_types(id):
+    check_exists(id)
     content = request.data
-    file = open('current/layer_types_current.json','w')
+    file = open(os.path.join('models', id, 'layer_types_current.json'),'w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 
 # Get the Preferences.
-@app.route('/api/get_preferences')
-def get_preferences():
-    with open('current/preferences.json', 'r') as myfile:
+@app.route('/api/get_preferences/<id>')
+def get_preferences(id):
+    check_exists(id)
+    with open(os.path.join('models', id, 'preferences.json'), 'r') as myfile:
         preferences = myfile.read()
         return preferences, ok_status, text_type
 
 # Update the Preferences.
-@app.route('/api/update_preferences', methods=['POST'])
-def update_preferences():
+@app.route('/api/update_preferences/<id>', methods=['POST'])
+def update_preferences(id):
+    check_exists(id)
     content = request.data
-    file = open('current/preferences.json','w')
+    file = open(os.path.join('models', id, 'preferences.json'),'w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 

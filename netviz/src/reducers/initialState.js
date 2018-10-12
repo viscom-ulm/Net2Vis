@@ -1,5 +1,6 @@
 // Set the initial State of the Application
 export default {
+    id: '',
     network: {},
     code: '',
     group_transform: {

@@ -10,6 +10,16 @@ import Code from './code/CodeComponent'
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
+  componentWillReceiveProps(newProps) {
+    const { id } = newProps.match.params;
+    this.props.actions.reloadAllState(id);
+  }
+
+  componentWillMount() {
+    const { id } = this.props.match.params;
+    this.props.actions.setID(id);
+  }
+
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
   handleMouseDown = (e) => {
     this.coords = {
