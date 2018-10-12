@@ -1,3 +1,5 @@
+# Do not push the models!
+backend/models
 
 # Created by https://www.gitignore.io/api/code,python
 
