@@ -1,8 +1,8 @@
 // Class for calling Backend functions related to the Network
 class NetworkApi {
   // Get the Network from the Backend
-  static getNetwork() {
-    const request = new Request('/api/get_network', { // Prepare the Request
+  static getNetwork(id) {
+    const request = new Request('/api/get_network/' + id, { // Prepare the Request
       method: 'GET'
     });
     

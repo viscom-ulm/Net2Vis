@@ -15,13 +15,13 @@ class Code extends React.Component {
   // When this Component mounts, check if the Code was already loaded and load it if not
   componentWillMount() {
     if(this.props.code === '') {
-      this.props.actions.loadCode();
+      this.props.actions.loadCode(this.props.id);
     }
   }
 
   // When the Code changes, Update it on the Backend
   handleOnChange = (newValue) => {
-    this.props.actions.updateCode(newValue)    
+    this.props.actions.updateCode(newValue, this.props.id);
   };
 
   // Render the Code into the Code View if Toggled
@@ -60,6 +60,7 @@ class Code extends React.Component {
 
 // Code PropTypes are the toggle state and the code
 Code.propTypes = {
+  id: PropTypes.string.isRequired,
   code_toggle: PropTypes.bool.isRequired,
   code: PropTypes.string.isRequired,
   error: PropTypes.object.isRequired
@@ -69,12 +70,14 @@ Code.propTypes = {
 function mapStateToProps(state, ownProps) {
   if (state.code) { // Check if the Code is already available
     return {
+      id: state.id,
       code: state.code,
       code_toggle: state.display.code_toggle,
       error: state.error      
     };
   } else {
     return {
+      id: state.id,
       code: '',
       code_toggle: state.display.code_toggle,
       error: state.error

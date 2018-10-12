@@ -12,9 +12,9 @@ class Network extends React.Component {
   // When this Component mounts, load the Network from the Backend
   componentWillMount() {
     if (!('layers' in this.props.network)) {
-      this.props.actions.loadNetwork();
-      this.props.actions.loadLayerTypes();
-      this.props.actions.loadPreferences();
+      this.props.actions.loadNetwork(this.props.id);
+      this.props.actions.loadLayerTypes(this.props.id);
+      this.props.actions.loadPreferences(this.props.id);
     }
   }
 
@@ -68,6 +68,7 @@ class Network extends React.Component {
 
 // PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Layer Types 
 Network.propTypes = {
+  id: PropTypes.string.isRequired,
   network: PropTypes.object.isRequired,
   group_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
@@ -78,6 +79,7 @@ Network.propTypes = {
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
+    id: state.id,
     network: state.network,
     group_transform: state.group_transform,
     layer_types_settings: state.layer_types_settings,

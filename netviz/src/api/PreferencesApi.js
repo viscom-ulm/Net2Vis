@@ -1,8 +1,8 @@
 // Class for calling Backend functions related to the Preferences 
 class PreferencesApi {
   // Get the code from the Backend
-  static getPreferences() {
-    const request = new Request('/api/get_preferences', { // Prepare the Request
+  static getPreferences(id) {
+    const request = new Request('/api/get_preferences/' + id, { // Prepare the Request
       method: 'GET'
     });
 
@@ -14,8 +14,8 @@ class PreferencesApi {
   }    
 
   // Update the Preferences on the Backend
-  static updatePreferences(preferences) {
-    const request = new Request('/api/update_preferences', { // Prepare the Request
+  static updatePreferences(preferences, id) {
+    const request = new Request('/api/update_preferences/' + id, { // Prepare the Request
       method: 'POST',
       body: JSON.stringify(preferences)
     });

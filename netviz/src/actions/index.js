@@ -4,6 +4,11 @@ import LayerTypesApi from '../api/LayerTypesApi';
 import PreferencesApi from '../api/PreferencesApi'
 import * as types from './types'
 
+// Set the ID of the current Network
+export function setID(id) {
+  return {type:types.SET_ID, id};
+}
+
 // Displace the main SVG group
 export function moveGroup(group_displacement) {
   return {type: types.MOVE_GROUP, group_displacement};
@@ -40,9 +45,9 @@ export function loadLayerTypesSuccess(layerTypes) {
 }
 
 // Called to load the LayerTypes
-export function loadLayerTypes() {
+export function loadLayerTypes(id) {
   return function(dispatch) {
-    return LayerTypesApi.getLayerTypes().then(layerTypes => {
+    return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
       dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
     }).catch(error => {
       throw(error);
@@ -56,9 +61,9 @@ export function updateLayerTypesSuccess(layerTypes) {
 }
 
 // Called to update the LayerTypes
-export function updateLayerTypes(layerTypes) {
+export function updateLayerTypes(layerTypes, id) {
   return function(dispatch) {
-    return LayerTypesApi.updateLayerTypes(layerTypes).then(layerTypes => {
+    return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
       dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
     }).catch(error => {
       console.warn('LayerTypes invalid.');
@@ -82,9 +87,9 @@ export function loadPreferencesSuccess(preferences) {
 }
 
 // Called to load the Preferences
-export function loadPreferences() {
+export function loadPreferences(id) {
   return function(dispatch) {
-    return PreferencesApi.getPreferences().then(preferences => {
+    return PreferencesApi.getPreferences(id).then(preferences => {
       dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
       throw(error);
@@ -98,9 +103,9 @@ export function updatePreferencesSuccess(preferences) {
 }
 
 // Called to update the Preferences
-export function updatePreferences(preferences) {
+export function updatePreferences(preferences, id) {
   return function(dispatch) {
-    return PreferencesApi.updatePreferences(preferences).then(preferences => {
+    return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
       dispatch(updatePreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
       console.warn('Preferences invalid.');
@@ -130,9 +135,9 @@ export function networkLoaded(network, dispatch) {
 }
 
 // Called to load the Network
-export function loadNetwork() {
+export function loadNetwork(id) {
   return function(dispatch) {
-    return NetworkApi.getNetwork().then(network => {
+    return NetworkApi.getNetwork(id).then(network => {
       networkLoaded(network, dispatch);      
     }).catch(error => {
       throw(error);
@@ -146,9 +151,9 @@ export function loadCodeSuccess(code) {
 }
 
 // Called to load the Code
-export function loadCode() {
+export function loadCode(id) {
   return function(dispatch) {
-    return CodeApi.getCode().then(code => {
+    return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
     }).catch(error => {
       throw(error);
@@ -162,11 +167,11 @@ export function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code) {
+export function updateCode(code, id) {
   return function(dispatch) {
-    return CodeApi.updateCode(code).then(code => {
+    return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
-      return NetworkApi.getNetwork().then(network => { // TODO: Check if could be reused from above
+      return NetworkApi.getNetwork(id).then(network => { // TODO: Check if could be reused from above
         networkLoaded(network, dispatch);      
       }).catch(error => {
         throw(error);
