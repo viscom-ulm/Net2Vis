@@ -10,6 +10,14 @@ import Code from './code/CodeComponent'
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
+  componentWillReceiveProps(newProps) {
+    const { id } = newProps.match.params;
+    this.props.actions.setID(id)
+    this.props.actions.loadNetwork(id);
+    this.props.actions.loadLayerTypes(id);
+    this.props.actions.loadPreferences(id);
+  }
+
   componentWillMount() {
     const { id } = this.props.match.params;
     this.props.actions.setID(id);
