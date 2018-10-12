@@ -1,6 +1,7 @@
 import NetworkApi from '../api/NetworkApi';
 import CodeApi from '../api/CodeApi';
 import LayerTypesApi from '../api/LayerTypesApi';
+import PreferencesApi from '../api/PreferencesApi'
 import * as types from './types'
 
 // Displace the main SVG group
@@ -75,6 +76,38 @@ export function setLayersExtremes(network, preferences, initializeNetworkGraph) 
   return {type: types.SET_LAYERS_EXTREMES, network, preferences, initializeNetworkGraph}
 }
 
+// Loading Preferences was Successful
+export function loadPreferencesSuccess(preferences) {
+  return {type: types.LOAD_PREFERENCES_SUCCESS, preferences};
+}
+
+// Called to load the Preferences
+export function loadPreferences() {
+  return function(dispatch) {
+    return PreferencesApi.getPreferences().then(preferences => {
+      dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+// Updating Preferences was Succesful
+export function updatePreferencesSuccess(preferences) {
+  return {type: types.UPDATE_PREFERENCES_SUCCESS, preferences}
+}
+
+// Called to update the Preferences
+export function updatePreferences(preferences) {
+  return function(dispatch) {
+    return PreferencesApi.updatePreferences(preferences).then(preferences => {
+      dispatch(updatePreferencesSuccess(JSON.parse(preferences)));
+    }).catch(error => {
+      console.warn('Preferences invalid.');
+    });
+  }
+}
+
 // Add an error to the Code.
 export function addError(data) {
   return {type: types.ADD_ERROR, data}
@@ -142,31 +175,6 @@ export function updateCode(code) {
       console.warn('Current Network not executable.')
     });
   }
-}
-
-// Updating Layers Min Height
-export function changeLayersMinHeight(min_height) {
-  return {type: types.CHANGE_LAYERS_MIN_HEIGHT, min_height}
-}
-
-// Updating Layers Max Height
-export function changeLayersMaxHeight(max_height) {
-  return {type: types.CHANGE_LAYERS_MAX_HEIGHT, max_height}
-}
-
-// Updating Layers Width
-export function changeLayersWidth(width) {
-  return {type: types.CHANGE_LAYERS_WIDTH, width}
-}
-
-// Updating Layers Spacing
-export function changeLayersSpacingHorizontal(spacing) {
-  return {type: types.CHANGE_LAYERS_SPACING_HORIZONTAL, spacing}
-}
-
-// Updating Layers Spacing
-export function changeLayersSpacingVertical(spacing) {
-  return {type: types.CHANGE_LAYERS_SPACING_VERTICAL, spacing}
 }
 
 // Select Layer

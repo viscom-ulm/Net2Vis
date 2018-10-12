@@ -14,6 +14,7 @@ class Network extends React.Component {
     if (!('layers' in this.props.network)) {
       this.props.actions.loadNetwork();
       this.props.actions.loadLayerTypes();
+      this.props.actions.loadPreferences();
     }
   }
 

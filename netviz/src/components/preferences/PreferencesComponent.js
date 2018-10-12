@@ -11,27 +11,37 @@ import * as actions from '../../actions';
 class Preferences extends React.Component {
   // Min height of a Layer Changes
   handleMinChange = (e) => {
-    this.props.actions.changeLayersMinHeight(parseInt(e.currentTarget.value, 10));
+    var preferences = this.props.preferences;
+    preferences.layer_display_min_height.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updatePreferences(preferences);
   }
 
   // Max Height of a Layer Changes
   handleMaxChange = (e) => {
-    this.props.actions.changeLayersMaxHeight(parseInt(e.currentTarget.value, 10));
+    var preferences = this.props.preferences;
+    preferences.layer_display_max_height.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updatePreferences(preferences);
   }
 
   // Width of a Layer Changes
   handleWidthChange = (e) => {
-    this.props.actions.changeLayersWidth(parseInt(e.currentTarget.value, 10));
+    var preferences = this.props.preferences;
+    preferences.layer_display_width.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updatePreferences(preferences);
   }
 
   // Spacing of the Layers Changes
   handleSpacingHorizontalChange = (e) => {
-    this.props.actions.changeLayersSpacingHorizontal(parseInt(e.currentTarget.value, 10));
+    var preferences = this.props.preferences;
+    preferences.layers_spacing_horizontal.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updatePreferences(preferences);
   }
   
   // Spacing of the Layers Changes
   handleSpacingVerticalChange = (e) => {
-    this.props.actions.changeLayersSpacingVertical(parseInt(e.currentTarget.value, 10));
+    var preferences = this.props.preferences;
+    preferences.changeLayersSpacingVertical.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updatePreferences(preferences);
   }
 
   // Called when the Color of the Colorpicker changes

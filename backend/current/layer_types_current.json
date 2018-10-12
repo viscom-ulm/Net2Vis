@@ -1,1 +1,1 @@
-{"Conv2D":{"color":"#2d8d51"},"MaxPool2D":{"color":"#a85f5f"},"Dropout":{"color":"#f5e0e0"},"UpSampling2D":{"color":"#808080"},"Concatenate":{"color":"#bcb7f0"}}
+{"Conv2D":{"color":"#007434"},"MaxPool2D":{"color":"#810000"},"Dropout":{"color":"#c4c4c4"},"UpSampling2D":{"color":"#808080"},"Concatenate":{"color":"#4e3eff"}}

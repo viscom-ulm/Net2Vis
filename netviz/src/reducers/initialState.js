@@ -4,8 +4,8 @@ export default {
     code: '',
     group_transform: {
         x: 0,
-        y: 0,
-        scale: 1
+        y: 50,
+        scale: 0.5
     },
     display: {
         code_toggle: true,

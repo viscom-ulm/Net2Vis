@@ -94,4 +94,19 @@ def update_layer_types():
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
 
+# Get the Preferences.
+@app.route('/api/get_preferences')
+def get_preferences():
+    with open('current/preferences.json', 'r') as myfile:
+        preferences = myfile.read()
+        return preferences, ok_status, text_type
+
+# Update the Preferences.
+@app.route('/api/update_preferences', methods=['POST'])
+def update_preferences():
+    content = request.data
+    file = open('current/preferences.json','w')
+    file.write(content.decode("utf-8"))
+    return content, ok_status, text_type
+
 app.run(debug=True)
