@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
-import {SketchPicker} from 'react-color';
 
 import InputField from './InputField'
 import * as actions from '../../actions';
@@ -68,7 +67,7 @@ class Preferences extends React.Component {
         case 'color':
           return(
             <div id='Preferences'>
-                <SketchPicker color={ this.props.layer_types_settings[this.props.selected_legend_item].color } onChange={ this.handleColorChange } />
+              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
             </div>
           );
         default:
