@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 
 import * as actions from '../../actions';
 import Layer from './LayerComponent';
-import build_graph_from_network from '../../graph'
+import * as graphs from '../../graphs';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
@@ -20,7 +20,7 @@ class Network extends React.Component {
 
   // Render the individual Network Layers
   render() {
-    const graph = build_graph_from_network(this.props.network, this.props.layer_extreme_dimensions, this.props.preferences);
+    const graph = graphs.buildGraphFromNetwork(this.props.network, this.props.layer_extreme_dimensions, this.props.preferences);
     var nodes = [];
     graph.nodes().forEach(function(e) {
       nodes.push(graph.node(e));

@@ -1,7 +1,7 @@
 import * as dagre from 'dagre';
 
 // Build the network graph upon the Network representation
-export default function build_graph_from_network(network, layer_extreme_dimensions, preferences) {
+export function buildGraphFromNetwork(network, layer_extreme_dimensions, preferences) {
   var graph = new dagre.graphlib.Graph(); // Initialize the dagre Graph
   graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: preferences.layers_spacing_horizontal.value, nodesep: (layer_extreme_dimensions.max_size/2) + preferences.layers_spacing_vertical.value}); // Set Graph Properties
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
@@ -22,4 +22,8 @@ export default function build_graph_from_network(network, layer_extreme_dimensio
   }
   dagre.layout(graph); // Layout the graph to be displayed in a nice fashion
   return graph;
+}
+
+export function checkGroupable(network, selection) {
+  console.log(selection);
 }
