@@ -39,7 +39,7 @@ class Preferences extends React.Component {
   // Spacing of the Layers Changes
   handleSpacingVerticalChange = (e) => {
     var preferences = this.props.preferences;
-    preferences.changeLayersSpacingVertical.value = parseInt(e.currentTarget.value, 10);
+    preferences.layers_spacing_vertical.value = parseInt(e.currentTarget.value, 10);
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
