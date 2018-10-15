@@ -20,7 +20,7 @@ class Controls extends React.Component {
   }
 
   groupLayers = () => {
-    console.log(this.props.selection);
+    graphs.groupLayers(this.props.network, this.props.selection);
   }
 
   render() {

@@ -24,6 +24,40 @@ export function buildGraphFromNetwork(network, layer_extreme_dimensions, prefere
   return graph;
 }
 
-export function checkGroupable(network, selection) {
-  console.log(selection);
+// Gouping a selection of layers
+export function groupLayers(network, selection) { 
+  console.log(checkGroupable(network, selection));
+}
+
+// Check if the current selection is groupable
+function checkGroupable(network, selection) { 
+  if (selection.length < 2) { // Needs to contain more than one element
+    return false;
+  }
+  for (var i in selection) { // Check groupability of each of the selected layers
+    var layer = network.layers[selection[i]]; // Get the current layer
+    var inputs = layer.properties.input; // Get the inputs of the current layer
+    var outputs = layer.properties.output; // Get the outputs of the current layer
+    var inContained = contained(inputs, selection); // Check how many of the inputs of the current layer are also selected.
+    var outContained = contained(outputs, selection); // Check how many of the outputs of the current layer are also selected. 
+    if ((inputs.length !== inContained) && inContained > 0) { // Some, but not all inputs selected
+      return false; // Not groupable
+    } else if ((outputs.length !== outContained) && outContained > 0) { // Some, but not all outputs selected
+      return false; // Not groupable
+    } else if (outContained === 0 && inContained === 0) { // No in- or outputs at all selected
+      return false; // Not Groupable
+    }
+  }
+  return true; // More than one element selected, and all elements connected. Also no parallel path partly selected. Groupable!
+}
+
+// Check, how many of the given layers are contained in the selection
+function contained(layers, selection) { 
+  var contained = 0;
+  for (var j in layers) { // Iterate over all layers
+    if (selection.includes(layers[j])) { // If the selection includes the layer
+      contained = contained + 1; // Increment the number of contained elements
+    }
+  }
+  return contained;
 }
