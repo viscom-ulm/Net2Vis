@@ -28,5 +28,6 @@ export default {
     error: {},
     selection: [],
     preferences_mode: 'network',
-    selected_legend_item: ''
+    selected_legend_item: '',
+    groups: []
 }

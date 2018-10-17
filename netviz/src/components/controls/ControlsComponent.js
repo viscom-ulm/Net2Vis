@@ -19,8 +19,12 @@ class Controls extends React.Component {
     saveAs(new Blob([svg_text], {type: "text/svg;charset=utf-8"}), 'model.svg'); // Save the SVG on Disk
   }
 
+  // Group some Layers together
   groupLayers = () => {
-    graphs.groupLayers(this.props.network, this.props.selection);
+    var group = graphs.groupLayers(this.props.network, this.props.selection); // Group the Layers
+    if (group !== undefined) { // Check if the group could be made
+      this.props.actions.addGroup(group); // Add the group to the state
+    }
   }
 
   render() {

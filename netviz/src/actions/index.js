@@ -228,3 +228,8 @@ export function reloadAllState(id) {
     });
   }
 }
+
+// Add a new Grouping
+export function addGroup(group) {
+  return {type: types.ADD_GROUP, group}
+}

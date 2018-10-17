@@ -26,7 +26,11 @@ export function buildGraphFromNetwork(network, layer_extreme_dimensions, prefere
 
 // Gouping a selection of layers
 export function groupLayers(network, selection) { 
-  console.log(checkGroupable(network, selection));
+  if (checkGroupable(network, selection)) { // If the selection is groupable
+    return generateGroup(network, selection); // Generate the Group
+  } else {
+    return undefined;
+  }
 }
 
 // Check if the current selection is groupable
@@ -60,4 +64,15 @@ function contained(layers, selection) {
     }
   }
   return contained;
+}
+
+// Generate the Group in the Graph
+function generateGroup(network, selection) {
+  var group = { // Initialize the Group as empty object
+    layers: []
+  };
+  for (var i in selection) { // Iterate over all selected Layers
+    group.layers.push(network.layers[selection[i]]); // Add the Layers to the group
+  }
+  return group;
 }
