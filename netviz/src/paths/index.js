@@ -114,3 +114,37 @@ function reducePosition(edges) {
   }
   return positions;
 }
+
+// Calculate the extremes of one Layer
+export function calculateLayerExtremes(layer_width, layer_height, layer, edges, extreme_dimensions) {
+  var extremes = {min_x: layer.x, max_x: (layer.x + layer_width), min_y: 0, max_y: 0};
+  const y_diff = [(extreme_dimensions.max_size - layer_height[0]) / 2, (extreme_dimensions.max_size - layer_height[1]) / 2]; // Calculate the vertical difference to center the Glyph
+  const y_pos = [y_diff[0], y_diff[1], y_diff[1] + layer_height[1], y_diff[0] + layer_height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points
+  if(layer.layer.properties.input.length > 1) {
+    const position_in_reduced = reducePosition(getIncomingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
+    position_in_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
+    const y_off_max = position_in_reduced[position_in_reduced.length - 1] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_min = position_in_reduced[0] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    extremes.min_y = y_pos[0] + y_off_min;
+    extremes.max_y = y_pos[3] + y_off_max;
+  } else {
+    extremes.min_y = y_pos[0];
+    extremes.max_y = y_pos[3];
+  }
+  if(layer.layer.properties.output.length > 1) {
+    const position_out_reduced = reducePosition(getOutgoingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
+    position_out_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
+    const y_off_max = position_out_reduced[position_out_reduced.length - 1] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_min = position_out_reduced[0] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    var min_y = y_pos[0] + y_off_min;
+    var max_y = y_pos[3] + y_off_max;
+    extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
+    extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
+  } else {
+    var min_y = y_pos[1];
+    var max_y = y_pos[2];
+    extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
+    extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
+  }
+  return extremes;
+}

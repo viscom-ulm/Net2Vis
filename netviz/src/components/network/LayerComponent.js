@@ -17,6 +17,9 @@ class Layer extends React.Component {
       setting.color = '#808080';
       this.props.actions.addSettingForLayerType(setting, this.props.layer.layer.name);
     }
+    const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
+    const layer_height = this.calculateLayerHeight(extreme_dimensions, this.props.layer.layer.properties.dimensions); // Calculate the height of the Layer
+    this.props.actions.updateGraphExtremeDimensions(paths.calculateLayerExtremes(this.props.preferences.layer_display_width.value, layer_height, this.props.layer, this.props.edges, extreme_dimensions))
   }
 
   // When a layer is clicked, change its selection state

@@ -63,7 +63,8 @@ Controls.propTypes = {
   display: PropTypes.object.isRequired,
   network: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
-  layer_extreme_dimensions: PropTypes.object.isRequired
+  layer_extreme_dimensions: PropTypes.object.isRequired,
+  graph_extreme_dimensions: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -72,7 +73,8 @@ function mapStateToProps(state, ownProps) {
     display: state.display,
     network: state.network,
     preferences: state.preferences,
-    layer_extreme_dimensions: state.layer_extreme_dimensions
+    layer_extreme_dimensions: state.layer_extreme_dimensions,
+    graph_extreme_dimensions: state.graph_extreme_dimensions
   };
 }
 
