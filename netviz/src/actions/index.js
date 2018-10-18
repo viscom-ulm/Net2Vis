@@ -228,3 +228,8 @@ export function reloadAllState(id) {
     });
   }
 }
+
+// Update the extreme dimensions of the whole graph.
+export function updateGraphExtremeDimensions(extreme_dimensions) {
+  return { type: types.UPDATE_GRAPH_EXTREME_DIMENSIONS, extreme_dimensions}
+}

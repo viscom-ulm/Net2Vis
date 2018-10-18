@@ -8,10 +8,11 @@ import display from './DisplayReducer';
 import layer_types_settings from './LayerTypesSettingsReducer';
 import preferences from './PreferencesReducer';
 import error from './ErrorReducer';
-import layer_extreme_dimensions from './LayerExtremeDimensionsReducer'
-import selection from './SelectionReducer'
-import preferences_mode from './PreferencesModeReducer'
-import selected_legend_item from './SelectedLegendItemReducer'
+import layer_extreme_dimensions from './LayerExtremeDimensionsReducer';
+import selection from './SelectionReducer';
+import preferences_mode from './PreferencesModeReducer';
+import selected_legend_item from './SelectedLegendItemReducer';
+import graph_extreme_dimensions from './GraphExtemeDimensionsReducer';
 
 // Combine all Reducers
 export default combineReducers({
@@ -26,5 +27,6 @@ export default combineReducers({
     layer_extreme_dimensions,
     selection,
     preferences_mode,
-    selected_legend_item
+    selected_legend_item,
+    graph_extreme_dimensions
 })
