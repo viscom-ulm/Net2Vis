@@ -1,13 +1,13 @@
 // Calculate the SVG Path for a Glyph
-export function calculateGlyphPath(extreme_dimensions, layer_height, layer_width, layer, edges) {
+export function calculateGlyphPath(extreme_dimensions, layer_height, layer, edges) {
   const y_diff = [(extreme_dimensions.max_size - layer_height[0]) / 2, (extreme_dimensions.max_size - layer_height[1]) / 2]; // Calculate the vertical difference to center the Glyph
   const y_pos = [y_diff[0], y_diff[1], y_diff[1] + layer_height[1], y_diff[0] + layer_height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points
   if(layer.layer.properties.input.length > 1) { // Multiple Inputs
-    return calculateMultiInputPath(y_pos, layer_width, layer, edges); // Caculate a Path with multiple Inputs
+    return calculateMultiInputPath(y_pos, layer, edges); // Caculate a Path with multiple Inputs
   } else if(layer.layer.properties.output.length > 1) { // Multiple Outputs
-    return calculateMultiOutputPath(y_pos, layer_width, layer, edges); // Calculate a Path with Multiple Outputs
+    return calculateMultiOutputPath(y_pos, layer, edges); // Calculate a Path with Multiple Outputs
   } else { // Trivial case
-    return calculateTrivialPath(y_pos, layer_width); // Calculate a Path for the trivial Glyph
+    return calculateTrivialPath(y_pos, layer.width); // Calculate a Path for the trivial Glyph
   }
 }
   
@@ -20,33 +20,33 @@ function calculateTrivialPath(y_pos, layer_width) {
 }
   
 // Multi Input Layer
-function calculateMultiInputPath(y_pos, layer_width, layer, edges) {
+function calculateMultiInputPath(y_pos, layer, edges) {
   const position_reduced = reducePosition(getIncomingEdges(layer, edges));
   position_reduced.sort((a,b) => b - a); // Sort them by y value descending
-  var pathData = 'M ' + layer_width + ' ' + y_pos[2]; // Move to initial location (bottom right)
+  var pathData = 'M ' + layer.width + ' ' + y_pos[2]; // Move to initial location (bottom right)
   for(var i in position_reduced) { // For each Input
     const y_off = position_reduced[i] - layer.y; // Calculate the Offset of the current Input Layer to this Layer
     pathData = addLeftEnd(pathData, y_pos[0] + y_off, y_pos[3] + y_off); // Add a left End for this Input
     if(i < position_reduced.length - 1) { // More Iputs to follow
       const y_off2 = position_reduced[(parseInt(i, 10)+1)] - layer.y; // Calculate the Offset of the next Input Layer to this Layer
-      pathData = addIntersection(pathData, 0, y_pos[0] + y_off, layer_width, y_pos[1], 0, y_pos[3] + y_off2, layer_width, y_pos[2]); // Add an Intersection Point for both Layers
+      pathData = addIntersection(pathData, 0, y_pos[0] + y_off, layer.width, y_pos[1], 0, y_pos[3] + y_off2, layer.width, y_pos[2]); // Add an Intersection Point for both Layers
     }
   }
-  pathData = addRightEnd(pathData, y_pos[1], y_pos[2], layer_width); // Add a right End to the Layer
+  pathData = addRightEnd(pathData, y_pos[1], y_pos[2], layer.width); // Add a right End to the Layer
   return pathData;
 }
 
 // Multi Output Layer
-function calculateMultiOutputPath(y_pos, layer_width, layer, edges) {
+function calculateMultiOutputPath(y_pos, layer, edges) {
   const position_reduced = reducePosition(getOutgoingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
   position_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
   var pathData = 'M 0 ' + y_pos[0]; // Move to initial Location (top left)
   for(var i in position_reduced) { // For each outgoing Edge
     const y_off = position_reduced[i] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
-    pathData = addRightEnd(pathData, y_pos[1] + y_off, y_pos[2] + y_off, layer_width); // Add a right End for this Output
+    pathData = addRightEnd(pathData, y_pos[1] + y_off, y_pos[2] + y_off, layer.width); // Add a right End for this Output
     if(i < position_reduced.length - 1) { // More Outputs to follow
       const y_off2 = position_reduced[(parseInt(i, 10)+1)] - layer.y; // Calculate the Offset of the next Output Layer to this Layer
-      pathData = addIntersection(pathData, layer_width, y_pos[2] + y_off, 0, y_pos[3], 0, y_pos[0], layer_width, y_pos[1] + y_off2); // Add an Intersection Point for both Layers
+      pathData = addIntersection(pathData, layer.width, y_pos[2] + y_off, 0, y_pos[3], 0, y_pos[0], layer.width, y_pos[1] + y_off2); // Add an Intersection Point for both Layers
     }
   }
   pathData = addLeftEnd(pathData, y_pos[0], y_pos[3]); // Add left end of Glyph
@@ -116,15 +116,15 @@ function reducePosition(edges) {
 }
 
 // Calculate the extremes of one Layer
-export function calculateLayerExtremes(layer_width, layer_height, layer, edges, extreme_dimensions) {
-  var extremes = {min_x: layer.x, max_x: (layer.x + layer_width), min_y: 0, max_y: 0};
+export function calculateLayerExtremes(layer_height, layer, edges, extreme_dimensions) {
+  var extremes = {min_x: layer.x, max_x: (layer.x + layer.width), min_y: 0, max_y: 0};
   const y_diff = [(extreme_dimensions.max_size - layer_height[0]) / 2, (extreme_dimensions.max_size - layer_height[1]) / 2]; // Calculate the vertical difference to center the Glyph
   const y_pos = [y_diff[0], y_diff[1], y_diff[1] + layer_height[1], y_diff[0] + layer_height[0]]; // Vertical Position of top-left, top-right, bottom-right and bottom-left Points
   if(layer.layer.properties.input.length > 1) {
     const position_in_reduced = reducePosition(getIncomingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
     position_in_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
-    const y_off_max = position_in_reduced[position_in_reduced.length - 1] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
-    const y_off_min = position_in_reduced[0] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_max = position_in_reduced[position_in_reduced.length - 1]; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_min = position_in_reduced[0]; // Calculate the Offset of the current Output Layer to this Edge
     extremes.min_y = y_pos[0] + y_off_min;
     extremes.max_y = y_pos[3] + y_off_max;
   } else {
@@ -136,12 +136,19 @@ export function calculateLayerExtremes(layer_width, layer_height, layer, edges, 
   if(layer.layer.properties.output.length > 1) {
     const position_out_reduced = reducePosition(getOutgoingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
     position_out_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
-    const y_off_max = position_out_reduced[position_out_reduced.length - 1] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
-    const y_off_min = position_out_reduced[0] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_max = position_out_reduced[position_out_reduced.length - 1]; // Calculate the Offset of the current Output Layer to this Edge
+    const y_off_min = position_out_reduced[0]; // Calculate the Offset of the current Output Layer to this Edge
     min_y = y_pos[0] + y_off_min;
     max_y = y_pos[3] + y_off_max;
     extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
     extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
+    if(layer.layer.id === 1 || layer.layer.id === 4) {
+      console.log(y_pos);
+      console.log(layer.y);
+      console.log(y_off_min);
+      console.log(y_off_max);
+      console.log(extremes);
+    }
   } else {
     min_y = y_pos[1];
     max_y = y_pos[2];

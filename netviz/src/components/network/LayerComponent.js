@@ -19,7 +19,7 @@ class Layer extends React.Component {
     }
     const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const layer_height = this.calculateLayerHeight(extreme_dimensions, this.props.layer.layer.properties.dimensions); // Calculate the height of the Layer
-    this.props.actions.updateGraphExtremeDimensions(paths.calculateLayerExtremes(this.props.preferences.layer_display_width.value, layer_height, this.props.layer, this.props.edges, extreme_dimensions))
+    this.props.actions.updateGraphExtremeDimensions(paths.calculateLayerExtremes(layer_height, this.props.layer, this.props.edges, extreme_dimensions))
   }
 
   // When a layer is clicked, change its selection state
@@ -48,11 +48,10 @@ class Layer extends React.Component {
   render() {
     // Get the Properties to use them in the Rendering
     const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
-    const layer_width = this.props.preferences.layer_display_width.value; // Get the Width of the Layers
     const dimensions = this.props.layer.layer.properties.dimensions; // Get the Dimensions of the current Layer
     const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const layer_height = this.calculateLayerHeight(extreme_dimensions, dimensions); // Calculate the height of the Layer
-    const pathData = paths.calculateGlyphPath(extreme_dimensions, layer_height, layer_width, this.props.layer, this.props.edges); // Calculate the Path of the Layer
+    const pathData = paths.calculateGlyphPath(extreme_dimensions, layer_height, this.props.layer, this.props.edges); // Calculate the Path of the Layer
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
     const current_edges = paths.getOutgoingEdges(this.props.layer, this.props.edges); // Get relevant Edges going out from the current Layer
