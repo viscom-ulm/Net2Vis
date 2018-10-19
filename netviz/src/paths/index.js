@@ -131,18 +131,20 @@ export function calculateLayerExtremes(layer_width, layer_height, layer, edges, 
     extremes.min_y = y_pos[0];
     extremes.max_y = y_pos[3];
   }
+  var min_y = 0;
+  var max_y = 0;
   if(layer.layer.properties.output.length > 1) {
     const position_out_reduced = reducePosition(getOutgoingEdges(layer, edges)); // Get the y positions of the straight parts of alloutgoing edges
     position_out_reduced.sort((a, b) => a - b); // Sort them by the y value ascending
     const y_off_max = position_out_reduced[position_out_reduced.length - 1] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
     const y_off_min = position_out_reduced[0] - layer.y; // Calculate the Offset of the current Output Layer to this Edge
-    var min_y = y_pos[0] + y_off_min;
-    var max_y = y_pos[3] + y_off_max;
+    min_y = y_pos[0] + y_off_min;
+    max_y = y_pos[3] + y_off_max;
     extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
     extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
   } else {
-    var min_y = y_pos[1];
-    var max_y = y_pos[2];
+    min_y = y_pos[1];
+    max_y = y_pos[2];
     extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
     extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
   }
