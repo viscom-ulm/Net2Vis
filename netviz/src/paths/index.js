@@ -142,13 +142,6 @@ export function calculateLayerExtremes(layer_height, layer, edges, extreme_dimen
     max_y = y_pos[3] + y_off_max;
     extremes.min_y = extremes.min_y < min_y ? extremes.min_y : min_y;
     extremes.max_y = extremes.max_y > max_y ? extremes.max_y : max_y;
-    if(layer.layer.id === 1 || layer.layer.id === 4) {
-      console.log(y_pos);
-      console.log(layer.y);
-      console.log(y_off_min);
-      console.log(y_off_max);
-      console.log(extremes);
-    }
   } else {
     min_y = y_pos[1];
     max_y = y_pos[2];
