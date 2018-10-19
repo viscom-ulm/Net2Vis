@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const EdgeComponent = ({edge, layer_max_height, layer_width, horizontal_spacing}) => {
+const EdgeComponent = ({edge, layer_max_height, horizontal_spacing}) => {
   var points = edge.points;
   var path = "";
   var y_pos = points[0].y; // Initialize the y_pos point Placeholder
@@ -30,7 +30,7 @@ const EdgeComponent = ({edge, layer_max_height, layer_width, horizontal_spacing}
   }
   for(i in points) { // Go over all Points
     if (points[i].y === y_pos) { // Check if on same y as y_pos
-      path = path + (points[i].x+(layer_width/2)) + "," + (points[i].y+(layer_max_height/2)) + " "; // Add the Point to the Path
+      path = path + points[i].x + "," + (points[i].y+(layer_max_height/2)) + " "; // Add the Point to the Path
     }
   }
   return (
@@ -42,7 +42,6 @@ const EdgeComponent = ({edge, layer_max_height, layer_width, horizontal_spacing}
 EdgeComponent.propTypes = {
   edge: PropTypes.object.isRequired,
   layer_max_height: PropTypes.number.isRequired,
-  layer_width: PropTypes.number.isRequired
 };
 
 export default EdgeComponent;
