@@ -17,13 +17,17 @@ export default {
     preferences: {
         layer_display_min_height: {value: 30, type: 'number', description: 'Minimum Layer Height'},
         layer_display_max_height: {value: 150, type: 'number', description: 'Maximum Layer Height'},
-        layer_display_width: {value: 80, type: 'number', description: 'Width of Layers'},
+        layer_display_min_width: {value: 20, type: 'number', description: 'Minimum width of Layers'},
+        layer_display_max_width: {value: 80, type: 'number', description: 'Maximum width of Layers'},
         layers_spacing_horizontal: {value: 0, type: 'number', description: 'Horizontal spacing between Layers'},
-        layers_spacing_vertical: {value: 0, type: 'number', description: 'Vertical spacing between Layers'}
+        layers_spacing_vertical: {value: 0, type: 'number', description: 'Vertical spacing between Layers'},
+        features_mapping: {value: 'width', type: 'choice', description: 'Visual mapping of the Features'}
     },
     layer_extreme_dimensions: {
         max_size: 2,
-        min_size: 1
+        min_size: 1,
+        max_features: 2,
+        min_features: 1
     },
     error: {},
     selection: [],
