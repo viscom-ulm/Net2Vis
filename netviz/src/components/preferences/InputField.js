@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {SketchPicker} from 'react-color';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
-const InputField = ({value, type, description, action}) => {
+const InputField = ({value, type, description, action, options}) => {
   if(type === 'number') {
     return (
       <div className='preferenceItem'>
@@ -16,6 +16,17 @@ const InputField = ({value, type, description, action}) => {
       <div className='preferenceItem'>
         {description}:
         <SketchPicker width={260} disableAlpha={true} presetColors={[]} color={ value } onChange={ (e) => action(e) } />
+      </div>
+    );
+  } else if (type === 'choice') {
+    return (
+      <div className='preferenceItem'>
+        {description}:
+        <select className='inputElementSelect' value={value} onChange={ (e) => action(e) }>
+          {options.map((opt, index) => 
+            <option value={opt} key={index}>{opt}</option>
+          )}
+        </select>
       </div>
     );
   }
