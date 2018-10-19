@@ -21,16 +21,16 @@ const EdgeComponent = ({edge, layer_max_height, layer_width, horizontal_spacing}
     }
   }
   if (points[points.length - 1].y !== y_pos) { // Check if the end of the path has a slope
-    for (var k = points.length - 1; k > 0; k--) { // Iterate over all points in reversed order
-      if (points[k].y === y_pos) { // The last point of the straight line part has been found
-        points[k].x = points[k].x + (horizontal_spacing.value / 2); // Change the x-value of this point to compensate the spacing
+    for (i = points.length - 1; i > 0; i--) { // Iterate over all points in reversed order
+      if (points[i].y === y_pos) { // The last point of the straight line part has been found
+        points[i].x = points[i].x + (horizontal_spacing.value / 2); // Change the x-value of this point to compensate the spacing
         i = 0; // Exit the loop
       }
     }
   }
-  for(var l in points) { // Go over all Points
-    if (points[l].y === y_pos) { // Check if on same y as y_pos
-      path = path + (points[l].x+(layer_width/2)) + "," + (points[l].y+(layer_max_height/2)) + " "; // Add the Point to the Path
+  for(i in points) { // Go over all Points
+    if (points[i].y === y_pos) { // Check if on same y as y_pos
+      path = path + (points[i].x+(layer_width/2)) + "," + (points[i].y+(layer_max_height/2)) + " "; // Add the Point to the Path
     }
   }
   return (
