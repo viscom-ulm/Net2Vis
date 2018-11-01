@@ -233,3 +233,8 @@ export function reloadAllState(id) {
 export function updateGraphExtremeDimensions(extreme_dimensions) {
   return { type: types.UPDATE_GRAPH_EXTREME_DIMENSIONS, extreme_dimensions}
 }
+
+// Add a new Grouping
+export function addGroup(group) {
+  return {type: types.ADD_GROUP, group}
+}
