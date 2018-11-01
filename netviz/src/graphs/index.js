@@ -25,7 +25,6 @@ export function buildGraphFromNetwork(network, layer_extreme_dimensions, prefere
     }
   }
   dagre.layout(graph); // Layout the graph to be displayed in a nice fashion
-  console.log(graph);
   return graph;
 }
 
@@ -79,5 +78,34 @@ function generateGroup(network, selection) {
   for (var i in selection) { // Iterate over all selected Layers
     group.layers.push(network.layers[selection[i]]); // Add the Layers to the group
   }
+  findGroupOccurances(group, network);
   return group;
+}
+
+// Find all occurances of a group in the network
+export function findGroupOccurances(group, network) {
+  var inputNode = findInputNode(group, group.layers[0]); // Find one input Node to the Graph
+  var inputOccurances = findInputOccurances(inputNode, network); // Check, where the inputNode type exists in the network
+  console.log(inputOccurances);
+}
+
+// Find an input Node of a Group
+function findInputNode(group, layer) {
+  var inputs = layer.properties.input; // Get all inputs to the layer that is currently inspected
+  for (var j in group.layers) { // Iterate over all layers in the Group
+    if(group.layers[j].id === inputs[0]) { // Layer is an input to the inspected Layer
+      return findInputNode(group, group.layers[j]); // Check for the layer that is the input to the inspected Layer
+    }
+  }
+  return layer; // Return the layer, if his inputs are not contained in the Group
+}
+
+function findInputOccurances(inputNode, network) {
+  var occurances = []; // Initialize the occurances
+  for (var i in network.layers) { // Iterate over all layers in the network
+    if (network.layers[i].name === inputNode.name) { // The Layers have the same name
+      occurances.push(i); // Add the position of the Layer in the Network to the occurances
+    }
+  }
+  return occurances;
 }
