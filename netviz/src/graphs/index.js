@@ -76,28 +76,58 @@ function generateGroup(network, selection) {
     layers: []
   };
   for (var i in selection) { // Iterate over all selected Layers
-    group.layers.push(network.layers[selection[i]]); // Add the Layers to the group
+    group.layers.push({
+      name: network.layers[selection[i]].name,
+      inputs: addInputsToLayer(selection, network, i),
+      outputs: addOutputsToLayer(selection, network, i)
+    }); // Add the Layers to the group
   }
   findGroupOccurances(group, network);
   return group;
 }
 
+function addInputsToLayer(selection, network, i) {
+  var layers = []; // Initialize input Layers to be added
+  var inputs = network.layers[selection[i]].properties.input; // Get all inputs for the current Layer
+  for (var j in inputs) { // Iterate over all inputs
+    var inputLayer = network.layers[inputs[j]]; // Get the Layer of the current Input
+    for (var k in selection) { // Iterate over all selected Items
+      if (selection[k] === inputLayer.id) { // Current InputLayer is currently inspected selected Item
+        layers.push(k); // Add the selection ID to the input layers
+      }
+    }
+  }
+  return layers;
+}
+
+function addOutputsToLayer(selection, network, i) {
+  var layers = []; // Initialize output Layers to be added
+  var outputs = network.layers[selection[i]].properties.output; // Get all outputs for the current Layer
+  for (var j in outputs) { // Iterate over all outputs
+    var outputLayer = network.layers[outputs[j]]; // Get the Layer of the current Output
+    for (var k in selection) { // Iterate over all selected Items
+      if (selection[k] === outputLayer.id) { // Current OutputLayer id currently inspected selected Item
+        layers.push(k); // Add the selection ID to the input layers
+      }
+    }
+  }
+  return layers;
+}
+
 // Find all occurances of a group in the network
 export function findGroupOccurances(group, network) {
-  var inputNode = findInputNode(group, group.layers[0]); // Find one input Node to the Graph
+  var inputNode = findInputNode(group); // Find one input Node to the Graph
   var inputOccurances = findInputOccurances(inputNode, network); // Check, where the inputNode type exists in the network
   console.log(inputOccurances);
 }
 
 // Find an input Node of a Group
-function findInputNode(group, layer) {
-  var inputs = layer.properties.input; // Get all inputs to the layer that is currently inspected
+function findInputNode(group) {
   for (var j in group.layers) { // Iterate over all layers in the Group
-    if(group.layers[j].id === inputs[0]) { // Layer is an input to the inspected Layer
-      return findInputNode(group, group.layers[j]); // Check for the layer that is the input to the inspected Layer
+    if(group.layers[j].inputs.length === 0) { // Layer has no inputs contained in the Group
+      return group.layers[j];
     }
   }
-  return layer; // Return the layer, if his inputs are not contained in the Group
 }
 
 function findInputOccurances(inputNode, network) {
