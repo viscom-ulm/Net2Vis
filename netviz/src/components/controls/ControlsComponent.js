@@ -25,6 +25,8 @@ class Controls extends React.Component {
     if (group !== undefined) { // Check if the group could be made
       this.props.actions.addGroup(group); // Add the group to the state
     }
+    var occurences = graphs.findGroupOccurences(group, this.props.network); // Check, where this group can be found
+    console.log(occurences);
   }
 
   render() {

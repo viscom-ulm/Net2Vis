@@ -82,7 +82,6 @@ function generateGroup(network, selection) {
       outputs: addOutputsToLayer(selection, network, i)
     }); // Add the Layers to the group
   }
-  findGroupOccurences(group, network);
   return group;
 }
 
@@ -118,27 +117,27 @@ function addOutputsToLayer(selection, network, i) {
 export function findGroupOccurences(group, network) {
   var input = findInputNode(group); // Find one input Node to the Graph
   var inputOccurences = findInputOccurences(input.inputNode, network); // Check, where the inputNode type exists in the network
-  var matchesList = generateInitialMatchesList(group, network, inputOccurences, input.inputID);
-  var nextLayerInfo = findUncheckedConnectedLayer(matchesList);
-  while (nextLayerInfo.source !== -1) {
-    for (var i in matchesList) {
-      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchPosition];
-      var layerNumber = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection];  
+  var matchesList = generateInitialMatchesList(group, network, inputOccurences, input.inputID); // Initialize the Matches List using the input node and its occurences
+  var nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
+  while (nextLayerInfo.source !== -1) { // Do as long as there are more layers to check
+    for (var i in matchesList) { // Iterate over all lists in the matches List
+      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchPosition]; // Get the source layer from which we get to the layer to be inspected from the network
+      var layerNumber = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the number of the current layer to be inspected(depending on in or out connected)
       var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
       var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
-      var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].outputs[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].inputs[nextLayerInfo.connection];
+      var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].outputs[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].inputs[nextLayerInfo.connection]; // Get the number of the group node to be inspected (depending on in or out connected)
       var outputsGroup = group.layers[groupNumber].outputs; // Get the outputs for the input Layer of the Group
       var inputsGroup = group.layers[groupNumber].inputs; // Get the outputs for the input Layer of the Group
-      if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) {
-        matchesList[i][groupNumber].matchPosition = layerNumber;
-      } else {
-        matchesList.splice(i, 1);
-        i = i - 1;
+      if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) { // Outputs and Inputs match
+        matchesList[i][groupNumber].matchPosition = layerNumber; // Assign the match position
+      } else { // Output or Inputs do not match
+        matchesList.splice(i, 1); // Remove the list from the matchesList
+        i = i - 1; // Do not skip an element after removal
       }
     }
-    var nextLayerInfo = findUncheckedConnectedLayer(matchesList);
+    nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
   }
-  console.log(matchesList);
+  return matchesList;
 }
 
 // Find an input Node of a Group
@@ -176,24 +175,24 @@ function generateInitialMatchesList(group, network, inputOccurences, inputID) {
 }
 
 function findUncheckedConnectedLayer(matchesList) {
-  if (matchesList.length > 0) {
-    var list = matchesList[0];
-    for (var i in list) {
-      if (typeof(list[i].matchPosition) !== 'undefined') {
-        for (var j in list[i].outputs) {
-          if (typeof(list[list[i].outputs[j]].matchPosition) === 'undefined') {
-            return {type: 'out', source: i, connection: j}; 
+  if (matchesList.length > 0) { // If there are lists to be checked still
+    var list = matchesList[0]; // Get the first list as an example (since all should contain matches at the same positions)
+    for (var i in list) { // Iterate over the list items (nodes of the group) 
+      if (typeof(list[i].matchPosition) !== 'undefined') { // If current group node already matches
+        for (var j in list[i].outputs) { // Iterate over the outputs
+          if (typeof(list[list[i].outputs[j]].matchPosition) === 'undefined') { // If group node connected at this output not matched
+            return {type: 'out', source: i, connection: j}; // Layer to be inspected has been found
           }
         }
-        for (var k in list[i].inputs) {
-          if (typeof(list[list[i].inputs[k]].matchPosition) === 'undefined') {
-            return {type: 'in', source: i, connection: k}; 
+        for (var k in list[i].inputs) { // Iterate over all Inputs
+          if (typeof(list[list[i].inputs[k]].matchPosition) === 'undefined') { // If group node connected at this input not matched
+            return {type: 'in', source: i, connection: k}; // Layer to be inspected has been found
           }
         }
       }
     }
   }
-  return {type: 'in', source: -1, connection: -1}; 
+  return {type: 'in', source: -1, connection: -1}; // No layer to be inspected, return this as a signal
 }
 
 // Check if the outputs of Networklayer and Groupnode are matching
