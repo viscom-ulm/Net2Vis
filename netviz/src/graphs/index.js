@@ -82,7 +82,7 @@ function generateGroup(network, selection) {
       outputs: addOutputsToLayer(selection, network, i)
     }); // Add the Layers to the group
   }
-  findGroupOccurances(group, network);
+  findGroupOccurences(group, network);
   return group;
 }
 
@@ -114,28 +114,118 @@ function addOutputsToLayer(selection, network, i) {
   return layers;
 }
 
-// Find all occurances of a group in the network
-export function findGroupOccurances(group, network) {
-  var inputNode = findInputNode(group); // Find one input Node to the Graph
-  var inputOccurances = findInputOccurances(inputNode, network); // Check, where the inputNode type exists in the network
-  console.log(inputOccurances);
+// Find all occurences of a group in the network
+export function findGroupOccurences(group, network) {
+  var input = findInputNode(group); // Find one input Node to the Graph
+  var inputOccurences = findInputOccurences(input.inputNode, network); // Check, where the inputNode type exists in the network
+  var matchesList = generateInitialMatchesList(group, network, inputOccurences, input.inputID);
+  var nextLayerInfo = findUncheckedConnectedLayer(matchesList);
+  while (nextLayerInfo.source !== -1) {
+    for (var i in matchesList) {
+      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchPosition];
+      var layerNumber = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection];  
+      var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
+      var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
+      var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].outputs[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].inputs[nextLayerInfo.connection];
+      var outputsGroup = group.layers[groupNumber].outputs; // Get the outputs for the input Layer of the Group
+      var inputsGroup = group.layers[groupNumber].inputs; // Get the outputs for the input Layer of the Group
+      if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) {
+        matchesList[i][groupNumber].matchPosition = layerNumber;
+      } else {
+        matchesList.splice(i, 1);
+        i = i - 1;
+      }
+    }
+    var nextLayerInfo = findUncheckedConnectedLayer(matchesList);
+  }
+  console.log(matchesList);
 }
 
 // Find an input Node of a Group
 function findInputNode(group) {
   for (var j in group.layers) { // Iterate over all layers in the Group
     if(group.layers[j].inputs.length === 0) { // Layer has no inputs contained in the Group
-      return group.layers[j];
+      return {inputID: j, inputNode: group.layers[j]};
     }
   }
 }
 
-function findInputOccurances(inputNode, network) {
-  var occurances = []; // Initialize the occurances
+// Find all layers that are the same as the input layer of the group
+function findInputOccurences(inputNode, network) {
+  var occurences = []; // Initialize the occurences
   for (var i in network.layers) { // Iterate over all layers in the network
     if (network.layers[i].name === inputNode.name) { // The Layers have the same name
-      occurances.push(i); // Add the position of the Layer in the Network to the occurances
+      occurences.push(i); // Add the position of the Layer in the Network to the occurences
     }
   }
-  return occurances;
+  return occurences;
+}
+
+// Initialize the matches list, where, for each match of the input layer, a match list is created in the matches list
+function generateInitialMatchesList(group, network, inputOccurences, inputID) {
+  var matchesList = []; // Initialize the matchesList
+  for (var i in inputOccurences) { // Iterate over all occurences of the group input Layer in the Network
+    var outputsLayer = network.layers[inputOccurences[i]].properties.output; // Get the outputs for this Layer
+    var outputsGroup = group.layers[inputID].outputs; // Get the outputs for the input Layer of the Group
+    if (checkOutputsMatching(outputsGroup, outputsLayer, network, group)) { // If parts still equal
+      matchesList.push(JSON.parse(JSON.stringify(group.layers.slice(0)))); // Copy the group layers to the matches List
+      matchesList[matchesList.length - 1][inputID].matchPosition = inputOccurences[i]; // Set the match for the input layer of the group in this match of the matches List
+    }
+  }
+  return matchesList;
+}
+
+function findUncheckedConnectedLayer(matchesList) {
+  if (matchesList.length > 0) {
+    var list = matchesList[0];
+    for (var i in list) {
+      if (typeof(list[i].matchPosition) !== 'undefined') {
+        for (var j in list[i].outputs) {
+          if (typeof(list[list[i].outputs[j]].matchPosition) === 'undefined') {
+            return {type: 'out', source: i, connection: j}; 
+          }
+        }
+        for (var k in list[i].inputs) {
+          if (typeof(list[list[i].inputs[k]].matchPosition) === 'undefined') {
+            return {type: 'in', source: i, connection: k}; 
+          }
+        }
+      }
+    }
+  }
+  return {type: 'in', source: -1, connection: -1}; 
+}
+
+// Check if the outputs of Networklayer and Groupnode are matching
+function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
+  var same = true; // Initialize the sameness placeholder
+  if (outputsGroup.length === 0) {
+    return same;
+  } else if (outputsGroup.length === outputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of outputs
+    for (var j in outputsGroup) { // Iterate over all ouptuts of the Group Layer 
+      if (group.layers[outputsGroup[j]].name !== network.layers[outputsLayer[j]].name) { // Not the same Layer Name as the Network output
+        same = false; // Network part not equal
+      }
+    }
+  } else {
+    same = false; // Network part not equal
+  }
+  return same;
+}
+
+// Check if the inputs of Networklayer and Groupnode are matching
+function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
+  var same = true; // Initialize the sameness placeholder
+  if (inputsGroup.length === 0) {
+    return same;
+  } else if (inputsGroup.length === inputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of inputs
+    for (var j in inputsGroup) { // Iterate over all inputs of the Group Layer 
+      if (group.layers[inputsGroup[j]].name !== network.layers[inputsLayer[j]].name) { // Not the same Layer Name as the Network input
+        same = false; // Network part not equal
+      }
+    }
+  } else {
+    same = false; // Network part not equal
+  }
+  return same;
 }
