@@ -44,7 +44,7 @@ function checkGroupable(network, selection) {
     return false;
   }
   for (var i in selection) { // Check groupability of each of the selected layers
-    var layer = network.layers[selection[i]]; // Get the current layer
+    var layer = network.layers[getLayerByID(selection[i], network.layers)]; // Get the current layer
     var inputs = layer.properties.input; // Get the inputs of the current layer
     var outputs = layer.properties.output; // Get the outputs of the current layer
     var inContained = contained(inputs, selection); // Check how many of the inputs of the current layer are also selected.
@@ -79,7 +79,7 @@ function generateGroup(network, selection) {
   };
   for (var i in selection) { // Iterate over all selected Layers
     group.layers.push({
-      name: network.layers[selection[i]].name,
+      name: network.layers[getLayerByID(selection[i], network.layers)].name,
       inputs: addInputsToLayer(selection, network, i),
       outputs: addOutputsToLayer(selection, network, i)
     }); // Add the Layers to the group
@@ -89,9 +89,9 @@ function generateGroup(network, selection) {
 
 function addInputsToLayer(selection, network, i) {
   var layers = []; // Initialize input Layers to be added
-  var inputs = network.layers[selection[i]].properties.input; // Get all inputs for the current Layer
+  var inputs = network.layers[getLayerByID(selection[i], network.layers)].properties.input; // Get all inputs for the current Layer
   for (var j in inputs) { // Iterate over all inputs
-    var inputLayer = network.layers[inputs[j]]; // Get the Layer of the current Input
+    var inputLayer = network.layers[getLayerByID(inputs[j], network.layers)]; // Get the Layer of the current Input
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === inputLayer.id) { // Current InputLayer is currently inspected selected Item
         layers.push(k); // Add the selection ID to the input layers
@@ -103,9 +103,9 @@ function addInputsToLayer(selection, network, i) {
 
 function addOutputsToLayer(selection, network, i) {
   var layers = []; // Initialize output Layers to be added
-  var outputs = network.layers[selection[i]].properties.output; // Get all outputs for the current Layer
+  var outputs = network.layers[getLayerByID(selection[i], network.layers)].properties.output; // Get all outputs for the current Layer
   for (var j in outputs) { // Iterate over all outputs
-    var outputLayer = network.layers[outputs[j]]; // Get the Layer of the current Output
+    var outputLayer = network.layers[getLayerByID(outputs[j], network.layers)]; // Get the Layer of the current Output
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === outputLayer.id) { // Current OutputLayer id currently inspected selected Item
         layers.push(k); // Add the selection ID to the input layers
@@ -123,8 +123,9 @@ export function findGroupOccurences(group, network) {
   var nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
   while (nextLayerInfo.source !== -1) { // Do as long as there are more layers to check
     for (var i in matchesList) { // Iterate over all lists in the matches List
-      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchID]; // Get the source layer from which we get to the layer to be inspected from the network
-      var layerNumber = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the number of the current layer to be inspected(depending on in or out connected)
+      var currentSourceLayer = network.layers[getLayerByID(matchesList[i][nextLayerInfo.source].matchID, network.layers)]; // Get the source layer from which we get to the layer to be inspected from the network
+      var layerID = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the ID of the current layer to be inspected(depending on in or out connected)
+      var layerNumber = getLayerByID(layerID, network.layers); // Map the layerID to the position in the array
       var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
       var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
       var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].outputs[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].inputs[nextLayerInfo.connection]; // Get the number of the group node to be inspected (depending on in or out connected)
@@ -204,7 +205,7 @@ function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
     return same;
   } else if (outputsGroup.length === outputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of outputs
     for (var j in outputsGroup) { // Iterate over all ouptuts of the Group Layer 
-      if (group.layers[outputsGroup[j]].name !== network.layers[outputsLayer[j]].name) { // Not the same Layer Name as the Network output
+      if (group.layers[outputsGroup[j]].name !== network.layers[getLayerByID(outputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network output
         same = false; // Network part not equal
       }
     }
@@ -221,7 +222,7 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
     return same;
   } else if (inputsGroup.length === inputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of inputs
     for (var j in inputsGroup) { // Iterate over all inputs of the Group Layer 
-      if (group.layers[inputsGroup[j]].name !== network.layers[inputsLayer[j]].name) { // Not the same Layer Name as the Network input
+      if (group.layers[inputsGroup[j]].name !== network.layers[getLayerByID(inputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network input
         same = false; // Network part not equal
       }
     }
@@ -259,6 +260,8 @@ export function concatenateLayers(occurence, network, group) {
         compressedNetwork.layers.push(layer); // Add the layer to the compressed Network
       }
     }
+  } else {
+    return network;
   }
   compressedNetwork.layers.push(newLayer); // Add the new Layer to the compressed Network
   return compressedNetwork;
@@ -331,10 +334,9 @@ function changeOutputIfNeccessary(occurence, layer, newID, newLayer) {
 function getNewInputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the Occurence List
     if (occurence[i].inputs.length === 0) { // No Inputs for a Layer
-      for (var j in network.layers) { // Check all layers
-        if (network.layers[j].id === occurence[i].matchID) { // Layer has is that occurence item matches
-          return network.layers[j].properties.dimensions.in; // Return the input dimensions for this layer from the network
-        }
+      var id = getLayerByID(occurence[i].matchID, network.layers);
+      if (id >= 0) { // Layer has ID that occurence item matches
+        return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network
       }
     }
   }
@@ -344,11 +346,20 @@ function getNewInputDimensions(occurence, network) {
 function getNewOutputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the occurence List
     if (occurence[i].outputs.length === 0) { // Not Outputs for a Layer
-      for (var j in network.layers) { // Check all layers
-        if (network.layers[j].id === occurence[i].matchID) { // Layer has is that occurence item matches
-          return network.layers[j].properties.dimensions.out; // Return the input dimensions for this layer from the network
-        }
+      var id = getLayerByID(occurence[i].matchID, network.layers);
+      if (id >= 0) { // Layer has ID that occurence item matches
+        return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network
       }
     }
   }
+}
+
+// Returns the layer index gien an ID
+function getLayerByID(id, layers) {
+  for (var i in layers) { // Iterate over all layers
+    if (layers[i].id == id) { // Layer ID matches
+      return i;
+    }
+  }
+  return -1; // No Layer with this ID
 }
