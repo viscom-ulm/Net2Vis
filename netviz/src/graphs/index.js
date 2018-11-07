@@ -1,4 +1,5 @@
 import * as dagre from 'dagre';
+import * as randomstring from 'randomstring';
 
 // Build the network graph upon the Network representation
 export function buildGraphFromNetwork(network, layer_extreme_dimensions, preferences) {
@@ -73,6 +74,7 @@ function contained(layers, selection) {
 // Generate the Group in the Graph
 function generateGroup(network, selection) {
   var group = { // Initialize the Group as empty object
+    name: randomstring.generate(),
     layers: []
   };
   for (var i in selection) { // Iterate over all selected Layers
@@ -121,7 +123,7 @@ export function findGroupOccurences(group, network) {
   var nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
   while (nextLayerInfo.source !== -1) { // Do as long as there are more layers to check
     for (var i in matchesList) { // Iterate over all lists in the matches List
-      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchPosition]; // Get the source layer from which we get to the layer to be inspected from the network
+      var currentSourceLayer = network.layers[matchesList[i][nextLayerInfo.source].matchID]; // Get the source layer from which we get to the layer to be inspected from the network
       var layerNumber = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the number of the current layer to be inspected(depending on in or out connected)
       var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
       var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
@@ -129,7 +131,7 @@ export function findGroupOccurences(group, network) {
       var outputsGroup = group.layers[groupNumber].outputs; // Get the outputs for the input Layer of the Group
       var inputsGroup = group.layers[groupNumber].inputs; // Get the outputs for the input Layer of the Group
       if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) { // Outputs and Inputs match
-        matchesList[i][groupNumber].matchPosition = layerNumber; // Assign the match position
+        matchesList[i][groupNumber].matchID = network.layers[layerNumber].id; // Assign the match ID
       } else { // Output or Inputs do not match
         matchesList.splice(i, 1); // Remove the list from the matchesList
         i = i - 1; // Do not skip an element after removal
@@ -168,7 +170,7 @@ function generateInitialMatchesList(group, network, inputOccurences, inputID) {
     var outputsGroup = group.layers[inputID].outputs; // Get the outputs for the input Layer of the Group
     if (checkOutputsMatching(outputsGroup, outputsLayer, network, group)) { // If parts still equal
       matchesList.push(JSON.parse(JSON.stringify(group.layers.slice(0)))); // Copy the group layers to the matches List
-      matchesList[matchesList.length - 1][inputID].matchPosition = inputOccurences[i]; // Set the match for the input layer of the group in this match of the matches List
+      matchesList[matchesList.length - 1][inputID].matchID = network.layers[inputOccurences[i]].id; // Set the match for the input layer of the group in this match of the matches List
     }
   }
   return matchesList;
@@ -178,14 +180,14 @@ function findUncheckedConnectedLayer(matchesList) {
   if (matchesList.length > 0) { // If there are lists to be checked still
     var list = matchesList[0]; // Get the first list as an example (since all should contain matches at the same positions)
     for (var i in list) { // Iterate over the list items (nodes of the group) 
-      if (typeof(list[i].matchPosition) !== 'undefined') { // If current group node already matches
+      if (typeof(list[i].matchID) !== 'undefined') { // If current group node already matches
         for (var j in list[i].outputs) { // Iterate over the outputs
-          if (typeof(list[list[i].outputs[j]].matchPosition) === 'undefined') { // If group node connected at this output not matched
+          if (typeof(list[list[i].outputs[j]].matchID) === 'undefined') { // If group node connected at this output not matched
             return {type: 'out', source: i, connection: j}; // Layer to be inspected has been found
           }
         }
         for (var k in list[i].inputs) { // Iterate over all Inputs
-          if (typeof(list[list[i].inputs[k]].matchPosition) === 'undefined') { // If group node connected at this input not matched
+          if (typeof(list[list[i].inputs[k]].matchID) === 'undefined') { // If group node connected at this input not matched
             return {type: 'in', source: i, connection: k}; // Layer to be inspected has been found
           }
         }
@@ -227,4 +229,126 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
     same = false; // Network part not equal
   }
   return same;
+}
+
+// Replaces multiple Layers by a more abstract one.
+export function concatenateLayers(occurence, network, group) {
+  var compressedNetwork = {layers: []}
+  if (layerIdsExist(occurence, network)) { // Check if all layers that should be concatenated still exist.
+    var newID = maxID(network) + 1; // Get a new ID for the concatenation Layer
+    var newLayer = { // Initialize the new layer
+      id: newID,
+      name: group.name,
+      properties: {
+        dimensions: {
+          in: [100, 100, 100],
+          out: [100, 100, 100]
+        },
+        input: [],
+        output: [],
+        properties: {}
+      }
+    }
+    newLayer.properties.dimensions.in = getNewInputDimensions(occurence, network); // Change the input Dimensions of the new Layer
+    newLayer.properties.dimensions.out = getNewOutputDimensions(occurence, network); // Change the output Dimensions of the new Layer
+    for (var i in network.layers) { // Go over all Layers in the Network
+      if(!checkInOccurence(occurence, network.layers[i].id)) { // Layer not in the compression List
+        var layer = JSON.parse(JSON.stringify(network.layers[i])); // Copy layer from the original Network
+        changeInputIfNeccessary(occurence, layer, newID, newLayer); // Change inputs of the layer if they are now missing
+        changeOutputIfNeccessary(occurence, layer, newID, newLayer);// Change outputs of the layer if they are now missing
+        compressedNetwork.layers.push(layer); // Add the layer to the compressed Network
+      }
+    }
+  }
+  compressedNetwork.layers.push(newLayer); // Add the new Layer to the compressed Network
+  return compressedNetwork;
+}
+
+// Check if all layerIDs in the occurence still exist in the Network.
+function layerIdsExist(occurence, network) {
+  for (var i in occurence) { // Check all items in the occurence
+    if (!layerIdExists(occurence[i].matchID, network)) { // Layer does not exist
+      return false;
+    }
+  }
+  return true; // All layers exist
+}
+
+// Check if a Layer with a given ID exists.
+function layerIdExists(id, network) {
+  for (var i in network.layers) { // Iterate over all layers in the Network
+    if (network.layers[i].id === id) { // Check if it has the searched ID
+      return true;
+    }
+  }
+  return false; // No layer with the searched ID
+}
+
+// Returning the maximum ID in the current network.
+function maxID(network) {
+  var id = 0; // Initialize the max ID
+  for (var i in network.layers) { // Check all layers
+    id = network.layers[i].id > id ? network.layers[i].id : id; // Set to bigger of current layer id and id
+  }
+  return id;
+}
+
+// Check if a layer is in the occurence list
+function checkInOccurence(occurence, id) {
+  for (var i in occurence) { // Iterate over the list
+    if (occurence[i].matchID === id) { // Layer IDs match, in the list
+      return true;
+    }
+  }
+  return false; // Not in the List
+}
+
+// Change the input of a layer if the input to it is about to be removed.
+function changeInputIfNeccessary(occurence, layer, newID, newLayer) {
+  for (var i in layer.properties.input) { // Iterate over all inputs of the layer
+    for (var j in occurence) { // Iterate over all items in the occurence list
+      if (layer.properties.input[i] === occurence[j].matchID) { // Input of the layer in the Occurence List
+        layer.properties.input[i] = newID; // Set the input to the ID of the newly created abstract Layer
+        newLayer.properties.output.push(layer.id); // Add the current layer to the outputs of the new Layer
+      }
+    }
+  }
+}
+
+// Change the output of a layer if the output to it is about to be removed.
+function changeOutputIfNeccessary(occurence, layer, newID, newLayer) {
+  for (var i in layer.properties.output) { // Iterate over all outputs of the layer
+    for (var j in occurence) { // Iterate over all items in the occurence list
+      if (layer.properties.output[i] === occurence[j].matchID) { // Output of the layer in the Occurence List
+        layer.properties.output[i] = newID; // Set the input to the ID of the newly created abstract Layer
+        newLayer.properties.input.push(layer.id); // Add the current layer to the inputs of the new Layer
+      }
+    }
+  }
+}
+
+// Get the input dimensions for the new Layer
+function getNewInputDimensions(occurence, network) {
+  for (var i in occurence) { // Iterate over the Occurence List
+    if (occurence[i].inputs.length === 0) { // No Inputs for a Layer
+      for (var j in network.layers) { // Check all layers
+        if (network.layers[j].id === occurence[i].matchID) { // Layer has is that occurence item matches
+          return network.layers[j].properties.dimensions.in; // Return the input dimensions for this layer from the network
+        }
+      }
+    }
+  }
+}
+
+// Get the output dimensions for the new Layer
+function getNewOutputDimensions(occurence, network) {
+  for (var i in occurence) { // Iterate over the occurence List
+    if (occurence[i].outputs.length === 0) { // Not Outputs for a Layer
+      for (var j in network.layers) { // Check all layers
+        if (network.layers[j].id === occurence[i].matchID) { // Layer has is that occurence item matches
+          return network.layers[j].properties.dimensions.out; // Return the input dimensions for this layer from the network
+        }
+      }
+    }
+  }
 }

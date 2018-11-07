@@ -39,5 +39,6 @@ export default {
         max_x: 0,
         max_y: 0
     },
-    groups: []
+    groups: [],
+    compressed_network: {}
 }

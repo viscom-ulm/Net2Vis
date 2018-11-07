@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 import ToggleButton from './ToggleButton';
 import ClickableButton from './ClickableButton';
@@ -25,8 +25,6 @@ class Controls extends React.Component {
     if (group !== undefined) { // Check if the group could be made
       this.props.actions.addGroup(group); // Add the group to the state
     }
-    var occurences = graphs.findGroupOccurences(group, this.props.network); // Check, where this group can be found
-    console.log(occurences);
   }
 
   render() {
