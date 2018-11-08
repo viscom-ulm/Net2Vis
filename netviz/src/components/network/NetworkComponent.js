@@ -12,15 +12,16 @@ class Network extends React.Component {
   // When this Component mounts, load the Network from the Backend
   componentWillMount() {
     if (!('layers' in this.props.network)) {
-      this.props.actions.loadNetwork(this.props.id);
-      this.props.actions.loadLayerTypes(this.props.id);
-      this.props.actions.loadPreferences(this.props.id);
+      this.props.actions.reloadAllState(this.props.id);
+//      this.props.actions.loadNetwork(this.props.id, this.props.groups);
+//      this.props.actions.loadLayerTypes(this.props.id);
+//      this.props.actions.loadPreferences(this.props.id);
     }
   }
 
   // Render the individual Network Layers
   render() {
-    const graph = graphs.buildGraphFromNetwork(this.props.network, this.props.layer_extreme_dimensions, this.props.preferences);
+    const graph = graphs.buildGraphFromNetwork(this.props.compressed_network, this.props.layer_extreme_dimensions, this.props.preferences);
     var nodes = [];
     graph.nodes().forEach(function(e) {
       nodes.push(graph.node(e));
@@ -49,7 +50,9 @@ Network.propTypes = {
   group_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
-  layer_extreme_dimensions: PropTypes.object.isRequired
+  layer_extreme_dimensions: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  compressed_network: PropTypes.object.isRequired
 };
 
 // Map the State of the Application to the Props of this Class
@@ -60,7 +63,9 @@ function mapStateToProps(state, ownProps) {
     group_transform: state.group_transform,
     layer_types_settings: state.layer_types_settings,
     preferences: state.preferences,
-    layer_extreme_dimensions: state.layer_extreme_dimensions
+    layer_extreme_dimensions: state.layer_extreme_dimensions,
+    groups: state.groups,
+    compressed_network: state.compressed_network
   };
 }
 

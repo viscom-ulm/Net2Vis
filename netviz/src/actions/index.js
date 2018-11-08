@@ -1,8 +1,9 @@
 import NetworkApi from '../api/NetworkApi';
 import CodeApi from '../api/CodeApi';
 import LayerTypesApi from '../api/LayerTypesApi';
-import PreferencesApi from '../api/PreferencesApi'
-import * as types from './types'
+import PreferencesApi from '../api/PreferencesApi';
+import GroupsApi from '../api/GroupsApi';
+import * as types from './types';
 
 // Set the ID of the current Network
 export function setID(id) {
@@ -66,14 +67,9 @@ export function updateLayerTypes(layerTypes, id) {
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
       dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
     }).catch(error => {
-      console.warn('LayerTypes invalid.');
+      throw(error);
     });
   }
-}
-
-// Loading Network was Successful
-export function loadNetworkSuccess(network) {
-  return {type: types.LOAD_NETWORK_SUCCESS, network};
 }
 
 // Set the Extreme dimensions of the Layers in the Network
@@ -123,22 +119,33 @@ export function removeError() {
   return {type: types.REMOVE_ERROR}
 }
 
+// Initializes the compressed version of the network.
+export function initializeCompressedNetwork(network, groups) {
+  return{type: types.INITIALIZE_COMPRESSED_NETWORK, network, groups}
+}
+
+// Loading Network was Successful
+export function loadNetworkSuccess(network) {
+  return {type: types.LOAD_NETWORK_SUCCESS, network};
+}
+
 // Helper Function to be called once a Network has been Loaded.
-export function networkLoaded(network, dispatch) {
+export function networkLoaded(network, groups, dispatch) {
   if(network.success === true) {
     dispatch(removeError());
     dispatch(loadNetworkSuccess(network.data));
     dispatch(setLayersExtremes(network.data));
+    dispatch(initializeCompressedNetwork(network.data, groups));
   } else {
     dispatch(addError(network.data));
   }
 }
 
 // Called to load the Network
-export function loadNetwork(id) {
+export function loadNetwork(id, groups) {
   return function(dispatch) {
     return NetworkApi.getNetwork(id).then(network => {
-      networkLoaded(network, dispatch);      
+      networkLoaded(network, groups, dispatch);      
     }).catch(error => {
       throw(error);
     })  
@@ -167,12 +174,12 @@ export function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id) {
+export function updateCode(code, id, groups) {
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
-      return NetworkApi.getNetwork(id).then(network => { // TODO: Check if could be reused from above
-        networkLoaded(network, dispatch);      
+      return NetworkApi.getNetwork(id).then(network => { 
+        networkLoaded(network, groups, dispatch);      
       }).catch(error => {
         throw(error);
       })
@@ -212,17 +219,23 @@ export function reloadAllState(id) {
   return function(dispatch) {
     return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
-      return NetworkApi.getNetwork(id).then(network => { 
-        networkLoaded(network, dispatch);      
-        return PreferencesApi.getPreferences(id).then(preferences => {
-          dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
-          return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-            dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+      return GroupsApi.getGroups(id).then(groups => {
+        dispatch(loadGroupsSuccess(JSON.parse(groups)));
+        return NetworkApi.getNetwork(id).then(network => { 
+          networkLoaded(network, JSON.parse(groups), dispatch);      
+          return PreferencesApi.getPreferences(id).then(preferences => {
+            dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
+            return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+            });
           });
+        }).catch(error => {
+          throw(error);
         });
       }).catch(error => {
-        throw(error);
-      })
+        console.log(error);
+        console.warn('Error in Grouping');
+      });
     }).catch(error => {
       console.warn('Current Network not executable.')
     });
@@ -234,7 +247,21 @@ export function updateGraphExtremeDimensions(extreme_dimensions) {
   return { type: types.UPDATE_GRAPH_EXTREME_DIMENSIONS, extreme_dimensions}
 }
 
-// Add a new Grouping
-export function addGroup(group) {
+// Loading Groups was Successful
+export function loadGroupsSuccess(groups) {
+  return {type: types.LOAD_GROUPS_SUCCESS, groups};
+}
+
+// Adding Group was Successful
+export function addGroupSuccess(group) {
   return {type: types.ADD_GROUP, group}
+}
+
+// Add a new Grouping
+export function addGroup(group, id) {
+  return function(dispatch) {
+    return GroupsApi.addGroup(group, id).then(group => {
+      dispatch(addGroupSuccess(JSON.parse(group)));
+    });
+  }
 }

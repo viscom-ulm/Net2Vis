@@ -16,6 +16,7 @@ function calculateTrivialPath(y_pos, layer_width) {
   var pathData = 'M 0 ' + y_pos[0]; // Move to initial Location
   pathData = addRightEnd(pathData, y_pos[1], y_pos[2], layer_width); // Add right end of Glyph
   pathData = addLeftEnd(pathData, y_pos[0], y_pos[3]); // Add left end of Glyph
+  pathData = addCloseTag(pathData);
   return pathData;
 }
   
@@ -33,6 +34,7 @@ function calculateMultiInputPath(y_pos, layer, edges) {
     }
   }
   pathData = addRightEnd(pathData, y_pos[1], y_pos[2], layer.width); // Add a right End to the Layer
+  pathData = pathData.addCloseTag(pathData);
   return pathData;
 }
 
@@ -50,6 +52,7 @@ function calculateMultiOutputPath(y_pos, layer, edges) {
     }
   }
   pathData = addLeftEnd(pathData, y_pos[0], y_pos[3]); // Add left end of Glyph
+  pathData = addCloseTag(pathData);
   return pathData;
 }
 
@@ -73,6 +76,12 @@ function addIntersection(pathData, x00, y00, x01, y01, x10, y10, x11, y11) {
   var ix = x00 + (a * (x01 -x00)); // Interpolate the x-Value using a
   var iy = y00 + (a * (y01 - y00)); // Interpolate the y-Value using a
   pathData = pathData + ' L ' + ix + ' ' + iy; // Draw to the Intersection Point
+  return pathData;
+}
+
+// Add closing Tag for SVG Path
+function addCloseTag(pathData) {
+  pathData = pathData + ' z';
   return pathData;
 }
 

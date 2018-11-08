@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 
 import ToggleButton from './ToggleButton';
 import ClickableButton from './ClickableButton';
@@ -21,9 +21,9 @@ class Controls extends React.Component {
 
   // Group some Layers together
   groupLayers = () => {
-    var group = graphs.groupLayers(this.props.network, this.props.selection); // Group the Layers
+    var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
     if (group !== undefined) { // Check if the group could be made
-      this.props.actions.addGroup(group); // Add the group to the state
+      this.props.actions.addGroup(group, this.props.id); // Add the group to the state
     }
   }
 
@@ -44,8 +44,9 @@ class Controls extends React.Component {
 
 // Controls state of the Application
 Controls.propTypes = {
+  id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
-  network: PropTypes.object.isRequired,
+  compressed_network: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
   graph_extreme_dimensions: PropTypes.object.isRequired,
@@ -55,8 +56,9 @@ Controls.propTypes = {
 // Mapping the Controls state to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
+    id: state.id,
     display: state.display,
-    network: state.network,
+    compressed_network: state.compressed_network,
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     graph_extreme_dimensions: state.graph_extreme_dimensions,
