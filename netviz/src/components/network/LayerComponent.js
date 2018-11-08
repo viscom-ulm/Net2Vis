@@ -66,7 +66,7 @@ class Layer extends React.Component {
           <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} key={index}/>
         )}
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
-          <path d={pathData} style={{fill:set.color, stroke: stroke}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
+          <path d={pathData} style={{fill:set.color, stroke: stroke, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
           <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={this.props.layer.layer.name}/>
         </g>
       </g>
