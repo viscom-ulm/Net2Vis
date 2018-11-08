@@ -9,6 +9,7 @@ import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
 import * as graphs from '../../graphs';
 
+
 // Controls at top of the Application
 class Controls extends React.Component {
   // Triggers download functionality of the network graph
