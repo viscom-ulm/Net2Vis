@@ -120,8 +120,8 @@ export function removeError() {
 }
 
 // Initializes the compressed version of the network.
-export function initializeCompressedNetwork(network) {
-  return{type: types.INITIALIZE_COMPRESSED_NETWORK, network}
+export function initializeCompressedNetwork(network, groups) {
+  return{type: types.INITIALIZE_COMPRESSED_NETWORK, network, groups}
 }
 
 // Loading Network was Successful
@@ -135,7 +135,7 @@ export function networkLoaded(network, groups, dispatch) {
     dispatch(removeError());
     dispatch(loadNetworkSuccess(network.data));
     dispatch(setLayersExtremes(network.data));
-    dispatch(initializeCompressedNetwork(network.data));
+    dispatch(initializeCompressedNetwork(network.data, groups));
   } else {
     dispatch(addError(network.data));
   }
@@ -220,9 +220,9 @@ export function reloadAllState(id) {
     return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
       return GroupsApi.getGroups(id).then(groups => {
-        dispatch(loadGroupsSuccess(groups));
+        dispatch(loadGroupsSuccess(JSON.parse(groups)));
         return NetworkApi.getNetwork(id).then(network => { 
-          networkLoaded(network, groups, dispatch);      
+          networkLoaded(network, JSON.parse(groups), dispatch);      
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
@@ -231,8 +231,11 @@ export function reloadAllState(id) {
           });
         }).catch(error => {
           throw(error);
-        })
-      })
+        });
+      }).catch(error => {
+        console.log(error);
+        console.warn('Error in Grouping');
+      });
     }).catch(error => {
       console.warn('Current Network not executable.')
     });
@@ -249,7 +252,16 @@ export function loadGroupsSuccess(groups) {
   return {type: types.LOAD_GROUPS_SUCCESS, groups};
 }
 
-// Add a new Grouping
-export function addGroup(group) {
+// Adding Group was Successful
+export function addGroupSuccess(group) {
   return {type: types.ADD_GROUP, group}
+}
+
+// Add a new Grouping
+export function addGroup(group, id) {
+  return function(dispatch) {
+    return GroupsApi.addGroup(group, id).then(group => {
+      dispatch(addGroupSuccess(JSON.parse(group)));
+    });
+  }
 }

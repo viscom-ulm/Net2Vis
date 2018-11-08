@@ -336,7 +336,7 @@ function getNewInputDimensions(occurence, network) {
     if (occurence[i].inputs.length === 0) { // No Inputs for a Layer
       var id = getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
-        return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network
+        return network.layers[id].properties.dimensions.in; // Return the input dimensions for this layer from the network
       }
     }
   }
@@ -357,7 +357,7 @@ function getNewOutputDimensions(occurence, network) {
 // Returns the layer index gien an ID
 function getLayerByID(id, layers) {
   for (var i in layers) { // Iterate over all layers
-    if (layers[i].id == id) { // Layer ID matches
+    if (layers[i].id === id) { // Layer ID matches
       return i;
     }
   }

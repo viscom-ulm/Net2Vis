@@ -23,7 +23,7 @@ class Controls extends React.Component {
   groupLayers = () => {
     var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
     if (group !== undefined) { // Check if the group could be made
-      this.props.actions.addGroup(group); // Add the group to the state
+      this.props.actions.addGroup(group, this.props.id); // Add the group to the state
     }
   }
 
@@ -44,6 +44,7 @@ class Controls extends React.Component {
 
 // Controls state of the Application
 Controls.propTypes = {
+  id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
@@ -55,6 +56,7 @@ Controls.propTypes = {
 // Mapping the Controls state to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
+    id: state.id,
     display: state.display,
     compressed_network: state.compressed_network,
     preferences: state.preferences,

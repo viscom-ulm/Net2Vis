@@ -57,6 +57,7 @@ def check_exists(id):
     copyfile(os.path.join('default', 'model_current.py'), os.path.join('models', id, 'model_current.py'))
     copyfile(os.path.join('default', 'layer_types_current.json'), os.path.join('models', id, 'layer_types_current.json'))
     copyfile(os.path.join('default', 'preferences.json'), os.path.join('models', id, 'preferences.json'))
+    copyfile(os.path.join('default', 'groups.json'), os.path.join('models', id, 'groups.json'))
 
 ###############
 # Basic Serving 
@@ -134,7 +135,7 @@ def get_groups(id):
     groups = myfile.read()
     return groups, ok_status, text_type
 
-# Update the Preferences.
+# Update the Groups.
 @app.route('/api/update_groups/<id>', methods=['POST'])
 def update_groups(id):
   check_exists(id)
@@ -143,4 +144,19 @@ def update_groups(id):
   file.write(content.decode("utf-8"))
   return content, ok_status, text_type
   
+# Add a new Group.
+@app.route('/api/add_group/<id>', methods=['POST'])
+def add_group(id):
+  check_exists(id)
+  content = request.data
+  with open(os.path.join('models', id, 'groups.json'), "r+") as file:
+    data = file.read()
+    data = json.loads(data)
+    data.append(json.loads(content))
+    print(data)
+    file.seek(0)
+    file.write(json.dumps(data))
+    file.truncate()
+  return content, ok_status, text_type
+
 app.run(debug=True)

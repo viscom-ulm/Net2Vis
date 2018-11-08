@@ -12,9 +12,10 @@ class Network extends React.Component {
   // When this Component mounts, load the Network from the Backend
   componentWillMount() {
     if (!('layers' in this.props.network)) {
-      this.props.actions.loadNetwork(this.props.id, this.props.groups);
-      this.props.actions.loadLayerTypes(this.props.id);
-      this.props.actions.loadPreferences(this.props.id);
+      this.props.actions.reloadAllState(this.props.id);
+//      this.props.actions.loadNetwork(this.props.id, this.props.groups);
+//      this.props.actions.loadLayerTypes(this.props.id);
+//      this.props.actions.loadPreferences(this.props.id);
     }
   }
 
