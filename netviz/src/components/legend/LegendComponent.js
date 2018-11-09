@@ -7,6 +7,36 @@ import LegendItem from './LegendItem';
 import * as actions from '../../actions';
 
 class Legend extends React.Component {
+  // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
+  handleMouseDown = (e) => {
+    this.coords = {
+      x: e.pageX,
+      y: e.pageY
+    }
+    document.addEventListener('mousemove', this.handleMouseMove);
+    //this.props.actions.setPreferenceMode('network');
+    if(!e.shiftKey) {
+      //this.props.actions.deselectLayers();
+    } 
+  };
+  
+  // MouseUp Listener for SVG, ending the drag option by removing the MouseMove Listener
+  handleMouseUp = () => {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    this.coords = {};
+  };
+  
+  // MouseMove Listener, moving the SVG around
+  handleMouseMove = (e) => {
+    const xDiff = this.coords.x - e.pageX;
+    const yDiff = this.coords.y - e.pageY;
+
+    this.coords.x = e.pageX;
+    this.coords.y = e.pageY;
+
+    //this.props.actions.moveGroup([xDiff,yDiff]);
+  };
+
   // When a layer is clicked, change its selection state
   handleLayerClicked = (e) => {
     this.props.actions.setPreferenceMode('color');
@@ -22,11 +52,11 @@ class Legend extends React.Component {
       }
       return(
         <div id='Legend'>
-          <div className='flexhorizontal flexlegend'>
-          {settings.map(setting => 
-            <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
-          )}
-          </div>
+          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+            {settings.map(setting => 
+              <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
+            )}
+          </svg>
         </div>
       );
     } else {
@@ -53,3 +83,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Legend);
+
+/*
+          <div className='flexhorizontal flexlegend'>
+          {settings.map(setting => 
+            <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
+          )}
+          </div>
+          */
