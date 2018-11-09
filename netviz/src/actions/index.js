@@ -20,6 +20,11 @@ export function zoomGroup(group_zoom) {
   return {type: types.ZOOM_GROUP, group_zoom};
 }
 
+// Displace the legend SVG
+export function moveLegend(group_displacement) {
+  return {type: types.MOVE_LEGEND, group_displacement};
+}
+
 // Toggle the Code View
 export function toggleCode() {
   return {type: types.TOGGLE_CODE};

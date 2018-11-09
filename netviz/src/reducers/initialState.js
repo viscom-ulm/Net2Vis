@@ -8,6 +8,10 @@ export default {
         y: 50,
         scale: 0.5
     },
+    legend_transform: {
+        x: 0,
+        y: 0
+    },
     display: {
         code_toggle: true,
         preferences_toggle: true,

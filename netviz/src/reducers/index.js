@@ -4,6 +4,7 @@ import id from './IDReducer';
 import network from './NetworkReducer';
 import code from './CodeReducer';
 import group_transform from './TransformReducer';
+import legend_transform from './LegendTransformReducer';
 import display from './DisplayReducer';
 import layer_types_settings from './LayerTypesSettingsReducer';
 import preferences from './PreferencesReducer';
@@ -22,6 +23,7 @@ export default combineReducers({
     network,
     code,
     group_transform,
+    legend_transform,
     display,
     layer_types_settings,
     preferences,

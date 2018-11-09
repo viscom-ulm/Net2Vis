@@ -34,7 +34,7 @@ class Legend extends React.Component {
     this.coords.x = e.pageX;
     this.coords.y = e.pageY;
 
-    //this.props.actions.moveGroup([xDiff,yDiff]);
+    this.props.actions.moveLegend([xDiff,yDiff]);
   };
 
   // When a layer is clicked, change its selection state
@@ -46,6 +46,8 @@ class Legend extends React.Component {
   render() {
     if(this.props.legend_toggle) {
       const layer_types_settings = this.props.layer_types_settings;
+      const group_t = this.props.legend_transform;
+      const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
       var settings = [];
       for (var key in layer_types_settings) {
         settings.push({name: key, color: layer_types_settings[key].color});
@@ -53,9 +55,11 @@ class Legend extends React.Component {
       return(
         <div id='Legend'>
           <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
-            {settings.map(setting => 
-              <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
-            )}
+            <g id='legend_group' transform={legend_transform}>
+              {settings.map(setting => 
+                <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
+              )}
+            </g>
           </svg>
         </div>
       );
@@ -67,12 +71,14 @@ class Legend extends React.Component {
 
 Legend.propTypes = {
   legend_toggle: PropTypes.bool.isRequired,
+  legend_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     legend_toggle: state.display.legend_toggle,
+    legend_transform: state.legend_transform,
     layer_types_settings: state.layer_types_settings
   };
 }
