@@ -9,6 +9,8 @@ import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
 import * as graphs from '../../graphs';
 
+import downloadLogo from '../../media/download_icon.png';
+import groupLogo from '../../media/group_icon.png';
 
 // Controls at top of the Application
 class Controls extends React.Component {
@@ -31,14 +33,18 @@ class Controls extends React.Component {
   render() {
     const display = this.props.display;
     return(
-      <ul>
-        <li className='header noselect'>NetViz</li>
-        <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
-        <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
-        <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
-        <ClickableButton name="Group" action={this.groupLayers}/>
-        <ClickableButton name="Download" action={this.downloadSVG}/>
-      </ul>
+      <div className='wrapper'>
+        <div className='menu'>
+          <div className='header noselect'>NetViz</div>
+          <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
+          <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
+          <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
+        </div>
+        <div className='menu'>
+          <ClickableButton name="Group" image={groupLogo} action={this.groupLayers}/>
+          <ClickableButton name="Download" image={downloadLogo} action={this.downloadSVG}/>
+        </div>
+      </div>
     );
   }
 }
