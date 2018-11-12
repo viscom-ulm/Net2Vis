@@ -18,8 +18,8 @@ class Controls extends React.Component {
   downloadSVG = () => {
     var svg_text = document.getElementById('main_group').innerHTML; // Get the inner elements of the svg
     const transform = `translate(${10}, ${-this.props.graph_extreme_dimensions.min_y + 5})`;
-    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (this.props.graph_extreme_dimensions.max_x - this.props.graph_extreme_dimensions.min_x) + "' height='" + (this.props.graph_extreme_dimensions.max_y - this.props.graph_extreme_dimensions.min_y + 10) + "'><g transform='" + transform + "'>" + svg_text + "</g></svg>"; // Append svg tag
-    saveAs(new Blob([svg_text], {type: "text/svg;charset=utf-8"}), 'model.svg'); // Save the SVG on Disk
+    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (this.props.graph_extreme_dimensions.max_x - this.props.graph_extreme_dimensions.min_x) + "' height='" + (this.props.graph_extreme_dimensions.max_y - this.props.graph_extreme_dimensions.min_y + 10) + "'><g transform='" + transform + "'>" + svg_text + "</g></svg>"; // append svg tag
+    saveAs(new Blob([svg_text], {type: "text/svg;charset=utf-8"}), 'model.svg'); // save the svg on disk
   }
 
   // Group some Layers together

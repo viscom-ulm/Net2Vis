@@ -6,7 +6,8 @@ export default function layerTypesSettignsReducer(state = initialState.layer_typ
     case(types.ADD_LAYER_TYPE_SETTING):
       return Object.assign({}, state, {
         [action.name]: {
-          color: action.setting.color
+          color: action.setting.color,
+          alias: action.setting.alias
         }
       });
     case types.UPDATE_LAYER_TYPES_SUCCESS:

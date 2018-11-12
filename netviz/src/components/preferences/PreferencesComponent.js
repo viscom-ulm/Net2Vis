@@ -44,6 +44,13 @@ class Preferences extends React.Component {
     this.props.actions.updateLayerTypes(layerTypes, this.props.id);
   }
 
+  // Called when the Name of the Layer Alias changes
+  handleAliasChange = (e) => {
+    var layerTypes = this.props.layer_types_settings;
+    layerTypes[this.props.selected_legend_item].alias = e.currentTarget.value;
+    this.props.actions.updateLayerTypes(layerTypes, this.props.id);
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -61,6 +68,7 @@ class Preferences extends React.Component {
         case 'color':
           return(
             <div id='Preferences'>
+              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
               <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
             </div>
           );
