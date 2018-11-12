@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
 import * as actions from '../../actions';
+import * as legend from '../../legend';
 
 // <div className='legendItem' style={style} onClick={() => action(layer_name)}>{layer_name}</div>
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
@@ -14,8 +15,9 @@ class LegendItem extends React.Component {
       stroke: 'black',
       stokeLinejoin: 'round'
     };  
+    const x_Pos = 10 + legend.calculateXPosition(this.props.layer_name, this.props.layer_types_settings);
     return (
-      <rect x='10' y='10' width='20' height='80' style={style} onClick={() => this.props.action(this.props.layer_name)}/>
+      <rect x={x_Pos} y='10' width='20' height='80' style={style} onClick={() => this.props.action(this.props.layer_name)}/>
     ) 
   }
 }
