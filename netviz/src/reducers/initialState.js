@@ -49,6 +49,8 @@ export default {
         element_spacing: {value: 30, type: 'number', description: 'Spacing between Elements'},
         layer_height: {value: 30, type: 'number', description: 'Layer Height'},
         layer_width: {value: 10, type: 'number', description: 'Layer Width'},
-        layer_spacing: {value: 5, type: 'number', description: 'Spacing between Layers'}
+        layer_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
+        layer_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
+        complex_spacing: {value: 30, type: 'number', description: 'Spacing before complex Layer'}
     }
 }

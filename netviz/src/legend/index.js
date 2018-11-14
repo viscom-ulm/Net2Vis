@@ -19,7 +19,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
       const graph = getLegendItemGraph(groups[i], legendPreferences);
       return {
         trivial: false,
-        width: graph.graph().width + 50,
+        width: graph.graph().width + legendPreferences.complex_spacing.value,
         representer: {
           name: layerName,
           setting: layerTypesSettings[layerName]
@@ -40,7 +40,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
 
 function getLegendItemGraph(group, legendPreferences) {
   var graph = new dagre.graphlib.Graph();
-  graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: legendPreferences.layer_spacing.value, nodesep: 10}); // Set Graph Properties
+  graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: legendPreferences.layer_spacing_horizontal.value, nodesep: legendPreferences.layer_spacing_vertical.value}); // Set Graph Properties
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
   for (var i in group.layers) {
     const layer = group.layers[i];
