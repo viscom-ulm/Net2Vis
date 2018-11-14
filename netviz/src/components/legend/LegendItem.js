@@ -13,7 +13,7 @@ class LegendItem extends React.Component {
     };  
     if (this.props.representation.layer.trivial) {
       return (
-        <rect x={this.props.representation.position} y='10' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
+        <rect x={this.props.representation.position} y='0' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
       ) 
     } else {
       const graph = this.props.representation.layer.graph;
@@ -27,9 +27,9 @@ class LegendItem extends React.Component {
       });
       return (
         <g>
-          <rect x={this.props.representation.position} y='10' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
+          <rect x={this.props.representation.position} y='0' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
           {nodes.map((layer, i) => 
-            <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} key={i}/>
+            <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} height={graph.graph().height} key={i}/>
           )}
         </g>
       ) 
