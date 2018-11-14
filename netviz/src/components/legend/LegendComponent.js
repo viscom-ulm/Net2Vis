@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 
 import LegendItem from './LegendItem';
 import * as actions from '../../actions';
+import * as legend from '../../legend';
 
 class Legend extends React.Component {
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
@@ -45,19 +46,15 @@ class Legend extends React.Component {
   
   render() {
     if(this.props.legend_toggle) {
-      const layer_types_settings = this.props.layer_types_settings;
       const group_t = this.props.legend_transform;
       const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
-      var settings = [];
-      for (var key in layer_types_settings) {
-        settings.push({name: key, color: layer_types_settings[key].color});
-      }
+      const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
       return(
         <div id='Legend'>
           <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
             <g id='legend_group' transform={legend_transform}>
-              {settings.map(setting => 
-                <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
+              {legend_representation.map(representation => 
+                <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
               )}
             </g>
           </svg>
@@ -72,14 +69,18 @@ class Legend extends React.Component {
 Legend.propTypes = {
   legend_toggle: PropTypes.bool.isRequired,
   legend_transform: PropTypes.object.isRequired,
-  layer_types_settings: PropTypes.object.isRequired
+  layer_types_settings: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  legend_preferences: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     legend_toggle: state.display.legend_toggle,
     legend_transform: state.legend_transform,
-    layer_types_settings: state.layer_types_settings
+    layer_types_settings: state.layer_types_settings,
+    groups: state.groups,
+    legend_preferences: state.legend_preferences
   };
 }
 
@@ -89,11 +90,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Legend);
-
-/*
-          <div className='flexhorizontal flexlegend'>
-          {settings.map(setting => 
-            <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
-          )}
-          </div>
-          */

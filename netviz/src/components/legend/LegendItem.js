@@ -1,42 +1,56 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
 
-import * as actions from '../../actions';
-import * as legend from '../../legend';
+import ComplexLegendItem from './ComplexLegendItem';
 
-// <div className='legendItem' style={style} onClick={() => action(layer_name)}>{layer_name}</div>
-// ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 class LegendItem extends React.Component {
   render() {
     const style = {
-      fill: this.props.layer_color,
+      fill: this.props.representation.layer.representer.setting.color,
       stroke: 'black',
       stokeLinejoin: 'round'
     };  
-    const x_Pos = 10 + legend.calculateXPosition(this.props.layer_name, this.props.layer_types_settings);
-    return (
-      <rect x={x_Pos} y='10' width='20' height='80' style={style} onClick={() => this.props.action(this.props.layer_name)}/>
-    ) 
+    if (this.props.representation.layer.trivial) {
+      return (
+        <rect x={this.props.representation.position} y='10' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
+      ) 
+    } else {
+      const graph = this.props.representation.layer.graph;
+      var nodes = [];
+      graph.nodes().forEach(function(e) {
+        nodes.push(graph.node(e));
+      });
+      var edges = [];
+      graph.edges().forEach(function(e) {
+        edges.push({v: e.v, w: e.w, points: graph.edge(e)});
+      });
+      return (
+        <g>
+          <rect x={this.props.representation.position} y='10' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
+          {nodes.map((layer, i) => 
+            <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} key={i}/>
+          )}
+        </g>
+      ) 
+    }
   }
 }
 
 // PropTypes of this Class
 LegendItem.propTypes = {
-  layer_types_settings: PropTypes.object.isRequired
+  layer_types_settings: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  legend_preferences: PropTypes.object.isRequired
 }
 
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    layer_types_settings: state.layer_types_settings
+    layer_types_settings: state.layer_types_settings,
+    groups: state.groups,
+    legend_preferences: state.legend_preferences
   };
 }
 
-// Map the Actions for the State to the Props of this Class
-function mapDispatchToProps(dispatch) {
-  return {actions: bindActionCreators(actions, dispatch)}
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LegendItem);
+export default connect(mapStateToProps, undefined)(LegendItem);
