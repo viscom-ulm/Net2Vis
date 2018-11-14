@@ -59,15 +59,15 @@ class Main extends React.Component {
   // Render the Main Content and call other Elements
   render() {
     return (
-      <div id='networkComponent' className='flexvertical'>
-        <div className='flexhorizontal'>
+      <div className='flexhorizontal'>
+        <div id='networkComponent' className='flexvertical'>
           <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
             <Network />
           </svg> 
-          <Preferences />
-          <Code />
+          <Legend />
         </div>
-        <Legend />
+        <Preferences />
+        <Code />
       </div>
     );
   }
