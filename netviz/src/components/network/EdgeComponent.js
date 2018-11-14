@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import * as paths from '../../paths';
+
 const EdgeComponent = ({edge, layer_max_height, horizontal_spacing}) => {
   var points = edge.points;
   var path = "";

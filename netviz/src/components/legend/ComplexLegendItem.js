@@ -31,7 +31,7 @@ class ComplexLegendItem extends React.Component {
     return(
       <g transform={`translate(${50 + this.props.position}, ${-this.props.height/2})`}>
         {current_edges.map((edge, index) =>
-          <EdgeComponent edge={edge.points} layer_max_height={this.props.legend_preferences.layer_height.value} horizontal_spacing={this.props.legend_preferences.layer_spacing.value} key={index}/>
+          <EdgeComponent edge={edge.points} layer_max_height={this.props.legend_preferences.layer_height.value} horizontal_spacing={this.props.legend_preferences.layer_spacing} key={index}/>
         )}
         <g transform={`translate(${this.props.layer.x - (this.props.legend_preferences.layer_width.value/2.0)}, ${this.props.layer.y})`}>
           <path d={pathData} style={style}/>

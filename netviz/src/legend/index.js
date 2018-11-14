@@ -44,7 +44,7 @@ function getLegendItemGraph(group, legendPreferences) {
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
   for (var i in group.layers) {
     const layer = group.layers[i];
-    graph.setNode(i, {id: i, width: legendPreferences.layer_width.value, height: legendPreferences.layer_height.value, layer: layer});
+    graph.setNode(i, {id: parseInt(i, 10), width: legendPreferences.layer_width.value, height: legendPreferences.layer_height.value, layer: layer});
   }
   for (var j in group.layers) { // Add all Edges to the Graph
     var layer_current = group.layers[j]; // Get the current Layer
