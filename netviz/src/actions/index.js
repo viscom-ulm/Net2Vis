@@ -266,7 +266,6 @@ export function addGroupSuccess(group) {
 export function addGroup(group, id) {
   return function(dispatch) {
     return GroupsApi.addGroup(group, id).then(group => {
-      dispatch(addSettingForLayerType())
       dispatch(addGroupSuccess(JSON.parse(group)));
     });
   }
