@@ -16,6 +16,7 @@ import selected_legend_item from './SelectedLegendItemReducer';
 import graph_extreme_dimensions from './GraphExtemeDimensionsReducer';
 import groups from './GroupsReducer';
 import compressed_network from './CompressionReducer';
+import legend_preferences from './LegendPreferencesReducer';
 
 // Combine all Reducers
 export default combineReducers({
@@ -34,5 +35,6 @@ export default combineReducers({
     selected_legend_item,
     graph_extreme_dimensions,
     groups,
-    compressed_network
+    compressed_network,
+    legend_preferences
 })
