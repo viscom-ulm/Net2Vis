@@ -6,7 +6,11 @@ export default {
     group_transform: {
         x: 0,
         y: 50,
-        scale: 0.5
+        scale: 1
+    },
+    legend_transform: {
+        x: 0,
+        y: 0
     },
     display: {
         code_toggle: true,
@@ -40,5 +44,13 @@ export default {
         max_y: 0
     },
     groups: [],
-    compressed_network: {}
+    compressed_network: {},
+    legend_preferences: {
+        element_spacing: {value: 70, type: 'number', description: 'Spacing between Elements'},
+        layer_height: {value: 30, type: 'number', description: 'Layer Height'},
+        layer_width: {value: 10, type: 'number', description: 'Layer Width'},
+        layers_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
+        layers_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
+        complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'}
+    }
 }

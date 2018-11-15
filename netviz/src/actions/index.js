@@ -2,6 +2,7 @@ import NetworkApi from '../api/NetworkApi';
 import CodeApi from '../api/CodeApi';
 import LayerTypesApi from '../api/LayerTypesApi';
 import PreferencesApi from '../api/PreferencesApi';
+import LegendPreferencesApi from '../api/LegendPreferencesApi';
 import GroupsApi from '../api/GroupsApi';
 import * as types from './types';
 
@@ -18,6 +19,11 @@ export function moveGroup(group_displacement) {
 // Zoom the main SVG group
 export function zoomGroup(group_zoom) {
   return {type: types.ZOOM_GROUP, group_zoom};
+}
+
+// Displace the legend SVG
+export function moveLegend(group_displacement) {
+  return {type: types.MOVE_LEGEND, group_displacement};
 }
 
 // Toggle the Code View
@@ -227,6 +233,9 @@ export function reloadAllState(id) {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
               dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+              return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
+                dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
+              });
             });
           });
         }).catch(error => {
@@ -262,6 +271,38 @@ export function addGroup(group, id) {
   return function(dispatch) {
     return GroupsApi.addGroup(group, id).then(group => {
       dispatch(addGroupSuccess(JSON.parse(group)));
+    });
+  }
+}
+
+// Loading LegendPreferences was Successful
+export function loadLegendPreferencesSuccess(legend_preferences) {
+  return {type: types.LOAD_LEGEND_PREFERENCES_SUCCESS, legend_preferences};
+}
+
+// Called to load the Preferences
+export function loadLegendPreferences(id) {
+  return function(dispatch) {
+    return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
+      dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
+    }).catch(error => {
+      throw(error);
+    });
+  };
+}
+
+// Updating Preferences was Succesful
+export function updateLegendPreferencesSuccess(legend_preferences) {
+  return {type: types.UPDATE_LEGEND_PREFERENCES_SUCCESS, legend_preferences}
+}
+
+// Called to update the Preferences
+export function updateLegendPreferences(preferences, id) {
+  return function(dispatch) {
+    return LegendPreferencesApi.updateLegendPreferences(preferences, id).then(preferences => {
+      dispatch(updateLegendPreferencesSuccess(JSON.parse(preferences)));
+    }).catch(error => {
+      console.warn('Preferences invalid.');
     });
   }
 }

@@ -80,8 +80,8 @@ function generateGroup(network, selection) {
   for (var i in selection) { // Iterate over all selected Layers
     group.layers.push({
       name: network.layers[getLayerByID(selection[i], network.layers)].name,
-      inputs: addInputsToLayer(selection, network, i),
-      outputs: addOutputsToLayer(selection, network, i)
+      input: addInputsToLayer(selection, network, i),
+      output: addOutputsToLayer(selection, network, i)
     }); // Add the Layers to the group
   }
   return group;
@@ -128,9 +128,9 @@ export function findGroupOccurences(group, network) {
       var layerNumber = getLayerByID(layerID, network.layers); // Map the layerID to the position in the array
       var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
       var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
-      var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].outputs[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].inputs[nextLayerInfo.connection]; // Get the number of the group node to be inspected (depending on in or out connected)
-      var outputsGroup = group.layers[groupNumber].outputs; // Get the outputs for the input Layer of the Group
-      var inputsGroup = group.layers[groupNumber].inputs; // Get the outputs for the input Layer of the Group
+      var groupNumber = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].output[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].input[nextLayerInfo.connection]; // Get the number of the group node to be inspected (depending on in or out connected)
+      var outputsGroup = group.layers[groupNumber].output; // Get the outputs for the input Layer of the Group
+      var inputsGroup = group.layers[groupNumber].input; // Get the outputs for the input Layer of the Group
       if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) { // Outputs and Inputs match
         matchesList[i][groupNumber].matchID = network.layers[layerNumber].id; // Assign the match ID
       } else { // Output or Inputs do not match
@@ -146,7 +146,7 @@ export function findGroupOccurences(group, network) {
 // Find an input Node of a Group
 function findInputNode(group) {
   for (var j in group.layers) { // Iterate over all layers in the Group
-    if(group.layers[j].inputs.length === 0) { // Layer has no inputs contained in the Group
+    if(group.layers[j].input.length === 0) { // Layer has no inputs contained in the Group
       return {inputID: j, inputNode: group.layers[j]};
     }
   }
@@ -168,7 +168,7 @@ function generateInitialMatchesList(group, network, inputOccurences, inputID) {
   var matchesList = []; // Initialize the matchesList
   for (var i in inputOccurences) { // Iterate over all occurences of the group input Layer in the Network
     var outputsLayer = network.layers[inputOccurences[i]].properties.output; // Get the outputs for this Layer
-    var outputsGroup = group.layers[inputID].outputs; // Get the outputs for the input Layer of the Group
+    var outputsGroup = group.layers[inputID].output; // Get the outputs for the input Layer of the Group
     if (checkOutputsMatching(outputsGroup, outputsLayer, network, group)) { // If parts still equal
       matchesList.push(JSON.parse(JSON.stringify(group.layers.slice(0)))); // Copy the group layers to the matches List
       matchesList[matchesList.length - 1][inputID].matchID = network.layers[inputOccurences[i]].id; // Set the match for the input layer of the group in this match of the matches List
@@ -182,13 +182,13 @@ function findUncheckedConnectedLayer(matchesList) {
     var list = matchesList[0]; // Get the first list as an example (since all should contain matches at the same positions)
     for (var i in list) { // Iterate over the list items (nodes of the group) 
       if (typeof(list[i].matchID) !== 'undefined') { // If current group node already matches
-        for (var j in list[i].outputs) { // Iterate over the outputs
-          if (typeof(list[list[i].outputs[j]].matchID) === 'undefined') { // If group node connected at this output not matched
+        for (var j in list[i].output) { // Iterate over the outputs
+          if (typeof(list[list[i].output[j]].matchID) === 'undefined') { // If group node connected at this output not matched
             return {type: 'out', source: i, connection: j}; // Layer to be inspected has been found
           }
         }
-        for (var k in list[i].inputs) { // Iterate over all Inputs
-          if (typeof(list[list[i].inputs[k]].matchID) === 'undefined') { // If group node connected at this input not matched
+        for (var k in list[i].input) { // Iterate over all Inputs
+          if (typeof(list[list[i].input[k]].matchID) === 'undefined') { // If group node connected at this input not matched
             return {type: 'in', source: i, connection: k}; // Layer to be inspected has been found
           }
         }
@@ -333,7 +333,7 @@ function changeOutputIfNeccessary(occurence, layer, newID, newLayer) {
 // Get the input dimensions for the new Layer
 function getNewInputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the Occurence List
-    if (occurence[i].inputs.length === 0) { // No Inputs for a Layer
+    if (occurence[i].input.length === 0) { // No Inputs for a Layer
       var id = getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.in; // Return the input dimensions for this layer from the network
@@ -345,7 +345,7 @@ function getNewInputDimensions(occurence, network) {
 // Get the output dimensions for the new Layer
 function getNewOutputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the occurence List
-    if (occurence[i].outputs.length === 0) { // Not Outputs for a Layer
+    if (occurence[i].output.length === 0) { // Not Outputs for a Layer
       var id = getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network

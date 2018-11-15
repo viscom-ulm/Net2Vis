@@ -13,9 +13,6 @@ class Network extends React.Component {
   componentWillMount() {
     if (!('layers' in this.props.network)) {
       this.props.actions.reloadAllState(this.props.id);
-//      this.props.actions.loadNetwork(this.props.id, this.props.groups);
-//      this.props.actions.loadLayerTypes(this.props.id);
-//      this.props.actions.loadPreferences(this.props.id);
     }
   }
 

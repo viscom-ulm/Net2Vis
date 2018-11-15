@@ -34,7 +34,7 @@ function calculateMultiInputPath(y_pos, layer, edges) {
     }
   }
   pathData = addRightEnd(pathData, y_pos[1], y_pos[2], layer.width); // Add a right End to the Layer
-  pathData = pathData.addCloseTag(pathData);
+  pathData = addCloseTag(pathData);
   return pathData;
 }
 

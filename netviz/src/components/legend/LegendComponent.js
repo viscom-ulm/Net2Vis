@@ -5,8 +5,36 @@ import {bindActionCreators} from 'redux';
 
 import LegendItem from './LegendItem';
 import * as actions from '../../actions';
+import * as legend from '../../legend';
 
 class Legend extends React.Component {
+  // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
+  handleMouseDown = (e) => {
+    this.coords = {
+      x: e.pageX,
+      y: e.pageY
+    }
+    document.addEventListener('mousemove', this.handleMouseMove);
+    this.props.actions.setPreferenceMode('legend');
+  };
+  
+  // MouseUp Listener for SVG, ending the drag option by removing the MouseMove Listener
+  handleMouseUp = () => {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+    this.coords = {};
+  };
+  
+  // MouseMove Listener, moving the SVG around
+  handleMouseMove = (e) => {
+    const xDiff = this.coords.x - e.pageX;
+    const yDiff = this.coords.y - e.pageY;
+
+    this.coords.x = e.pageX;
+    this.coords.y = e.pageY;
+
+    this.props.actions.moveLegend([xDiff,yDiff]);
+  };
+
   // When a layer is clicked, change its selection state
   handleLayerClicked = (e) => {
     this.props.actions.setPreferenceMode('color');
@@ -15,18 +43,18 @@ class Legend extends React.Component {
   
   render() {
     if(this.props.legend_toggle) {
-      const layer_types_settings = this.props.layer_types_settings;
-      var settings = [];
-      for (var key in layer_types_settings) {
-        settings.push({name: key, color: layer_types_settings[key].color});
-      }
+      const group_t = this.props.legend_transform;
+      const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
+      const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
       return(
         <div id='Legend'>
-          <div className='flexhorizontal flexlegend'>
-          {settings.map(setting => 
-            <LegendItem layer_name={setting.name} layer_color={setting.color} key={setting.name} action={this.handleLayerClicked}/>
-          )}
-          </div>
+          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+            <g id='legend_group' transform={legend_transform}>
+              {legend_representation.map(representation => 
+                <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
+              )}
+            </g>
+          </svg>
         </div>
       );
     } else {
@@ -37,13 +65,19 @@ class Legend extends React.Component {
 
 Legend.propTypes = {
   legend_toggle: PropTypes.bool.isRequired,
-  layer_types_settings: PropTypes.object.isRequired
+  legend_transform: PropTypes.object.isRequired,
+  layer_types_settings: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  legend_preferences: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   return {
     legend_toggle: state.display.legend_toggle,
-    layer_types_settings: state.layer_types_settings
+    legend_transform: state.legend_transform,
+    layer_types_settings: state.layer_types_settings,
+    groups: state.groups,
+    legend_preferences: state.legend_preferences
   };
 }
 
