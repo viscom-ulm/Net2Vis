@@ -42,7 +42,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
 
 function getLegendItemGraph(group, legendPreferences) {
   var graph = new dagre.graphlib.Graph();
-  graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: legendPreferences.layer_spacing_horizontal.value, nodesep: legendPreferences.layer_spacing_vertical.value}); // Set Graph Properties
+  graph.setGraph({ranker: 'longest-path', rankdir: 'LR', ranksep: legendPreferences.layers_spacing_horizontal.value, nodesep: legendPreferences.layers_spacing_vertical.value}); // Set Graph Properties
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
   for (var i in group.layers) {
     const layer = group.layers[i];

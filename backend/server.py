@@ -159,4 +159,22 @@ def add_group(id):
     file.truncate()
   return content, ok_status, text_type
 
+# Get the Preferences.
+@app.route('/api/get_legend_preferences/<id>')
+def get_legend_preferences(id):
+  check_exists(id)
+  with open(os.path.join('models', id, 'legend_preferences.json'), 'r') as myfile:
+    preferences = myfile.read()
+    return preferences, ok_status, text_type
+
+# Update the Preferences.
+@app.route('/api/update_legend_preferences/<id>', methods=['POST'])
+def update_legend_preferences(id):
+  check_exists(id)
+  content = request.data
+  file = open(os.path.join('models', id, 'legend_preferences.json'),'w')
+  file.write(content.decode("utf-8"))
+  return content, ok_status, text_type
+
+
 app.run(debug=True)

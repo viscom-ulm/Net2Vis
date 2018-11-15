@@ -15,10 +15,7 @@ class Legend extends React.Component {
       y: e.pageY
     }
     document.addEventListener('mousemove', this.handleMouseMove);
-    //this.props.actions.setPreferenceMode('network');
-    if(!e.shiftKey) {
-      //this.props.actions.deselectLayers();
-    } 
+    this.props.actions.setPreferenceMode('legend');
   };
   
   // MouseUp Listener for SVG, ending the drag option by removing the MouseMove Listener

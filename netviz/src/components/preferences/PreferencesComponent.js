@@ -51,6 +51,48 @@ class Preferences extends React.Component {
     this.props.actions.updateLayerTypes(layerTypes, this.props.id);
   }
 
+  // Called when the spacing of the legend elements changes
+  handleLegendElementSpacingChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.element_spacing.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
+  // Called when the Width of the legend layers changes
+  handleLegendLayerWidthChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.layer_width.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
+  // Called when the Height of the legend layers changes
+  handleLegendLayerHeightChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.layer_height.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
+  // Called when the horizontal spacing of the legend layers changes
+  handleLegendLayersSpacingHorizontalChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.layers_spacing_horizontal.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
+  // Called when the vertical spacing of the legend layers changes
+  handleLegendLayersSpacingVerticalChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.layers_spacing_vertical.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
+  // Called when the spacing between representer and complex item of the legend layers changes
+  handleLegendComplexSpacingChange = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.complex_spacing.value = parseInt(e.currentTarget.value, 10);
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -58,6 +100,7 @@ class Preferences extends React.Component {
         case 'network':
           return(
             <div id='Preferences'>
+              <p>Network</p>
               <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
               <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
               <Features/>
@@ -68,8 +111,21 @@ class Preferences extends React.Component {
         case 'color':
           return(
             <div id='Preferences'>
+              <p>Layer</p>
               <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
               <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+            </div>
+          );
+        case 'legend':
+          return(
+            <div id='Preferences'>
+              <p>Legend</p>
+              <InputField value={this.props.legend_preferences.element_spacing.value} type={this.props.legend_preferences.element_spacing.type} description={this.props.legend_preferences.element_spacing.description} action={this.handleLegendElementSpacingChange}/>
+              <InputField value={this.props.legend_preferences.layer_width.value} type={this.props.legend_preferences.layer_width.type} description={this.props.legend_preferences.layer_width.description} action={this.handleLegendLayerWidthChange}/>
+              <InputField value={this.props.legend_preferences.layer_height.value} type={this.props.legend_preferences.layer_height.type} description={this.props.legend_preferences.layer_height.description} action={this.handleLegendLayerHeightChange}/>
+              <InputField value={this.props.legend_preferences.layers_spacing_horizontal.value} type={this.props.legend_preferences.layers_spacing_horizontal.type} description={this.props.legend_preferences.layers_spacing_horizontal.description} action={this.handleLegendLayersSpacingHorizontalChange}/>
+              <InputField value={this.props.legend_preferences.layers_spacing_vertical.value} type={this.props.legend_preferences.layers_spacing_vertical.type} description={this.props.legend_preferences.layers_spacing_vertical.description} action={this.handleLegendLayersSpacingVerticalChange}/>
+              <InputField value={this.props.legend_preferences.complex_spacing.value} type={this.props.legend_preferences.complex_spacing.type} description={this.props.legend_preferences.complex_spacing.description} action={this.handleLegendComplexSpacingChange}/>
             </div>
           );
         default:
@@ -88,7 +144,8 @@ Preferences.propTypes = {
   preferences_toggle: PropTypes.bool.isRequired,
   preferences: PropTypes.object.isRequired,
   selected_legend_item: PropTypes.string.isRequired,
-  layer_types_settings: PropTypes.object.isRequired
+  layer_types_settings: PropTypes.object.isRequired,
+  legend_preferences: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -99,7 +156,8 @@ function mapStateToProps(state, ownProps) {
     preferences_toggle: state.display.preferences_toggle,
     preferences: state.preferences,
     selected_legend_item: state.selected_legend_item,
-    layer_types_settings: state.layer_types_settings
+    layer_types_settings: state.layer_types_settings,
+    legend_preferences: state.legend_preferences
   };
 }
 
