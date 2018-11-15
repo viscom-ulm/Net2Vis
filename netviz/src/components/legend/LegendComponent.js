@@ -47,15 +47,13 @@ class Legend extends React.Component {
       const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
       const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
       return(
-        <div id='Legend'>
-          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
-            <g id='legend_group' transform={legend_transform}>
-              {legend_representation.map(representation => 
-                <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
-              )}
-            </g>
-          </svg>
-        </div>
+        <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+          <g id='legend_group' transform={legend_transform}>
+            {legend_representation.map(representation => 
+              <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
+            )}
+          </g>
+        </svg>
       );
     } else {
       return null;

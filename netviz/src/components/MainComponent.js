@@ -1,6 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {
+  ReflexContainer,
+  ReflexSplitter,
+  ReflexElement
+} from 'react-reflex'
+
+import 'react-reflex/styles.css'
 
 import * as actions from '../actions'
 import Network from './network/NetworkComponent'
@@ -60,12 +67,17 @@ class Main extends React.Component {
   render() {
     return (
       <div className='flexhorizontal'>
-        <div id='networkComponent' className='flexvertical'>
-          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
-            <Network />
-          </svg> 
-          <Legend />
-        </div>
+        <ReflexContainer orientation='horizontal' windowResizeAware={true}>
+          <ReflexElement propagateDimensions={true} className='networkComponent'>
+            <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+              <Network />
+            </svg>
+          </ReflexElement>
+          <ReflexSplitter/>
+          <ReflexElement propagateDimensions={true} size={300}>
+            <Legend />
+          </ReflexElement>
+        </ReflexContainer>
         <Preferences />
         <Code />
       </div>

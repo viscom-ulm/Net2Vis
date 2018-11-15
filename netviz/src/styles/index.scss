@@ -115,8 +115,6 @@ header {
     width: 100%;
     flex-shrink: 0;
     background-color: #FFFFFF;
-    border-top: #000000;
-    border-top-style: solid;
 }
 
 #ColorPicker {
@@ -175,4 +173,8 @@ header {
     line-height: 50px;
     text-align: center;
     color: black;
+}
+
+.reflex-size-aware {
+    overflow: hidden;
 }
