@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const ClickableButton = ({name, image, action}) => {
   return (
-    <div className='noselect menuitem'>
+    <div className='noselect menuitem' onClick={() => action()}>
       <img src={image} alt='logo' />
-      <a onClick={() => action()}>{name}</a>
+      {name}
     </div>      
   );
 };
