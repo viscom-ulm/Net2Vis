@@ -7,6 +7,7 @@ export const UPDATE_CODE_SUCESS = 'UPDATE_CODE_SUCCESS'
 export const MOVE_GROUP = 'MOVE_GROUP';
 export const MOVE_LEGEND = 'MOVE_LEGEND';
 export const ZOOM_GROUP = 'ZOOM_GROUP';
+export const ZOOM_LEGEND = 'ZOOM_LEGEND';
 export const TOGGLE_CODE = 'TOGGLE_CODE';
 export const TOGGLE_PREFERENCES = 'TOGGLE_PREFERENCES';
 export const TOGGLE_LEGEND = 'TOGGLE_LEGEND';

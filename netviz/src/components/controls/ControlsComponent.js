@@ -21,14 +21,14 @@ class Controls extends React.Component {
     var graph_height = graph_element.getBBox().height * this.props.group_transform.scale; // Calculate the height of this Element
     var graph_text = graph_element.innerHTML; // Get the inner elements of the svg
     const graph_transform = `scale(${this.props.group_transform.scale}) translate(0, ${- (graph_element.getBBox().height/2.0)})`; // Set the transform for the graph to match the scaling and be centred
-    var graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform='" + `translate(5,5)` + "'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
+    var graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform=`translate(5,5)`'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
 
     var legend_element = document.getElementById('legend_group'); // Get the legend SVG Element
-    var legend_width = legend_element.getBBox().width; // Calculate the width of this Element
-    var legend_height = legend_element.getBBox().height; // Calculate the height of this Element
+    var legend_width = legend_element.getBBox().width * this.props.legend_transform.scale; // Calculate the width of this Element
+    var legend_height = legend_element.getBBox().height * this.props.legend_transform.scale; // Calculate the height of this Element
     var legend_text = legend_element.innerHTML; // Get the inner elements of the svg
     const legend_transform = `scale(${this.props.group_transform.scale})`; // Set the transform for the legend to match the scaling and be centred
-    var legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='" + `translate(5,5)` + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
+    var legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='`translate(5,5)`'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
 
     saveAs(new Blob([graph_downloadable], {type: "text/svg;charset=utf-8"}), 'model.svg'); // save the svg on disk
     saveAs(new Blob([legend_downloadable], {type: "text/svg;charset=utf-8"}), 'legend.svg'); // save the svg on disk
@@ -70,7 +70,8 @@ Controls.propTypes = {
   layer_extreme_dimensions: PropTypes.object.isRequired,
   graph_extreme_dimensions: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
-  group_transform: PropTypes.object.isRequired
+  group_transform: PropTypes.object.isRequired,
+  legend_transform: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -83,7 +84,8 @@ function mapStateToProps(state, ownProps) {
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     graph_extreme_dimensions: state.graph_extreme_dimensions,
     selection: state.selection,
-    group_transform: state.group_transform
+    group_transform: state.group_transform,
+    legend_transform: state.legend_transform
   };
 }
 

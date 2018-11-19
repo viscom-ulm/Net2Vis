@@ -59,7 +59,7 @@ class Main extends React.Component {
     this.props.actions.moveGroup([xDiff,yDiff]);
   };
 
-  // Scroll Listener, handling SCG zoom Actions
+  // Scroll Listener, handling SVG zoom Actions
   handleScroll = (e) => {
     this.props.actions.zoomGroup(e.deltaY);
   }

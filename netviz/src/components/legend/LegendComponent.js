@@ -35,6 +35,11 @@ class Legend extends React.Component {
     this.props.actions.moveLegend([xDiff,yDiff]);
   };
 
+  // Scroll Listener, handling SVG zoom Actions
+  handleScroll = (e) => {
+    this.props.actions.zoomLegend(e.deltaY);
+  }
+
   // When a layer is clicked, change its selection state
   handleLayerClicked = (e) => {
     this.props.actions.setPreferenceMode('color');
@@ -43,10 +48,10 @@ class Legend extends React.Component {
   
   render() {
     const group_t = this.props.legend_transform;
-    const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
+    const legend_transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale})`;
     const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
     return(
-      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
         <g id='legend_group' transform={legend_transform}>
           {legend_representation.map(representation => 
             <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
