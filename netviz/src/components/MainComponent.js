@@ -74,10 +74,6 @@ class Main extends React.Component {
             <Code />
           </ReflexElement>
         }
-        {
-          this.props.code_toggle &&
-          <ReflexSplitter/>
-        }
         <ReflexElement propagateDimensions={true}>
           <ReflexContainer orientation='horizontal' windowResizeAware={true}>
             <ReflexElement propagateDimensions={true} className='networkComponent'>
