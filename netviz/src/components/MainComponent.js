@@ -1,6 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {
+  ReflexContainer,
+  ReflexSplitter,
+  ReflexElement
+} from 'react-reflex'
+
+import 'react-reflex/styles.css'
 
 import * as actions from '../actions'
 import Network from './network/NetworkComponent'
@@ -59,18 +67,52 @@ class Main extends React.Component {
   // Render the Main Content and call other Elements
   render() {
     return (
-      <div className='flexhorizontal'>
-        <div id='networkComponent' className='flexvertical'>
-          <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
-            <Network />
-          </svg> 
-          <Legend />
-        </div>
-        <Preferences />
-        <Code />
-      </div>
+      <ReflexContainer orientation='vertical' windowResizeAware={true}>
+        {
+          this.props.code_toggle &&
+          <ReflexElement propagateDimensions={true} size={400}>
+            <Code />
+          </ReflexElement>
+        }
+        <ReflexElement propagateDimensions={true}>
+          <ReflexContainer orientation='horizontal' windowResizeAware={true}>
+            <ReflexElement propagateDimensions={true} className='networkComponent'>
+              <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+                <Network />
+              </svg>
+            </ReflexElement>
+            <ReflexSplitter/>
+            {
+              this.props.legend_toggle &&
+              <ReflexElement propagateDimensions={true} size={300}>
+                <Legend />
+              </ReflexElement>
+            }
+          </ReflexContainer>
+        </ReflexElement>
+        {
+          this.props.preferences_toggle &&
+          <ReflexElement propagateDimensions={true} size={300}>
+            <Preferences />
+          </ReflexElement>
+        }
+      </ReflexContainer>
     );
   }
+}
+
+Main.propTypes = {
+  legend_toggle: PropTypes.bool,
+  code_toggle: PropTypes.bool.isRequired,
+  preferences_toggle: PropTypes.bool.isRequired
+}
+
+function mapStateToProps(state, ownProps) {
+  return {
+    legend_toggle: state.display.legend_toggle,
+    code_toggle: state.display.code_toggle,
+    preferences_toggle: state.display.preferences_toggle
+  };
 }
 
 // Mapping the Actions called for SVG manipulation to the Props of this Class
@@ -78,4 +120,4 @@ function mapDispatchToProps(dispatch) {
   return {actions: bindActionCreators(actions, dispatch)}
 }
 
-export default connect(undefined, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

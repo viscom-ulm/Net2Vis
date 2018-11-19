@@ -26,42 +26,35 @@ class Code extends React.Component {
 
   // Render the Code into the Code View if Toggled
   render() {
-    if(this.props.code_toggle) {
-      const code = this.props.code;
-      var annotations = [];
-      if(this.props.error.hasOwnProperty('line_number')) {
-        annotations = [{row: (this.props.error.line_number - 1), column: 0, text: this.props.error.error_class + ': ' + this.props.error.detail, type: 'error'}];
-      }
-      return(// Editor with Syntax highlighting
-        <div id='Code'>
-          <AceEditor
-            mode="python"
-            theme="monokai"
-            wrapEnabled={true}
-            enableBasicAutocompletion={true}
-            enableLiveAutocompletion={true}
-            enableSnippets={true}
-            onChange={this.handleOnChange}
-            name="code_ace_editor"
-            editorProps={{$blockScrolling: Infinity}}
-            height = '100%'
-            width = '100%'
-            value = {code}
-            annotations = {annotations}
-            scrollMargin = {[10,0,0,0]}
-          />
-        </div>
-      );
-    } else {
-      return null;
+    const code = this.props.code;
+    var annotations = [];
+    if(this.props.error.hasOwnProperty('line_number')) {
+      annotations = [{row: (this.props.error.line_number - 1), column: 0, text: this.props.error.error_class + ': ' + this.props.error.detail, type: 'error'}];
     }
+    return(// Editor with Syntax highlighting
+        <AceEditor
+          mode="python"
+          theme="monokai"
+          wrapEnabled={true}
+          enableBasicAutocompletion={true}
+          enableLiveAutocompletion={true}
+          enableSnippets={true}
+          onChange={this.handleOnChange}
+          name="code_ace_editor"
+          editorProps={{$blockScrolling: Infinity}}
+          height = '100%'
+          width = 'auto'
+          value = {code}
+          annotations = {annotations}
+          scrollMargin = {[10,0,0,0]}
+        />
+    );
   }
 }
 
 // Code PropTypes are the toggle state and the code
 Code.propTypes = {
   id: PropTypes.string.isRequired,
-  code_toggle: PropTypes.bool.isRequired,
   code: PropTypes.string.isRequired,
   error: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired
@@ -73,7 +66,6 @@ function mapStateToProps(state, ownProps) {
     return {
       id: state.id,
       code: state.code,
-      code_toggle: state.display.code_toggle,
       error: state.error,
       groups: state.groups
     };
@@ -81,7 +73,6 @@ function mapStateToProps(state, ownProps) {
     return {
       id: state.id,
       code: '',
-      code_toggle: state.display.code_toggle,
       error: state.error,
       groups: state.groups
     };
