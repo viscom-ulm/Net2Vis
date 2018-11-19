@@ -42,27 +42,22 @@ class Legend extends React.Component {
   };
   
   render() {
-    if(this.props.legend_toggle) {
-      const group_t = this.props.legend_transform;
-      const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
-      const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
-      return(
-        <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
-          <g id='legend_group' transform={legend_transform}>
-            {legend_representation.map(representation => 
-              <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
-            )}
-          </g>
-        </svg>
-      );
-    } else {
-      return null;
-    }
+    const group_t = this.props.legend_transform;
+    const legend_transform = `translate(${group_t.x}, ${group_t.y})`;
+    const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
+    return(
+      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>
+        <g id='legend_group' transform={legend_transform}>
+          {legend_representation.map(representation => 
+            <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
+          )}
+        </g>
+      </svg>
+    );
   }
 }
 
 Legend.propTypes = {
-  legend_toggle: PropTypes.bool.isRequired,
   legend_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
@@ -71,7 +66,6 @@ Legend.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    legend_toggle: state.display.legend_toggle,
     legend_transform: state.legend_transform,
     layer_types_settings: state.layer_types_settings,
     groups: state.groups,
