@@ -16,9 +16,12 @@ import groupLogo from '../../media/group_icon.png';
 class Controls extends React.Component {
   // Triggers download functionality of the network graph
   downloadSVG = () => {
-    var svg_text = document.getElementById('main_group').innerHTML; // Get the inner elements of the svg
-    const transform = `translate(${10}, ${-this.props.graph_extreme_dimensions.min_y + 5})`;
-    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (this.props.graph_extreme_dimensions.max_x - this.props.graph_extreme_dimensions.min_x) + "' height='" + (this.props.graph_extreme_dimensions.max_y - this.props.graph_extreme_dimensions.min_y + 10) + "'><g transform='" + transform + "'>" + svg_text + "</g></svg>"; // append svg tag
+    var graph_element = document.getElementById('main_group');
+    var graph_width = graph_element.getBBox().width * this.props.group_transform.scale;
+    var graph_height = graph_element.getBBox().height * this.props.group_transform.scale;
+    var svg_text = graph_element.innerHTML; // Get the inner elements of the svg
+    const transform = `scale(${this.props.group_transform.scale}) translate(0, ${- (graph_element.getBBox().height/2.0)})`;
+    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform='" + `translate(5,5)` + "'><g transform='" + transform + "'>" + svg_text + "</g></g></svg>"; // append svg tag
     saveAs(new Blob([svg_text], {type: "text/svg;charset=utf-8"}), 'model.svg'); // save the svg on disk
   }
 
@@ -57,7 +60,8 @@ Controls.propTypes = {
   preferences: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
   graph_extreme_dimensions: PropTypes.object.isRequired,
-  selection: PropTypes.array.isRequired
+  selection: PropTypes.array.isRequired,
+  group_transform: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -69,7 +73,8 @@ function mapStateToProps(state, ownProps) {
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     graph_extreme_dimensions: state.graph_extreme_dimensions,
-    selection: state.selection
+    selection: state.selection,
+    group_transform: state.group_transform
   };
 }
 
