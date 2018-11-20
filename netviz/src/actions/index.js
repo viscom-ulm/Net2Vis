@@ -275,6 +275,25 @@ export function addGroup(group, id) {
   }
 }
 
+// Updating Groups was Successful
+export function updateGroupsSuccess(groups) {
+  return {type: types.UPDATE_GROUPS, groups}
+}
+
+// Delete groups from the network.
+export function deleteGroups(groups, layerTypes, network, id) {
+  return function(dispatch) {
+    dispatch(setPreferenceMode('legend'));
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+      return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+      });
+    });
+  }
+}
+
 // Loading LegendPreferences was Successful
 export function loadLegendPreferencesSuccess(legend_preferences) {
   return {type: types.LOAD_LEGEND_PREFERENCES_SUCCESS, legend_preferences};

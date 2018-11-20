@@ -27,6 +27,7 @@ class GroupsApi {
     });
   }
 
+  // Add a Group to the Backend
   static addGroup(group, id) {
     const request = new Request('/api/add_group/' + id, {
       method: 'POST',

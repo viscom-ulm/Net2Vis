@@ -93,6 +93,53 @@ class Preferences extends React.Component {
     this.props.actions.updateLegendPreferences(preferences, this.props.id);
   }
 
+  // Check if the currently selected Layer is a Group
+  isInGroups = (selectedLayer) => {
+    for (var i in this.props.groups) {
+      if (selectedLayer === this.props.groups[i].name) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  // Removes a Group and others that build on it from the State
+  deleteGroup = (e) => {
+    var currGroups = this.props.groups; // Current Groups in the State
+    var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
+    var groupIndices = [];
+    var legendItems = [];
+    for (var i in currGroups) { // Iterate over all Groups
+      if (this.props.selected_legend_item === currGroups[i].name) { // The group is the one to be deleted
+        for (var k in currLegend) { // Find the legend Entry for the group
+          if (String(k) === this.props.selected_legend_item) { // The Legend Entry was found
+            legendItems.push(k); // Add this to the LegendItems to be deleted
+          }
+        }
+        groupIndices.push(parseInt(i)); // Add this to the Groups to be deleted
+      } else { // Group is not the one to be deleted
+        for (var j in currGroups[i].layers) { // Iterate over all Layers of the Group
+          if (this.props.selected_legend_item === currGroups[i].layers[j].name) { // The Layer is the Group to be deleted
+            for (var l in currLegend) { // Find the legend Entry for the Group
+              if (String(l) === currGroups[i].name) { // The Legend Entry was found
+                legendItems.push(l); // Add this to the LegendItems to be deleted
+              }
+            }
+            groupIndices.push(parseInt(i)); // Add this to the Groups to be deleted
+          }
+        }
+      }
+    }
+    groupIndices.sort(function(a, b) { // Sort the group indices to make deleting easy
+      return b - a; // Descending
+    });
+    for (var m in groupIndices) { // Iterate over the indices
+      currGroups.splice(groupIndices[m], 1); // Delete the Group
+      delete currLegend[legendItems[m]]; // Delete the LegendItem
+    }
+    this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -109,13 +156,24 @@ class Preferences extends React.Component {
            </div>
           );
         case 'color':
-          return(
-            <div id='Preferences'>
-              <p>Layer</p>
-              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
-            </div>
-          );
+          if (this.isInGroups(this.props.selected_legend_item)) {
+            return(
+              <div id='Preferences'>
+                <p>Group</p>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+                <InputField value={'Delete'} type={'button'} description={'Delete Group'} action={this.deleteGroup}/>
+              </div>
+            );
+          } else {
+            return(
+              <div id='Preferences'>
+                <p>Layer</p>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+              </div>
+            );
+          }
         case 'legend':
           return(
             <div id='Preferences'>
@@ -145,7 +203,9 @@ Preferences.propTypes = {
   preferences: PropTypes.object.isRequired,
   selected_legend_item: PropTypes.string.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
-  legend_preferences: PropTypes.object.isRequired
+  legend_preferences: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  network: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -157,7 +217,9 @@ function mapStateToProps(state, ownProps) {
     preferences: state.preferences,
     selected_legend_item: state.selected_legend_item,
     layer_types_settings: state.layer_types_settings,
-    legend_preferences: state.legend_preferences
+    legend_preferences: state.legend_preferences,
+    groups: state.groups,
+    network: state.network
   };
 }
 
