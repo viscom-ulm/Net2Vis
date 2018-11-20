@@ -21,6 +21,11 @@ export function zoomGroup(group_zoom) {
   return {type: types.ZOOM_GROUP, group_zoom};
 }
 
+// Zoom the main SVG group
+export function zoomLegend(legend_zoom) {
+  return {type: types.ZOOM_LEGEND, legend_zoom};
+}
+
 // Displace the legend SVG
 export function moveLegend(group_displacement) {
   return {type: types.MOVE_LEGEND, group_displacement};
