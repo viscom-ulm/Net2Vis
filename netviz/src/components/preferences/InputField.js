@@ -36,6 +36,12 @@ const InputField = ({value, type, description, action, options}) => {
         <input className='inputElement' type="text" value={value} onChange={(e) => action(e)}/>
       </div>
     );
+  } else if (type === 'button') {
+    return (
+      <div className='preferenceItem'>
+        <button onClick={(e) => action(e)} className='inputElementSelect'>{description}</button>
+      </div>
+    );
   }
 };
 

@@ -102,6 +102,11 @@ class Preferences extends React.Component {
     }
     return false;
   }
+  
+  // Removes a Group from the State
+  deleteGroup = (e) => {
+    console.log(e);
+  }
 
   // Render the Preferences of the Visualization
   render() {
@@ -125,6 +130,7 @@ class Preferences extends React.Component {
                 <p>Group</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+                <InputField value={'Delete'} type={'button'} description={'Delete Group'} action={this.deleteGroup}/>
               </div>
             );
           } else {
