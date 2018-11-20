@@ -280,6 +280,7 @@ export function updateGroupsSuccess(groups) {
   return {type: types.UPDATE_GROUPS, groups}
 }
 
+// Delete groups from the network.
 export function deleteGroups(groups, layerTypes, network, id) {
   return function(dispatch) {
     dispatch(setPreferenceMode('legend'));
