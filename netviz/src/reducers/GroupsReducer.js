@@ -7,6 +7,8 @@ export default function groupsReducer(state = initialState.groups, action) {
       return action.groups;
     case types.ADD_GROUP:
       return state.concat(action.group);
+    case types.UPDATE_GROUPS:
+      return action.groups;
     default:
       return state;
   }

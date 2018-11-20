@@ -103,9 +103,29 @@ class Preferences extends React.Component {
     return false;
   }
   
-  // Removes a Group from the State
+  // Removes a Group and others that build on it from the State
   deleteGroup = (e) => {
-    console.log(e);
+    var currGroups = this.props.groups;
+    for (var i in currGroups) {
+      if (this.props.selected_legend_item === currGroups[i].name) {
+        currGroups.splice(i, 1);
+        i = i - 1;
+      } else {
+        for (var j in currGroups[i].layers) {
+          if (this.props.selected_legend_item === currGroups[i].layers[j].name) {
+            currGroups.splice(i, 1);
+            i = i - 1;
+          }
+        }
+      }
+    }
+    var currLegend = this.props.layer_types_settings;
+    for (var k in currLegend) {
+      if (k === this.props.selected_legend_item) {
+        delete currLegend[k];
+      }
+    }
+    this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id);
   }
 
   // Render the Preferences of the Visualization
@@ -172,7 +192,8 @@ Preferences.propTypes = {
   selected_legend_item: PropTypes.string.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   legend_preferences: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired
+  groups: PropTypes.array.isRequired,
+  network: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -185,7 +206,8 @@ function mapStateToProps(state, ownProps) {
     selected_legend_item: state.selected_legend_item,
     layer_types_settings: state.layer_types_settings,
     legend_preferences: state.legend_preferences,
-    groups: state.groups
+    groups: state.groups,
+    network: state.network
   };
 }
 
