@@ -93,6 +93,16 @@ class Preferences extends React.Component {
     this.props.actions.updateLegendPreferences(preferences, this.props.id);
   }
 
+  // Check if the currently selected Layer is a Group
+  isInGroups = (selectedLayer) => {
+    for (var i in this.props.groups) {
+      if (selectedLayer === this.props.groups[i].name) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -109,13 +119,23 @@ class Preferences extends React.Component {
            </div>
           );
         case 'color':
-          return(
-            <div id='Preferences'>
-              <p>Layer</p>
-              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-              <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
-            </div>
-          );
+          if (this.isInGroups(this.props.selected_legend_item)) {
+            return(
+              <div id='Preferences'>
+                <p>Group</p>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+              </div>
+            );
+          } else {
+            return(
+              <div id='Preferences'>
+                <p>Layer</p>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
+                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+              </div>
+            );
+          }
         case 'legend':
           return(
             <div id='Preferences'>
@@ -145,7 +165,8 @@ Preferences.propTypes = {
   preferences: PropTypes.object.isRequired,
   selected_legend_item: PropTypes.string.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
-  legend_preferences: PropTypes.object.isRequired
+  legend_preferences: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -157,7 +178,8 @@ function mapStateToProps(state, ownProps) {
     preferences: state.preferences,
     selected_legend_item: state.selected_legend_item,
     layer_types_settings: state.layer_types_settings,
-    legend_preferences: state.legend_preferences
+    legend_preferences: state.legend_preferences,
+    groups: state.groups
   };
 }
 
