@@ -69,7 +69,6 @@ Controls.propTypes = {
   compressed_network: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
-  graph_extreme_dimensions: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
   group_transform: PropTypes.object.isRequired,
   legend_transform: PropTypes.object.isRequired
@@ -83,7 +82,6 @@ function mapStateToProps(state, ownProps) {
     compressed_network: state.compressed_network,
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
-    graph_extreme_dimensions: state.graph_extreme_dimensions,
     selection: state.selection,
     group_transform: state.group_transform,
     legend_transform: state.legend_transform

@@ -38,12 +38,6 @@ export default {
     selection: [],
     preferences_mode: 'network',
     selected_legend_item: '',
-    graph_extreme_dimensions: {
-        min_x: 0,
-        min_y: 0,
-        max_x: 0,
-        max_y: 0
-    },
     groups: [],
     compressed_network: {},
     legend_preferences: {

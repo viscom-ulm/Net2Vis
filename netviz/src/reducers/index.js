@@ -13,7 +13,6 @@ import layer_extreme_dimensions from './LayerExtremeDimensionsReducer';
 import selection from './SelectionReducer';
 import preferences_mode from './PreferencesModeReducer';
 import selected_legend_item from './SelectedLegendItemReducer';
-import graph_extreme_dimensions from './GraphExtemeDimensionsReducer';
 import groups from './GroupsReducer';
 import compressed_network from './CompressionReducer';
 import legend_preferences from './LegendPreferencesReducer';
@@ -33,7 +32,6 @@ export default combineReducers({
     selection,
     preferences_mode,
     selected_legend_item,
-    graph_extreme_dimensions,
     groups,
     compressed_network,
     legend_preferences
