@@ -7,7 +7,8 @@ import {saveAs} from 'file-saver';
 import ToggleButton from './ToggleButton';
 import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
-import * as graphs from '../../groups';
+import * as grouping from '../../groups/Grouping';
+import * as duplicates from '../../groups/Duplicates';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
@@ -37,8 +38,8 @@ class Controls extends React.Component {
 
   // Group some Layers together
   groupLayers = () => {
-    var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
-    if (group !== undefined && (!graphs.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+    var group = grouping.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
+    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
       this.props.actions.addGroup(group, this.props.id); // Add the group to the state
     }
   }
