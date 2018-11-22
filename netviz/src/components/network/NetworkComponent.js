@@ -29,7 +29,14 @@ class Network extends React.Component {
     });
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
-    const transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale}) rotate(0 0 0)`;
+    var networkElement = document.getElementById('networkComponent'); // Get the main SVG Element
+    var mainGroup = document.getElementById('main_group'); // Get the main group of the SVG Element
+    var centerTransformation = {x: 0, y: 0} // Transformation to center the Graph initially
+    if(networkElement !== null && mainGroup !== null) { // If the elements exist already
+      centerTransformation.x = (networkElement.getBoundingClientRect().width / 2.0) - (mainGroup.getBoundingClientRect().width); // Transformation to center the graph in x direction
+      centerTransformation.y = (networkElement.getBoundingClientRect().height / 2.0) - (mainGroup.getBoundingClientRect().height); // Transformation to center the graph in y direction
+    }
+    const transform = `translate(${(group_t.x + centerTransformation.x)}, ${(group_t.y + centerTransformation.y)}) scale(${group_t.scale}) rotate(0 0 0)`; // Manipulate the position of the graph
     return(
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 

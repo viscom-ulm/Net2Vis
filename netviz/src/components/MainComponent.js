@@ -77,7 +77,7 @@ class Main extends React.Component {
         <ReflexElement propagateDimensions={true}>
           <ReflexContainer orientation='horizontal' windowResizeAware={true}>
             <ReflexElement propagateDimensions={true} className='networkComponent'>
-              <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+              <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
                 <Network />
               </svg>
             </ReflexElement>

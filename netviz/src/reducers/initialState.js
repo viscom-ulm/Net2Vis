@@ -5,7 +5,7 @@ export default {
     code: '',
     group_transform: {
         x: 0,
-        y: 50,
+        y: 0,
         scale: 1
     },
     legend_transform: {
