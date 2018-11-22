@@ -38,7 +38,7 @@ class Controls extends React.Component {
   // Group some Layers together
   groupLayers = () => {
     var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
-    if (group !== undefined && (!graphs.groupDoesExist(group, this.props.groups))) { // Check if the group could be made
+    if (group !== undefined && (!graphs.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
       this.props.actions.addGroup(group, this.props.id); // Add the group to the state
     }
   }
