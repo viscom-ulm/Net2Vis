@@ -1,6 +1,6 @@
 import initialState from './initialState';
 import * as types from '../actions/types';
-import * as graphs from '../graphs';
+import * as graphs from '../groups';
 
 export default function compressionReducer(state = initialState.compressed_network, action) {
   switch (action.type) {

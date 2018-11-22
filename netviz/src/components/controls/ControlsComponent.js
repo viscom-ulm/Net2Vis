@@ -7,7 +7,7 @@ import {saveAs} from 'file-saver';
 import ToggleButton from './ToggleButton';
 import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
-import * as graphs from '../../graphs';
+import * as graphs from '../../groups';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
