@@ -38,7 +38,7 @@ class Controls extends React.Component {
   // Group some Layers together
   groupLayers = () => {
     var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
-    if (group !== undefined) { // Check if the group could be made
+    if (group !== undefined && (!graphs.groupDoesExist(group, this.props.groups))) { // Check if the group could be made
       this.props.actions.addGroup(group, this.props.id); // Add the group to the state
     }
   }
@@ -71,7 +71,8 @@ Controls.propTypes = {
   layer_extreme_dimensions: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
   group_transform: PropTypes.object.isRequired,
-  legend_transform: PropTypes.object.isRequired
+  legend_transform: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -84,7 +85,8 @@ function mapStateToProps(state, ownProps) {
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     selection: state.selection,
     group_transform: state.group_transform,
-    legend_transform: state.legend_transform
+    legend_transform: state.legend_transform,
+    groups: state.groups
   };
 }
 
