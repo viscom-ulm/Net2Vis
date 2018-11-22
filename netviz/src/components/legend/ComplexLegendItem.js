@@ -34,7 +34,7 @@ class ComplexLegendItem extends React.Component {
           <EdgeComponent edge={edge.points} layer_max_height={this.props.legend_preferences.layer_height.value} horizontal_spacing={this.props.legend_preferences.layer_spacing_horizontal} key={index}/>
         )}
         <g transform={`translate(${this.props.layer.x - (this.props.legend_preferences.layer_width.value/2.0)}, ${this.props.layer.y})`}>
-          <path d={pathData} style={style}/>
+          <path d={pathData} style={style} onClick={() => this.props.action(this.props.layer.layer.name)}/>
         </g>
       </g>
     ) 

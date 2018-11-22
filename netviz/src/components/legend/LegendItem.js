@@ -34,7 +34,7 @@ class LegendItem extends React.Component {
           <rect x={this.props.representation.position} y='0' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
           <text textAnchor='middle' dominantBaseline='middle' x={this.props.representation.position + this.props.legend_preferences.layer_width.value + (this.props.legend_preferences.complex_spacing.value / 2.0)} y={this.props.legend_preferences.layer_height.value / 2.0}>=</text>
           {nodes.map((layer, i) => 
-            <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} height={graph.graph().height} key={i}/>
+            <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} height={graph.graph().height} key={i} action={this.props.action}/>
           )}
         </g>
       ) 
