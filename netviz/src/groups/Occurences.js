@@ -17,7 +17,12 @@ export function findGroupOccurences(group, network) {
       var outputsGroup = group.layers[groupNumber].output; // Get the outputs for the input Layer of the Group
       var inputsGroup = group.layers[groupNumber].input; // Get the outputs for the input Layer of the Group
       if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) { // Outputs and Inputs match
-        matchesList[i][groupNumber].matchID = network.layers[layerNumber].id; // Assign the match ID
+        if (checkOutputMatchIds(outputsLayer, outputsGroup, matchesList[i]) && checkInputMatchIds(inputsLayer, inputsGroup, matchesList[i])) {
+          matchesList[i][groupNumber].matchID = network.layers[layerNumber].id; // Assign the match ID
+        } else { // Output or Input IDs do not match
+          matchesList.splice(i, 1); // Remove the list from the matchesList
+          i = i - 1; // Do not skip an element after removal
+        }
       } else { // Output or Inputs do not match
         matchesList.splice(i, 1); // Remove the list from the matchesList
         i = i - 1; // Do not skip an element after removal
@@ -85,19 +90,30 @@ function findUncheckedConnectedLayer(matchesList) {
 
 // Check if the outputs of Networklayer and Groupnode are matching
 function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
-  var same = true; // Initialize the sameness placeholder
-  if (outputsGroup.length === 0) {
-    return same;
+  if (outputsGroup.length === 0) { // No outputs of the current layer in the group selected
+    return true;
   } else if (outputsGroup.length === outputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of outputs
     for (var j in outputsGroup) { // Iterate over all ouptuts of the Group Layer 
       if (group.layers[outputsGroup[j]].name !== network.layers[common.getLayerByID(outputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network output
-        same = false; // Network part not equal
+        return false; // Network part not equal
       }
     }
   } else {
-    same = false; // Network part not equal
+    return false; // Network part not equal
   }
-  return same;
+  return true;
+}
+
+// Check if the IDs of the output match the matchesList entry
+function checkOutputMatchIds(outputsLayer, outputsGroup, matchesList) {
+  for (var i in outputsGroup) { // For all outputs of the layer
+    if (typeof(matchesList[outputsGroup[i]].matchID) === 'undefined') { // Check if the match was already assigned
+      if (outputsLayer[i] !== matchesList[outputsGroup[i]].matchID) { // If the layer output does not match the match
+        return false; // The IDs do not match
+      }
+    }
+  }
+  return true; // All IDs match
 }
 
 // Check if the inputs of Networklayer and Groupnode are matching
@@ -115,4 +131,16 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
     same = false; // Network part not equal
   }
   return same;
+}
+
+// Check if the IDs of the input match the matchesList entry
+function checkInputMatchIds(inputsLayer, inputsGroup, matchesList) {
+  for (var i in inputsGroup) { // For all outputs of the layer
+    if (typeof(matchesList[inputsGroup[i]].matchID) === 'undefined') { // Check if the match was already assigned
+      if (inputsLayer[i] !== matchesList[inputsGroup[i]].matchID) { // If the layer input does not match the match
+        return false; // The IDs do not match
+      }
+    }
+  }
+  return true; // All IDs match
 }
