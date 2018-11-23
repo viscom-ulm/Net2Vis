@@ -58,6 +58,7 @@ def check_exists(id):
     copyfile(os.path.join('default', 'layer_types_current.json'), os.path.join('models', id, 'layer_types_current.json'))
     copyfile(os.path.join('default', 'preferences.json'), os.path.join('models', id, 'preferences.json'))
     copyfile(os.path.join('default', 'groups.json'), os.path.join('models', id, 'groups.json'))
+    copyfile(os.path.join('default', 'legend_preferences.json'), os.path.join('models', id, 'legend_preferences.json'))
 
 ###############
 # Basic Serving 
@@ -73,6 +74,7 @@ def get_network(id):
     result = jsonify({'success': True, 'data': net})
     return  result, ok_status, json_type
   else:
+    print(graph)
     result = jsonify({'success': False, 'data': graph})
     return  result, ok_status, json_type
     

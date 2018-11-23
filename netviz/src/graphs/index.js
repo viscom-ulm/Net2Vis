@@ -7,16 +7,22 @@ export function buildGraphFromNetwork(network, layer_extreme_dimensions, prefere
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
   for (var i in network.layers) { // Add all Layers to the Graph
     const layer = network.layers[i]; // Get the current Layer
-    const max_layer_dim = Math.max(layer.properties.dimensions.in[0], layer.properties.dimensions.out[0]) // Get the maximum dimension of the layer (in vs out)
-    const lay_diff =  layer_extreme_dimensions.max_size - layer_extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Layer
-    const dim_diff = preferences.layer_display_max_height.value - preferences.layer_display_min_height.value; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
-    const perc = (max_layer_dim - layer_extreme_dimensions.min_size) / lay_diff; // Calculate the interpolation factor for boths sides of the Glyph 
-    const height = perc * dim_diff + preferences.layer_display_min_height.value; // Calculate the height for both sides of the Glyph 
-    const feat_diff = layer_extreme_dimensions.max_features - layer_extreme_dimensions.min_features; // Get the difference between max and min features of the Layers
-    const fdim_diff = preferences.layer_display_max_width.value - preferences.layer_display_min_width.value; // Get the differnece between Max and Min width for the Glyph Dimensions
-    const f_perc = (layer.properties.dimensions.out[layer.properties.dimensions.out.length - 1] - layer_extreme_dimensions.min_features) / feat_diff; // Calculate the interpolation factor
-    const width = f_perc * fdim_diff + preferences.layer_display_min_width.value; // Calculate the width of the glyph
-    graph.setNode(layer.id, {width: width, height: height, layer: layer}); // Add a Node to the Graph
+    if (Array.isArray(layer.properties.dimensions.in) && Array.isArray(layer.properties.dimensions.out)) {
+      const max_layer_dim = Math.max(layer.properties.dimensions.in[0], layer.properties.dimensions.out[0]) // Get the maximum dimension of the layer (in vs out)
+      var lay_diff =  layer_extreme_dimensions.max_size - layer_extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Layer
+      lay_diff = lay_diff === 0 ? 1 : lay_diff; // Check if there is any difference in spatial resolution at all
+      const dim_diff = preferences.layer_display_max_height.value - preferences.layer_display_min_height.value; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
+      const perc = (max_layer_dim - layer_extreme_dimensions.min_size) / lay_diff; // Calculate the interpolation factor for boths sides of the Glyph 
+      const height = perc * dim_diff + preferences.layer_display_min_height.value; // Calculate the height for both sides of the Glyph 
+      var feat_diff = layer_extreme_dimensions.max_features - layer_extreme_dimensions.min_features; // Get the difference between max and min features of the Layers
+      feat_diff = feat_diff === 0 ? 1 : feat_diff; // Check if there is any difference in features at all
+      const fdim_diff = preferences.layer_display_max_width.value - preferences.layer_display_min_width.value; // Get the differnece between Max and Min width for the Glyph Dimensions
+      const f_perc = (layer.properties.dimensions.out[layer.properties.dimensions.out.length - 1] - layer_extreme_dimensions.min_features) / feat_diff; // Calculate the interpolation factor
+      const width = f_perc * fdim_diff + preferences.layer_display_min_width.value; // Calculate the width of the glyph
+      graph.setNode(layer.id, {width: width, height: height, layer: layer}); // Add a Node to the Graph
+    } else {
+      graph.setNode(layer.id, {width: preferences.layer_display_min_width.value, height: preferences.layer_display_max_height.value, layer: layer}); // Add a Node to the Graph
+    }
   }
   for (var j in network.layers) { // Add all Edges to the Graph
     var layer_current = network.layers[j]; // Get the current Layer
