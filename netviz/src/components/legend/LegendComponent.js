@@ -48,10 +48,17 @@ class Legend extends React.Component {
   
   render() {
     const group_t = this.props.legend_transform;
-    const legend_transform = `translate(${group_t.x}, ${group_t.y}) scale(${group_t.scale})`;
+    var legendElement = document.getElementById('legendComponent'); // Get the main SVG Element
+    var mainGroup = document.getElementById('legend_group'); // Get the main group of the SVG Element
+    var centerTransformation = {x: 0, y: 0} // Transformation to center the Graph initially
+    if(legendElement !== null && mainGroup !== null) { // If the elements exist already
+      centerTransformation.x = (legendElement.getBoundingClientRect().width / 2.0) - (mainGroup.getBoundingClientRect().width / 2.0); // Transformation to center the graph in x direction
+      centerTransformation.y = (legendElement.getBoundingClientRect().height / 2.0) - (mainGroup.getBoundingClientRect().height); // Transformation to center the graph in y direction
+    }
+    const legend_transform = `translate(${(group_t.x + centerTransformation.x)}, ${(group_t.y + centerTransformation.y)}) scale(${group_t.scale})`; // Manipulate the position of the graph
     const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences);
     return(
-      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll}>
+      <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='legendComponent'>
         <g id='legend_group' transform={legend_transform}>
           {legend_representation.map(representation => 
             <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
