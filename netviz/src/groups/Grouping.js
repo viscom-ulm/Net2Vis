@@ -47,6 +47,7 @@ function contained(layers, selection) {
 function generateGroup(network, selection) {
   var group = { // Initialize the Group as empty object
     name: randomstring.generate(),
+    active: true,
     layers: []
   };
   for (var i in selection) { // Iterate over all selected Layers
