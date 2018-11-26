@@ -44,7 +44,6 @@ class LegendItem extends React.Component {
 
 // PropTypes of this Class
 LegendItem.propTypes = {
-  layer_types_settings: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
   legend_preferences: PropTypes.object.isRequired
 }
@@ -52,7 +51,6 @@ LegendItem.propTypes = {
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    layer_types_settings: state.layer_types_settings,
     groups: state.groups,
     legend_preferences: state.legend_preferences
   };
