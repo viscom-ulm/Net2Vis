@@ -15,11 +15,7 @@ class Layer extends React.Component {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
       setting.color = '#808080';
-      if (this.props.layer.layer.isGroup) {
-        setting.alias = 'Group';
-      } else {
-        setting.alias = this.props.layer.layer.name;
-      }
+      setting.alias = this.props.layer.layer.name;
       this.props.actions.addSettingForLayerType(setting, this.props.layer.layer.name);
     }
   }
@@ -29,11 +25,7 @@ class Layer extends React.Component {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
       var setting = {}; 
       setting.color = '#808080';
-      if (this.props.layer.layer.isGroup) {
-        setting.alias = 'Group';
-      } else {
-        setting.alias = this.props.layer.layer.name;
-      }
+      setting.alias = this.props.layer.layer.name;
       this.props.actions.addSettingForLayerType(setting, this.props.layer.layer.name);
     }
   }

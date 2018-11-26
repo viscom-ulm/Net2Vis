@@ -8,7 +8,6 @@ export function concatenateLayers(occurence, network, group) {
     var newLayer = { // Initialize the new layer
       id: newID,
       name: group.name,
-      isGroup: true,
       properties: {
         dimensions: {
           in: [100, 100, 100],
