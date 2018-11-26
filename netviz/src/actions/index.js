@@ -267,10 +267,13 @@ export function addGroupSuccess(group) {
 }
 
 // Add a new Grouping
-export function addGroup(group, id) {
+export function addGroup(group, layerTypes, id) {
   return function(dispatch) {
     return GroupsApi.addGroup(group, id).then(group => {
       dispatch(addGroupSuccess(JSON.parse(group)));
+      return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+      });
     });
   }
 }
