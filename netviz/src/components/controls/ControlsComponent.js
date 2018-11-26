@@ -40,7 +40,12 @@ class Controls extends React.Component {
   groupLayers = () => {
     var group = grouping.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
     if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
-      this.props.actions.addGroup(group, this.props.id); // Add the group to the state
+      var settings = this.props.layer_types_settings;
+      settings[group.name] = {
+        color: '#808080',
+        alias: 'Group'
+      }
+      this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
     }
   }
 
@@ -72,7 +77,8 @@ Controls.propTypes = {
   selection: PropTypes.array.isRequired,
   group_transform: PropTypes.object.isRequired,
   legend_transform: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired
+  groups: PropTypes.array.isRequired,
+  layer_types_settings: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -85,7 +91,8 @@ function mapStateToProps(state, ownProps) {
     selection: state.selection,
     group_transform: state.group_transform,
     legend_transform: state.legend_transform,
-    groups: state.groups
+    groups: state.groups,
+    layer_types_settings: state.layer_types_settings
   };
 }
 
