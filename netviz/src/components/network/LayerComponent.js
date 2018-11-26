@@ -10,6 +10,16 @@ import * as paths from '../../paths';
 
 // Layer Component providing individual Layer Visualizations
 class Layer extends React.Component {  
+  // When the Component mounts and no Setting is there, initialize it
+  componentWillMount() {
+    if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
+      var setting = {}; 
+      setting.color = '#808080';
+      setting.alias = this.props.layer.layer.name;
+      this.props.actions.addSettingForLayerType(setting, this.props.layer.layer.name);
+    }
+  }
+
   // When the Component updates and no Setting is there, initialize it
   componentDidUpdate() {
     if(!this.props.settings) { // If the Setting for this LayerType was not defined, initialize it
