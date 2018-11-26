@@ -106,11 +106,17 @@ class Preferences extends React.Component {
 
   // Toggles a Group and others that build on it
   toggleGroup = (e) => {
-    var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups);
-    var currGroups = this.props.groups;
-    for (var i in groupIndices) {
-      currGroups[groupIndices[i]].active = false;
+    var currGroups = this.props.groups; // Get the currently present groups
+    var selectedGroup = removal.getGroupByName(this.props.selected_legend_item, this.props.groups);
+    if (selectedGroup.group.active === true) { // If the currently selected group is active
+      var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups); // Get the indices for all groups to be deactivated
+      for (var i in groupIndices) { // For all of these indices
+        currGroups[groupIndices[i]].active = false; // Deactivate the group
+      }
+    } else { // Group was inactive
+      currGroups[selectedGroup.id].active = true; // Activate the group
     }
+    this.props.actions.updateGroups(this.props.groups, this.props.id); // Push the groups update to the state
   }
   
   // Removes a Group and others that build on it from the State
@@ -119,9 +125,9 @@ class Preferences extends React.Component {
     var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
     var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups);
     var legendItems = [];
-    for (var i in groupIndices) {
-      for (var j in currLegend) {
-        if (String(j) === currGroups[groupIndices[i]].name) { // The Legend Entry was found
+    for (var i in groupIndices) { // For all the groups in the deletion list
+      for (var j in currLegend) { // For all the legend items
+        if (String(j) === currGroups[groupIndices[i]].name) { // The Legend Entry for the currently inspected group was found
           legendItems.push(j); // Add this to the LegendItems to be deleted
         }
       }
