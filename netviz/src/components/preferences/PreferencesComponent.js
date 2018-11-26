@@ -116,7 +116,7 @@ class Preferences extends React.Component {
     } else { // Group was inactive
       currGroups[selectedGroup.id].active = true; // Activate the group
     }
-    this.props.actions.updateGroups(this.props.groups, this.props.id); // Push the groups update to the state
+    this.props.actions.updateGroups(this.props.groups, this.props.network, this.props.id); // Push the groups update to the state
   }
   
   // Removes a Group and others that build on it from the State

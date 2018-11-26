@@ -281,10 +281,11 @@ export function updateGroupsSuccess(groups) {
 }
 
 // Update the Groups
-export function updateGroups(groups, id) {
+export function updateGroups(groups, network, id) {
   return function(dispatch) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
     });
   }
 }
