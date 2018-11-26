@@ -42,6 +42,13 @@ const InputField = ({value, type, description, action, options}) => {
         <button onClick={(e) => action(e)} className='inputElementSelect'>{description}</button>
       </div>
     );
+  } else if (type === 'switch') {
+    return (
+      <div className='preferenceItem'>
+        {description}:
+        <input type="checkbox" checked={value} onClick={(e) => action(e)}/>
+      </div>
+    );
   }
 };
 

@@ -8,9 +8,11 @@ export default function compressionReducer(state = initialState.compressed_netwo
     case types.INITIALIZE_COMPRESSED_NETWORK:
       var net = action.network;
       for (var i in action.groups) {
-        var occur = occurences.findGroupOccurences(action.groups[i], net); // Check, where this group can be found
-        for (var j in occur) {
-          net = concatenate.concatenateLayers(occur[j], net, action.groups[i]);
+        if (action.groups[i].active) {
+          var occur = occurences.findGroupOccurences(action.groups[i], net); // Check, where this group can be found
+          for (var j in occur) {
+            net = concatenate.concatenateLayers(occur[j], net, action.groups[i]);
+          }
         }
       }
       return net;

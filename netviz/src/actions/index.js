@@ -280,6 +280,16 @@ export function updateGroupsSuccess(groups) {
   return {type: types.UPDATE_GROUPS, groups}
 }
 
+// Update the Groups
+export function updateGroups(groups, network, id) {
+  return function(dispatch) {
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+    });
+  }
+}
+
 // Delete groups from the network.
 export function deleteGroups(groups, layerTypes, network, id) {
   return function(dispatch) {

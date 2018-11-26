@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import InputField from './InputField'
 import * as actions from '../../actions';
 import Features from './FeaturesComponent';
+import * as removal from '../../groups/Removal';
 
 // Component for displaying the Preferences of the Visualization
 class Preferences extends React.Component {
@@ -97,36 +98,37 @@ class Preferences extends React.Component {
   isInGroups = (selectedLayer) => {
     for (var i in this.props.groups) {
       if (selectedLayer === this.props.groups[i].name) {
-        return true;
+        return this.props.groups[i];
       }
     }
-    return false;
+    return null;
+  }
+
+  // Toggles a Group and others that build on it
+  toggleGroup = (e) => {
+    var currGroups = this.props.groups; // Get the currently present groups
+    var selectedGroup = removal.getGroupByName(this.props.selected_legend_item, this.props.groups);
+    if (selectedGroup.group.active === true) { // If the currently selected group is active
+      var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups); // Get the indices for all groups to be deactivated
+      for (var i in groupIndices) { // For all of these indices
+        currGroups[groupIndices[i]].active = false; // Deactivate the group
+      }
+    } else { // Group was inactive
+      currGroups[selectedGroup.id].active = true; // Activate the group
+    }
+    this.props.actions.updateGroups(this.props.groups, this.props.network, this.props.id); // Push the groups update to the state
   }
   
   // Removes a Group and others that build on it from the State
   deleteGroup = (e) => {
     var currGroups = this.props.groups; // Current Groups in the State
     var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
-    var groupIndices = [];
+    var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups);
     var legendItems = [];
-    for (var i in currGroups) { // Iterate over all Groups
-      if (this.props.selected_legend_item === currGroups[i].name) { // The group is the one to be deleted
-        for (var k in currLegend) { // Find the legend Entry for the group
-          if (String(k) === this.props.selected_legend_item) { // The Legend Entry was found
-            legendItems.push(k); // Add this to the LegendItems to be deleted
-          }
-        }
-        groupIndices.push(parseInt(i)); // Add this to the Groups to be deleted
-      } else { // Group is not the one to be deleted
-        for (var j in currGroups[i].layers) { // Iterate over all Layers of the Group
-          if (this.props.selected_legend_item === currGroups[i].layers[j].name) { // The Layer is the Group to be deleted
-            for (var l in currLegend) { // Find the legend Entry for the Group
-              if (String(l) === currGroups[i].name) { // The Legend Entry was found
-                legendItems.push(l); // Add this to the LegendItems to be deleted
-              }
-            }
-            groupIndices.push(parseInt(i)); // Add this to the Groups to be deleted
-          }
+    for (var i in groupIndices) { // For all the groups in the deletion list
+      for (var j in currLegend) { // For all the legend items
+        if (String(j) === currGroups[groupIndices[i]].name) { // The Legend Entry for the currently inspected group was found
+          legendItems.push(j); // Add this to the LegendItems to be deleted
         }
       }
     }
@@ -136,6 +138,7 @@ class Preferences extends React.Component {
     for (var m in groupIndices) { // Iterate over the indices
       currGroups.splice(groupIndices[m], 1); // Delete the Group
       delete currLegend[legendItems[m]]; // Delete the LegendItem
+      m = m - 1;
     }
     this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
@@ -156,12 +159,14 @@ class Preferences extends React.Component {
            </div>
           );
         case 'color':
-          if (this.isInGroups(this.props.selected_legend_item)) {
+          var group = this.isInGroups(this.props.selected_legend_item);
+          if (group !== null) {
             return(
               <div id='Preferences'>
                 <p>Group</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+                <InputField value={group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
                 <InputField value={'Delete'} type={'button'} description={'Delete Group'} action={this.deleteGroup}/>
               </div>
             );

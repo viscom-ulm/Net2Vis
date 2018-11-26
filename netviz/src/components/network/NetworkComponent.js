@@ -55,7 +55,6 @@ Network.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired,
   compressed_network: PropTypes.object.isRequired
 };
 
@@ -68,7 +67,6 @@ function mapStateToProps(state, ownProps) {
     layer_types_settings: state.layer_types_settings,
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
-    groups: state.groups,
     compressed_network: state.compressed_network
   };
 }
