@@ -107,7 +107,7 @@ function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
 // Check if the IDs of the output match the matchesList entry
 function checkOutputMatchIds(outputsLayer, outputsGroup, matchesList) {
   for (var i in outputsGroup) { // For all outputs of the layer
-    if (typeof(matchesList[outputsGroup[i]].matchID) === 'undefined') { // Check if the match was already assigned
+    if (typeof(matchesList[outputsGroup[i]].matchID) !== 'undefined') { // Check if the match was already assigned
       if (outputsLayer[i] !== matchesList[outputsGroup[i]].matchID) { // If the layer output does not match the match
         return false; // The IDs do not match
       }
@@ -136,7 +136,7 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
 // Check if the IDs of the input match the matchesList entry
 function checkInputMatchIds(inputsLayer, inputsGroup, matchesList) {
   for (var i in inputsGroup) { // For all outputs of the layer
-    if (typeof(matchesList[inputsGroup[i]].matchID) === 'undefined') { // Check if the match was already assigned
+    if (typeof(matchesList[inputsGroup[i]].matchID) !== 'undefined') { // Check if the match was already assigned
       if (inputsLayer[i] !== matchesList[inputsGroup[i]].matchID) { // If the layer input does not match the match
         return false; // The IDs do not match
       }
