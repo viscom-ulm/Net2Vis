@@ -53,14 +53,18 @@ class Controls extends React.Component {
   // Automatically Group Layers that are very common in this order
   autoGroupLayers = () => {
     var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
-    var group = grouping.groupLayers(this.props.compressed_network, repetition.ids); // Group the layers of the repetition
-    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
-      var settings = this.props.layer_types_settings;
-      settings[group.name] = {
-        color: '#808080',
-        alias: 'Group'
+    if (repetition !== undefined) {
+      var group = grouping.groupLayers(this.props.compressed_network, repetition.ids); // Group the layers of the repetition
+      if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+        var settings = this.props.layer_types_settings;
+        settings[group.name] = {
+          color: '#808080',
+          alias: 'Group'
+        }
+        this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
       }
-      this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
+    } else {
+      console.log('No repetition of at least two layers could be found.')
     }
   }
 
