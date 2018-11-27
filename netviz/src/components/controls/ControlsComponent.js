@@ -47,6 +47,8 @@ class Controls extends React.Component {
         alias: 'Group'
       }
       this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
+    } else {
+      console.warn('Either a duplicate or no grouping possible.')
     }
   }
 
@@ -62,9 +64,11 @@ class Controls extends React.Component {
           alias: 'Group'
         }
         this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
+      } else {
+        console.warn('Either a duplicate or no grouping possible.')
       }
     } else {
-      console.log('No repetition of at least two layers could be found.')
+      console.warn('No repetition of at least two layers could be found.')
     }
   }
 
