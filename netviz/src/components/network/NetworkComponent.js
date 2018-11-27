@@ -7,8 +7,6 @@ import * as actions from '../../actions';
 import Layer from './LayerComponent';
 import * as graphs from '../../graphs';
 
-import * as auto from '../../groups/Automation';
-
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
   // When this Component mounts, load the Network from the Backend
@@ -20,7 +18,6 @@ class Network extends React.Component {
 
   // Render the individual Network Layers
   render() {
-    console.log(auto.getMostCommonRepetition(this.props.compressed_network));
     const graph = graphs.buildGraphFromNetwork(this.props.compressed_network, this.props.layer_extreme_dimensions, this.props.preferences);
     var nodes = [];
     graph.nodes().forEach(function(e) {

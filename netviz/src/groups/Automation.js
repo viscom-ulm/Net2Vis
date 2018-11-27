@@ -74,13 +74,16 @@ function findRepetitionsForPath(path, repetitions) {
     for (var j = i+1; j < path.length; j++)  { // Check all the Layers that follow it
       var repName = ''; // Initial name for the repetition
       var layers = []; // Initial Layers in the repetition
+      var ids = []; // Initial Layers in the repetition for grouping
       for (var k = i; k <= j; k++) { // All number of layers between i and j
         repName = repName + path[k].name; // set the name to a clear Identifier (combination of layer names)
         layers.push(path[k].name); // Add the layers to the repetition
+        ids.push(path[k].id); // Add the id to the repetition
       }
       if (repetitions[repName] === undefined) { // Repetition does not already exist
         repetitions[repName] = { // Initialize the repetition
           layers: layers, // Set the Layers
+          ids: ids, // Set the ids needed for grouping
           amount: 1 // Initialize the amount of occurences
         }
       } else { // Repetition does exist
