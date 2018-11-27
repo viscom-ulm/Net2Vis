@@ -1,7 +1,8 @@
-export function findSequentialParts(network) {
-  var sequentialLayers = getSequentialLayers(network);
-  var sequentialPaths = getSequentialPaths(sequentialLayers);
-  console.log(sequentialPaths);
+// Find all sequential Parts of the Network
+function findSequentialPaths(network) {
+  var sequentialLayers = getSequentialLayers(network); // Get all Layers that are sequential
+  var sequentialPaths = getSequentialPaths(sequentialLayers); // Get all Pahts from these sequential Layers
+  return sequentialPaths;
 }
 
 // Get all Layers that belong to a sequential part of the network.
@@ -54,4 +55,56 @@ function getSequentialID(id, sequentialLayers) {
       return i; // Return as the seatched array index
     }
   }
+}
+
+// Get the most common repetition currently in the network
+export function getMostCommonRepetition(network) {
+  var sequentialPaths = findSequentialPaths(network); // Get the sequential Paths in the Network
+  var repetitions = {}; // Initialize the repetitions Variable
+  for (var i in sequentialPaths) { // For all the paths
+    findRepetitionsForPath(sequentialPaths[i], repetitions); // Find repetitions in the path
+  }
+  var key = getMostCommonKey(repetitions); // Get most common repetition
+  return repetitions[key];
+}
+
+// Find repetitions in a Path
+function findRepetitionsForPath(path, repetitions) {
+  for (var i = 0; i < path.length; i++) { // For each layer in the path
+    for (var j = i+1; j < path.length; j++)  { // Check all the Layers that follow it
+      var repName = ''; // Initial name for the repetition
+      var layers = []; // Initial Layers in the repetition
+      for (var k = i; k <= j; k++) { // All number of layers between i and j
+        repName = repName + path[k].name; // set the name to a clear Identifier (combination of layer names)
+        layers.push(path[k].name); // Add the layers to the repetition
+      }
+      if (repetitions[repName] === undefined) { // Repetition does not already exist
+        repetitions[repName] = { // Initialize the repetition
+          layers: layers, // Set the Layers
+          amount: 1 // Initialize the amount of occurences
+        }
+      } else { // Repetition does exist
+        repetitions[repName].amount = repetitions[repName].amount + 1; // Increase the occurence count
+      }
+    }
+  }
+}
+
+// Get the key that has the highest occurence count
+function getMostCommonKey(repetitions) {
+  var mostcommon = ''; // Initially, nothing is common
+  var number = 0; // Initially, no repetitions
+  var layers = 0; // Initial length of layers in the repetition
+  for (var key in repetitions) { // Check all keys
+    if (number < repetitions[key].amount) { // If there are more of it than any other
+      number = repetitions[key].amount; // Update the highest amount
+      mostcommon = key; // Update the Key
+      layers = repetitions[key].layers.length; // Update The layer length
+    } else if (number === repetitions[key].amount && layers < repetitions[key].layers.length) {
+      number = repetitions[key].amount; // Update the highest amount
+      mostcommon = key; // Update the Key
+      layers = repetitions[key].layers.length; // Update The layer length
+    }
+  }
+  return mostcommon
 }

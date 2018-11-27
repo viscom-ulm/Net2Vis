@@ -20,7 +20,7 @@ class Network extends React.Component {
 
   // Render the individual Network Layers
   render() {
-    auto.findSequentialParts(this.props.compressed_network);
+    console.log(auto.getMostCommonRepetition(this.props.compressed_network));
     const graph = graphs.buildGraphFromNetwork(this.props.compressed_network, this.props.layer_extreme_dimensions, this.props.preferences);
     var nodes = [];
     graph.nodes().forEach(function(e) {
