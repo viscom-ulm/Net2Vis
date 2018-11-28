@@ -1,9 +1,23 @@
 import * as common from './Common';
 
+// Get the most common repetition currently in the network
+export function getMostCommonRepetition(network) {
+  var sequentialPaths = findSequentialPaths(network); // Get the sequential Paths in the Network
+  var repetitions = {}; // Initialize the repetitions Variable
+  for (var i in sequentialPaths) { // For all the paths
+    findRepetitionsForPath(sequentialPaths[i], repetitions); // Find repetitions in the path
+  }
+  var key = getMostCommonKey(repetitions); // Get most common repetition
+  return repetitions[key];
+}
+
 // Find all sequential Parts of the Network
 function findSequentialPaths(network) {
   var sequentialLayers = getSequentialLayers(network); // Get all Layers that are sequential
   var sequentialPaths = getSequentialPaths(sequentialLayers); // Get all Pahts from these sequential Layers
+  console.log(sequentialPaths);
+  checkInputsMissing(sequentialPaths, network);
+  checkOutputsMissing(sequentialPaths, network);
   return sequentialPaths;
 }
 
@@ -50,15 +64,30 @@ function createSequence(sequentialPath, sequentialLayers) {
   }
 }
 
-// Get the most common repetition currently in the network
-export function getMostCommonRepetition(network) {
-  var sequentialPaths = findSequentialPaths(network); // Get the sequential Paths in the Network
-  var repetitions = {}; // Initialize the repetitions Variable
-  for (var i in sequentialPaths) { // For all the paths
-    findRepetitionsForPath(sequentialPaths[i], repetitions); // Find repetitions in the path
+// Add another layer to the beginning of the path, if just its input is parallel
+function checkInputsMissing(sequentialPaths, network) {
+  for (var i in sequentialPaths) { // Check all paths
+    var inIDs = sequentialPaths[i][0].properties.input; // Get the ID of the input to this layer
+    if (inIDs.length === 1) { // Layer has an input
+      var inLayer = network.layers[common.getLayerByID(inIDs[0], network.layers)]; // Get the layer that is the input to the first layer
+      if (inLayer.properties.output.length === 1) { // If it is only parallel on the input side
+        sequentialPaths[i].unshift(inLayer); // Add the layer to the beginning of the path
+      } 
+    }
   }
-  var key = getMostCommonKey(repetitions); // Get most common repetition
-  return repetitions[key];
+}
+
+// Add another layer to the end of the path, if just its output is parallel
+function checkOutputsMissing(sequentialPaths, network) {
+  for (var i in sequentialPaths) { // Check all paths
+    var outIDs = sequentialPaths[i][sequentialPaths[i].length-1].properties.output; // Get the ID of the output to the last layer
+    if (outIDs.length === 1) { // Layer has an output
+      var outLayer = network.layers[common.getLayerByID(outIDs[0], network.layers)]; // Get the layer that is the output to the last layer
+      if (outLayer.properties.input.length === 1) { // If it is only parallel on the output side
+        sequentialPaths[i].push(outLayer); // Add the layer to the end of the path
+      } 
+    }
+  }
 }
 
 // Find repetitions in a Path
