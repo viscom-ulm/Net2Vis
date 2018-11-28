@@ -9,6 +9,7 @@ import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
 import * as grouping from '../../groups/Grouping';
 import * as duplicates from '../../groups/Duplicates';
+import * as auto from '../../groups/Automation';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
@@ -46,6 +47,28 @@ class Controls extends React.Component {
         alias: 'Group'
       }
       this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
+    } else {
+      console.warn('Either a duplicate or no grouping possible.')
+    }
+  }
+
+  // Automatically Group Layers that are very common in this order
+  autoGroupLayers = () => {
+    var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
+    if (repetition !== undefined) {
+      var group = grouping.groupLayers(this.props.compressed_network, repetition.ids); // Group the layers of the repetition
+      if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+        var settings = this.props.layer_types_settings;
+        settings[group.name] = {
+          color: '#808080',
+          alias: 'Group'
+        }
+        this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
+      } else {
+        console.warn('Either a duplicate or no grouping possible.')
+      }
+    } else {
+      console.warn('No repetition of at least two layers could be found.')
     }
   }
 
@@ -60,6 +83,7 @@ class Controls extends React.Component {
           <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
         </div>
         <div className='menu'>
+          <ClickableButton name="Auto Group" image={groupLogo} action={this.autoGroupLayers}/>
           <ClickableButton name="Group" image={groupLogo} action={this.groupLayers}/>
           <ClickableButton name="Download" image={downloadLogo} action={this.downloadSVG}/>
         </div>

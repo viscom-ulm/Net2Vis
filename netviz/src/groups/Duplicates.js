@@ -12,7 +12,7 @@ export function groupDoesExist(group, groups) {
 function groupsEqualLayers(group1, group2) {
   if(group1.layers.length === group2.layers.length) { // Only possible if the groups have the same number of layers
     for (var i in group1.layers) { // For all layers in the Group
-      if (group1.layers[i].name === group2.layers.name) { // Layers must have the same name
+      if (group1.layers[i].name === group2.layers[i].name) { // Layers must have the same name
         if (group1.layers[i].input.length === group2.layers[i].input.length) { // Groups must have the same number of inputs
           for(var j in group1.layers[i].input) { // For all inputs of the layer
             if (group1.layers[i].input[j] !== group2.layers[i].input[j]) { // All inputs must be the same
