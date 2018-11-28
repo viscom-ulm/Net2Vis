@@ -1,3 +1,5 @@
+import * as common from './Common';
+
 // Find all sequential Parts of the Network
 function findSequentialPaths(network) {
   var sequentialLayers = getSequentialLayers(network); // Get all Layers that are sequential
@@ -32,7 +34,7 @@ function getSequentialPaths(sequentialLayers) {
 // Get the ID of an input layer in the sequentialLayers
 function getInputId(sequentialLayers) {
   for (var i in sequentialLayers) { // For all layers
-    if (getSequentialID(sequentialLayers[i].properties.input[0], sequentialLayers) === undefined) { // If their input is not in the sequential layers
+    if (common.getLayerByID(sequentialLayers[i].properties.input[0], sequentialLayers) === -1) { // If their input is not in the sequential layers
       return i; // Return the index as it is an input
     }
   }
@@ -40,20 +42,11 @@ function getInputId(sequentialLayers) {
 
 // Create a sequence from an input layer to create a path
 function createSequence(sequentialPath, sequentialLayers) {
-  var nextID = getSequentialID(sequentialPath[sequentialPath.length - 1].properties.output[0], sequentialLayers); // Get the ID of the next layer in sequentialLayers
-  if (nextID !== undefined) { // There is a next Layer ID, so we keep going
+  var nextID = common.getLayerByID(sequentialPath[sequentialPath.length - 1].properties.output[0], sequentialLayers); // Get the ID of the next layer in sequentialLayers
+  if (nextID !== -1) { // There is a next Layer ID, so we keep going
     sequentialPath.push(sequentialLayers[nextID]); // Add the layer to the path
     sequentialLayers.splice(nextID, 1); // Remove the layer from the sequentialLayers
     createSequence(sequentialPath, sequentialLayers); // Recursively add the next layer of the path
-  }
-}
-
-// Get a position in sequentialLayers where the layer has a given ID
-function getSequentialID(id, sequentialLayers) {
-  for (var i in sequentialLayers) { // For all Layers
-    if (sequentialLayers[i].id === id) { // The layer has the ID searched for
-      return i; // Return as the seatched array index
-    }
   }
 }
 
