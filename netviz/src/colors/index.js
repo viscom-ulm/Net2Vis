@@ -1,44 +1,44 @@
 import * as tinycolor from 'tinycolor2';
 
+// Generate a new color that is different to all existing ones
 export function generateNewColor(layerTypes) {
-  var saturation = 0.8;
-  var value = 0.7;
-  var colors = [];
-  for (var key in layerTypes) {
-    colors.push(tinycolor(layerTypes[key].color));
+  var saturation = 0.8; // Fixed Saturation Value
+  var value = 0.7; // Fixed color Value
+  var colors = []; // Placeholder for colors that are already present
+  for (var key in layerTypes) { // For all LayerTypes
+    colors.push(tinycolor(layerTypes[key].color)); // Add their color to the present colors
   }
-  if (colors.length === 0) {
-    var color = tinycolor({h: 210, s: saturation, v: value});
-    return color.toHexString();
+  if (colors.length === 0) { // If no colors are there
+    var color = tinycolor({h: 210, s: saturation, v: value}); // Set the initial color
+    return color.toHexString(); // Return it as hex
   }
-  colors = colors.map(x => x.toHsv());
-  colors = colors.map(x => x.h);
-  colors.sort(function(a, b) {
-    return a - b;
+  colors = colors.map(x => x.toHsv()); // Map all the colors to hsv
+  colors = colors.map(x => x.h); // Extract the h value
+  colors.sort(function(a, b) { // Sort them
+    return a - b; // Ascending
   });
-  console.log(colors)
-  var hue = findOptimalHue(colors);
-  console.log(hue)
-  var color = tinycolor({h: hue, s: saturation, v: value});
-  return color.toHexString();
+  var hue = findOptimalHue(colors); // Find a hue value that is different to all others
+  var color = tinycolor({h: hue, s: saturation, v: value}); // Make a color with this hue
+  return color.toHexString(); // Return it as hex
 }
 
+// Returns a hue value that has maximum absolute distance to all other hue values
 function findOptimalHue(colors) {
-  var hue = 0;
-  var maxDistance = 0;
-  var distance = 0;
-  for (var i in colors) {
-    if (parseInt(i) === (colors.length - 1)) {
-      distance = colors[0] + 360 - colors[i];
-      if (distance > maxDistance) {
-        maxDistance = distance;
-        hue = (colors[i] + (distance / 2.0)) % 360;
+  var hue = 0; // Initialize the new hue
+  var maxDistance = 0; // Initialize the maximum distance
+  var distance = 0; // Initialize the current distance
+  for (var i in colors) { // Check all colors
+    if (parseInt(i) === (colors.length - 1)) { // If this is the last color
+      distance = colors[0] + 360 - colors[i]; // Calculate the circular distance to the first
+      if (distance > maxDistance) { // If this distance is maximal
+        maxDistance = distance; // Set the new maxDistance
+        hue = (colors[i] + (distance / 2.0)) % 360; // Set the hue to be between the last and the first color
       }
-    } else {
-      distance = colors[parseInt(i) + 1] - colors[i];
-      if (distance > maxDistance) {
-        maxDistance = distance;
-        hue = colors[i] + (distance / 2.0);
+    } else { // Not the last color
+      distance = colors[parseInt(i) + 1] - colors[i]; // Calculate the distance to the next color
+      if (distance > maxDistance) { // If this is the max distance
+        maxDistance = distance; // Set the new maxDistance
+        hue = colors[i] + (distance / 2.0); // Set the hue value to be between these two colors
       }
     }
   }
