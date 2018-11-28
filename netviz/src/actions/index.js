@@ -52,8 +52,8 @@ export function addSettingForLayerType(setting, name) {
 }
 
 // Loading LayerTypes was Successful
-export function loadLayerTypesSuccess(layerTypes) {
-  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes};
+export function loadLayerTypesSuccess(layerTypes, network) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network};
 }
 
 // Called to load the LayerTypes
@@ -237,7 +237,7 @@ export function reloadAllState(id) {
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
               return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
                 dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
               });

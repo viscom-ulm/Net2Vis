@@ -10,6 +10,7 @@ import * as actions from '../../actions';
 import * as grouping from '../../groups/Grouping';
 import * as duplicates from '../../groups/Duplicates';
 import * as auto from '../../groups/Automation';
+import * as colors from '../../colors';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
@@ -43,7 +44,7 @@ class Controls extends React.Component {
     if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
       var settings = this.props.layer_types_settings;
       settings[group.name] = {
-        color: '#808080',
+        color: colors.generateNewColor(settings),
         alias: 'Group'
       }
       this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
@@ -60,7 +61,7 @@ class Controls extends React.Component {
       if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
         var settings = this.props.layer_types_settings;
         settings[group.name] = {
-          color: '#808080',
+          color: colors.generateNewColor(settings),
           alias: 'Group'
         }
         this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
