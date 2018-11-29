@@ -115,7 +115,7 @@ export function updatePreferences(preferences, id) {
     return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
       dispatch(updatePreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
 }
@@ -191,6 +191,9 @@ export function updateCode(code, id, groups) {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
         networkLoaded(network, groups, dispatch);      
+        return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
+        });
       }).catch(error => {
         throw(error);
       })
@@ -334,7 +337,7 @@ export function updateLegendPreferences(preferences, id) {
     return LegendPreferencesApi.updateLegendPreferences(preferences, id).then(preferences => {
       dispatch(updateLegendPreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
 }
