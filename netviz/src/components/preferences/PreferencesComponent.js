@@ -143,6 +143,18 @@ class Preferences extends React.Component {
     this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
 
+  // Deletes the Settings for a Layer
+  deleteLayerSettings = (e) => {
+    var currLegend = this.props.layer_types_settings; // Get the current Settings for the Legend
+    var selectedItem = this.props.selected_legend_item; // Get the currently selected Legend Item
+    for (var i in currLegend) { // Check all Legend Items
+      if (selectedItem === String(i)) { // If is is the searched one
+        delete currLegend[i]; // Remove it
+      }
+    }
+    this.props.actions.loadLayerTypesSuccess(currLegend, this.props.network); // The Layertypes are done, this is called to update them
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -176,6 +188,7 @@ class Preferences extends React.Component {
                 <p>Layer</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+                <InputField value={'Delete'} type={'button'} description={'Delete Layer Settings'} action={this.deleteLayerSettings}/>
               </div>
             );
           }

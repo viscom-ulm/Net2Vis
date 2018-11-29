@@ -23,7 +23,6 @@ export default function layerTypesSettignsReducer(state = initialState.layer_typ
           }
         }
       }
-      console.log(lTypes);
       return lTypes;
     default:
       return state;
