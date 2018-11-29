@@ -2,13 +2,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import * as paths from '../../paths';
 import EdgeComponent from '../network/EdgeComponent';
+
+import * as paths from '../../paths';
 
 class ComplexLegendItem extends React.Component {
   render() {
     var settings = this.props.layer_types_settings[this.props.layer.layer.name];
-    var color = settings ? settings.color : '#808080';
+    var color = settings.color;
     const extreme_dimensions = {max_size: this.props.legend_preferences.layer_height.value, min_size: this.props.legend_preferences.layer_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const pathableLayer = {
       layer: {
@@ -25,7 +26,7 @@ class ComplexLegendItem extends React.Component {
     const current_edges = paths.getOutgoingEdges(pathableLayer, this.props.edges); // Get relevant Edges going out from the current Layer
     const style = {
       fill: color,
-      stroke: 'black',
+      stroke: this.props.active ? 'black' : 'lightgrey',
       stokeLinejoin: 'round'
     };  
     return(
