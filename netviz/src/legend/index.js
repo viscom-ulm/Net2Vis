@@ -19,6 +19,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
       const graph = getLegendItemGraph(groups[i], legendPreferences);
       return {
         trivial: false,
+        active: groups[i].active,
         width: graph.graph().width + legendPreferences.complex_spacing.value + legendPreferences.layer_width.value,
         height: graph.graph().height,
         representer: {
@@ -31,6 +32,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
   }
   return {
     trivial: true,
+    active: true,
     width: legendPreferences.layer_width.value,
     height: legendPreferences.layer_height.value,
     representer: {

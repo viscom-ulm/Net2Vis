@@ -51,7 +51,7 @@ class Layer extends React.Component {
     return (
       <g>
         {current_edges.map((edge, index) =>
-          <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} key={index}/>
+          <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} color={'black'} key={index}/>
         )}
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
           <path d={pathData} style={{fill:set.color, stroke: stroke, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
