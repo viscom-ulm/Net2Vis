@@ -135,10 +135,9 @@ class Preferences extends React.Component {
     groupIndices.sort(function(a, b) { // Sort the group indices to make deleting easy
       return b - a; // Descending
     });
-    for (var m in groupIndices) { // Iterate over the indices
+    for (var m = groupIndices.length - 1; m > -1; m--) { // Iterate over the indices reversely to not provoke conflicts
       currGroups.splice(groupIndices[m], 1); // Delete the Group
       delete currLegend[legendItems[m]]; // Delete the LegendItem
-      m = m - 1;
     }
     this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
