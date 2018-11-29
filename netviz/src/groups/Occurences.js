@@ -7,7 +7,7 @@ export function findGroupOccurences(group, network) {
   var matchesList = generateInitialMatchesList(group, network, inputOccurences, input.inputID); // Initialize the Matches List using the input node and its occurences
   var nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
   while (nextLayerInfo.source !== -1) { // Do as long as there are more layers to check
-    for (var i in matchesList) { // Iterate over all lists in the matches List
+    for (var i = matchesList.length - 1; i > -1; i--) { // Iterate over all lists in the matches List
       var currentSourceLayer = network.layers[common.getLayerByID(matchesList[i][nextLayerInfo.source].matchID, network.layers)]; // Get the source layer from which we get to the layer to be inspected from the network
       var layerID = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the ID of the current layer to be inspected(depending on in or out connected)
       var layerNumber = common.getLayerByID(layerID, network.layers); // Map the layerID to the position in the array
@@ -21,11 +21,9 @@ export function findGroupOccurences(group, network) {
           matchesList[i][groupNumber].matchID = network.layers[layerNumber].id; // Assign the match ID
         } else { // Output or Input IDs do not match
           matchesList.splice(i, 1); // Remove the list from the matchesList
-          i = i - 1; // Do not skip an element after removal
         }
       } else { // Output or Inputs do not match
         matchesList.splice(i, 1); // Remove the list from the matchesList
-        i = i - 1; // Do not skip an element after removal
       }
     }
     nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
