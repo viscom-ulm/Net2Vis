@@ -15,7 +15,6 @@ export function getMostCommonRepetition(network) {
 function findSequentialPaths(network) {
   var sequentialLayers = getSequentialLayers(network); // Get all Layers that are sequential
   var sequentialPaths = getSequentialPaths(sequentialLayers); // Get all Pahts from these sequential Layers
-  console.log(sequentialPaths);
   checkInputsMissing(sequentialPaths, network);
   checkOutputsMissing(sequentialPaths, network);
   return sequentialPaths;

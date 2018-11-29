@@ -52,8 +52,8 @@ export function addSettingForLayerType(setting, name) {
 }
 
 // Loading LayerTypes was Successful
-export function loadLayerTypesSuccess(layerTypes) {
-  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes};
+export function loadLayerTypesSuccess(layerTypes, network) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network};
 }
 
 // Called to load the LayerTypes
@@ -115,7 +115,7 @@ export function updatePreferences(preferences, id) {
     return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
       dispatch(updatePreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
 }
@@ -191,6 +191,9 @@ export function updateCode(code, id, groups) {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
         networkLoaded(network, groups, dispatch);      
+        return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
+        });
       }).catch(error => {
         throw(error);
       })
@@ -237,7 +240,7 @@ export function reloadAllState(id) {
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
               return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
                 dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
               });
@@ -334,7 +337,7 @@ export function updateLegendPreferences(preferences, id) {
     return LegendPreferencesApi.updateLegendPreferences(preferences, id).then(preferences => {
       dispatch(updateLegendPreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
 }
