@@ -18,8 +18,8 @@ export function generateNewColor(layerTypes) {
     return a - b; // Ascending
   });
   var hue = findOptimalHue(colors); // Find a hue value that is different to all others
-  var color = tinycolor({h: hue, s: saturation, v: value}); // Make a color with this hue
-  return color.toHexString(); // Return it as hex
+  var newColor = tinycolor({h: hue, s: saturation, v: value}); // Make a color with this hue
+  return newColor.toHexString(); // Return it as hex
 }
 
 // Returns a hue value that has maximum absolute distance to all other hue values
