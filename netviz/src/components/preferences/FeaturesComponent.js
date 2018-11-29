@@ -42,23 +42,12 @@ class Features extends React.Component {
 
   // Render the Preferences of the Visualization
   render() {
-    switch (this.props.preferences.features_mapping.value) {
-      case 'width':
-        return(
-           <div>
-             <InputField value={this.props.preferences.features_mapping.value} type={this.props.preferences.features_mapping.type} description={this.props.preferences.features_mapping.description} action={this.handleSelectChange} options={['none', 'width']}/>
-             <InputField value={this.props.preferences.layer_display_min_width.value} type={this.props.preferences.layer_display_min_width.type} description={this.props.preferences.layer_display_min_width.description} action={this.handleMinWidthChange}/>
-             <InputField value={this.props.preferences.layer_display_max_width.value} type={this.props.preferences.layer_display_max_width.type} description={this.props.preferences.layer_display_max_width.description} action={this.handleMaxWidthChange}/>
-          </div>
-         );
-      default:
-        return(
-           <div>
-             <InputField value={this.props.preferences.features_mapping.value} type={this.props.preferences.features_mapping.type} description={this.props.preferences.features_mapping.description} action={this.handleSelectChange} options={['none', 'width']}/>
-             <InputField value={this.props.preferences.layer_display_max_width.value} type={this.props.preferences.layer_display_max_width.type} description={'Layer Width'} action={this.handleWidthChange}/>
-          </div>
-        );
-    }
+    return(
+      <div>
+        <InputField value={this.props.preferences.layer_display_min_width.value} type={this.props.preferences.layer_display_min_width.type} description={this.props.preferences.layer_display_min_width.description} action={this.handleMinWidthChange}/>
+        <InputField value={this.props.preferences.layer_display_max_width.value} type={this.props.preferences.layer_display_max_width.type} description={this.props.preferences.layer_display_max_width.description} action={this.handleMaxWidthChange}/>
+      </div>
+    );
   }
 }
 
