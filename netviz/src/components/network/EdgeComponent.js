@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const EdgeComponent = ({edge, layer_max_height, horizontal_spacing}) => {
+const EdgeComponent = ({edge, layer_max_height, horizontal_spacing, color}) => {
   var points = edge.points;
   var path = "";
   var y_pos = points[0].y; // Initialize the y_pos point Placeholder
@@ -34,7 +34,7 @@ const EdgeComponent = ({edge, layer_max_height, horizontal_spacing}) => {
     }
   }
   return (
-    <polyline points={path} style={{fill:"none", stroke:"black"}}/>
+    <polyline points={path} style={{fill:"none", stroke: color}}/>
   );
 };
 
