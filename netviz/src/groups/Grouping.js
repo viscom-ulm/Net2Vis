@@ -63,7 +63,7 @@ function generateGroup(network, selection) {
   };
   for (var i in selection) { // Iterate over all selected Layers
     group.layers.push({
-      id: parseInt(i),
+      id: network.layers[common.getLayerByID(selection[i], network.layers)].id,
       name: network.layers[common.getLayerByID(selection[i], network.layers)].name,
       properties: {
         dimensions: {
@@ -86,7 +86,7 @@ function addInputsToLayer(selection, network, i) {
     var inputLayer = network.layers[common.getLayerByID(inputs[j], network.layers)]; // Get the Layer of the current Input
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === inputLayer.id) { // Current InputLayer is currently inspected selected Item
-        layers.push(parseInt(k)); // Add the selection ID to the input layers
+        layers.push(inputLayer.id); // Add the selection ID to the input layers
       }
     }
   }
@@ -100,7 +100,7 @@ function addOutputsToLayer(selection, network, i) {
     var outputLayer = network.layers[common.getLayerByID(outputs[j], network.layers)]; // Get the Layer of the current Output
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === outputLayer.id) { // Current OutputLayer id currently inspected selected Item
-        layers.push(parseInt(k)); // Add the selection ID to the input layers
+        layers.push(outputLayer.id); // Add the selection ID to the input layers
       }
     }
   }
