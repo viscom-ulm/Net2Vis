@@ -122,13 +122,10 @@ class Preferences extends React.Component {
   // Removes a Group and others that build on it from the State
   deleteGroup = (e) => {
     var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
-    var currGroups = removal.deleteGroup(this.props.selected_legend_item, this.props.groups);
-    for (var j in currLegend) { // For all the legend items
-      if (String(j) === this.props.selected_legend_item.name) { // The Legend Entry for the currently inspected group was found
-        delete currLegend[j]; // Delete the LegendItem
-      }
-    }
-    //this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
+    var name = this.props.selected_legend_item; // Get the name of the currently selected Item
+    removal.deleteGroup(name, this.props.groups); // Delete the group and expand Groups that depend on it
+    delete currLegend[name]; // Delete the LegendItem
+    this.props.actions.deleteGroups(this.props.groups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
 
   // Deletes the Settings for a Layer
