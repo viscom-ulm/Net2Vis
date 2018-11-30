@@ -15,8 +15,8 @@ class ComplexLegendItem extends React.Component {
       layer: {
         id: parseInt(this.props.layer.id, 10),
         properties: {
-          input: this.props.layer.layer.input,
-          output: this.props.layer.layer.output
+          input: this.props.layer.layer.properties.input,
+          output: this.props.layer.layer.properties.output
         }
       },
       width: this.props.legend_preferences.layer_width.value,

@@ -15,6 +15,8 @@ function checkGroupable(network, selection) {
   if (selection.length < 2) { // Needs to contain more than one element
     return false;
   }
+  var inNodes = 0;
+  var outNodes = 0;
   for (var i in selection) { // Check groupability of each of the selected layers
     var layer = network.layers[common.getLayerByID(selection[i], network.layers)]; // Get the current layer
     var inputs = layer.properties.input; // Get the inputs of the current layer
@@ -28,6 +30,15 @@ function checkGroupable(network, selection) {
     } else if (outContained === 0 && inContained === 0) { // No in- or outputs at all selected
       return false; // Not Groupable
     }
+    if (inContained === 0) { // No Inputs to this Layer
+      inNodes = inNodes + 1; // Is input node, increase count
+    }
+    if (outContained === 0) {
+      outNodes = outNodes + 1; // Is output node, increase count
+    }
+  }
+  if (inNodes > 1 || outNodes > 1) { // Multiple input or output nodes
+    return false; // Not groupable
   }
   return true; // More than one element selected, and all elements connected. Also no parallel path partly selected. Groupable!
 }
@@ -52,9 +63,17 @@ function generateGroup(network, selection) {
   };
   for (var i in selection) { // Iterate over all selected Layers
     group.layers.push({
+      id: parseInt(i),
       name: network.layers[common.getLayerByID(selection[i], network.layers)].name,
-      input: addInputsToLayer(selection, network, i),
-      output: addOutputsToLayer(selection, network, i)
+      properties: {
+        dimensions: {
+          in: [1, 1, 1],
+          out: [1, 1, 1]
+        },
+        input: addInputsToLayer(selection, network, i),
+        output: addOutputsToLayer(selection, network, i),
+        properties: {}
+      }
     }); // Add the Layers to the group
   }
   return group;
@@ -67,7 +86,7 @@ function addInputsToLayer(selection, network, i) {
     var inputLayer = network.layers[common.getLayerByID(inputs[j], network.layers)]; // Get the Layer of the current Input
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === inputLayer.id) { // Current InputLayer is currently inspected selected Item
-        layers.push(k); // Add the selection ID to the input layers
+        layers.push(parseInt(k)); // Add the selection ID to the input layers
       }
     }
   }
@@ -81,7 +100,7 @@ function addOutputsToLayer(selection, network, i) {
     var outputLayer = network.layers[common.getLayerByID(outputs[j], network.layers)]; // Get the Layer of the current Output
     for (var k in selection) { // Iterate over all selected Items
       if (selection[k] === outputLayer.id) { // Current OutputLayer id currently inspected selected Item
-        layers.push(k); // Add the selection ID to the input layers
+        layers.push(parseInt(k)); // Add the selection ID to the input layers
       }
     }
   }

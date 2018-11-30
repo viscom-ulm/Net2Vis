@@ -121,25 +121,14 @@ class Preferences extends React.Component {
   
   // Removes a Group and others that build on it from the State
   deleteGroup = (e) => {
-    var currGroups = this.props.groups; // Current Groups in the State
     var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
-    var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups);
-    var legendItems = [];
-    for (var i in groupIndices) { // For all the groups in the deletion list
-      for (var j in currLegend) { // For all the legend items
-        if (String(j) === currGroups[groupIndices[i]].name) { // The Legend Entry for the currently inspected group was found
-          legendItems.push(j); // Add this to the LegendItems to be deleted
-        }
+    var currGroups = removal.deleteGroup(this.props.selected_legend_item, this.props.groups);
+    for (var j in currLegend) { // For all the legend items
+      if (String(j) === this.props.selected_legend_item.name) { // The Legend Entry for the currently inspected group was found
+        delete currLegend[j]; // Delete the LegendItem
       }
     }
-    groupIndices.sort(function(a, b) { // Sort the group indices to make deleting easy
-      return b - a; // Descending
-    });
-    for (var m = groupIndices.length - 1; m > -1; m--) { // Iterate over the indices reversely to not provoke conflicts
-      currGroups.splice(groupIndices[m], 1); // Delete the Group
-      delete currLegend[legendItems[m]]; // Delete the LegendItem
-    }
-    this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
+    //this.props.actions.deleteGroups(currGroups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
 
   // Deletes the Settings for a Layer

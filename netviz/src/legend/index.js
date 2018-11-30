@@ -52,8 +52,8 @@ function getLegendItemGraph(group, legendPreferences) {
   }
   for (var j in group.layers) { // Add all Edges to the Graph
     var layer_current = group.layers[j]; // Get the current Layer
-    for (var k in layer_current.output) { // Go over all outputs of the current Layer
-      graph.setEdge(j, layer_current.output[k]); // Add the Edge to the Graph
+    for (var k in layer_current.properties.output) { // Go over all outputs of the current Layer
+      graph.setEdge(j, layer_current.properties.output[k]); // Add the Edge to the Graph
     }
   }
   dagre.layout(graph); // Layout the graph to be displayed in a nice fashion
