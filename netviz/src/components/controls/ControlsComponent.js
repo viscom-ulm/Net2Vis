@@ -12,6 +12,7 @@ import * as duplicates from '../../groups/Duplicates';
 import * as auto from '../../groups/Automation';
 import * as colors from '../../colors';
 import * as addition from '../../groups/Addition';
+import * as sort from '../../groups/Sort';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
@@ -64,7 +65,7 @@ class Controls extends React.Component {
         alias: 'Group' // Initialize the alias
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
-      this.props.actions.addGroup(groups, group, settings, this.props.id); // Add the group to the state
+      sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
       this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
     } else {
       console.warn('Either a duplicate or no grouping possible.');
