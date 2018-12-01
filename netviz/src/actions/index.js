@@ -69,7 +69,7 @@ export function loadLayerTypes(id) {
 
 // Updating LayerTypes was Succesful
 export function updateLayerTypesSuccess(layerTypes, network) {
-  return {type: types.UPDATE_LAYER_TYPES_SUCCESS, layerTypes, network}
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network}
 }
 
 // Called to update the LayerTypes
