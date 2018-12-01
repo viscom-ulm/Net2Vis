@@ -276,17 +276,12 @@ export function loadGroupsSuccess(groups) {
   return {type: types.LOAD_GROUPS_SUCCESS, groups};
 }
 
-// Adding a Group was Successful
-export function addGroupSuccess(group) {
-  return {type: types.ADD_GROUP_SUCCESS, group}
-}
-
 // Add a new Grouping
-export function addGroup(groups, group, layerTypes, id) {
+export function addGroup(groups, network, layerTypes, id) {
   return function(dispatch) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
-      dispatch(addGroupSuccess(group));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
         dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
       });

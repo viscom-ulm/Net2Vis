@@ -65,6 +65,7 @@ class Controls extends React.Component {
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
       this.props.actions.addGroup(groups, group, settings, this.props.id); // Add the group to the state
+      this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
     } else {
       console.warn('Either a duplicate or no grouping possible.');
     }
@@ -94,6 +95,7 @@ class Controls extends React.Component {
 Controls.propTypes = {
   id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
+  network: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
@@ -108,6 +110,7 @@ function mapStateToProps(state, ownProps) {
   return {
     id: state.id,
     display: state.display,
+    network: state.network,
     compressed_network: state.compressed_network,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     selection: state.selection,
