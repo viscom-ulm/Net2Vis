@@ -264,16 +264,11 @@ export function loadGroupsSuccess(groups) {
   return {type: types.LOAD_GROUPS_SUCCESS, groups};
 }
 
-// Adding Group was Successful
-export function addGroupSuccess(group) {
-  return {type: types.ADD_GROUP, group}
-}
-
 // Add a new Grouping
-export function addGroup(group, layerTypes, id) {
+export function addGroup(groups, layerTypes, id) {
   return function(dispatch) {
-    return GroupsApi.addGroup(group, id).then(group => {
-      dispatch(addGroupSuccess(JSON.parse(group)));
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
         dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
       });

@@ -16,7 +16,7 @@ export default function compressionReducer(state = initialState.compressed_netwo
         }
       }
       return net;
-    case types.ADD_GROUP:
+    case types.UPDATE_GROUPS:
       var network = state;
       var occurence = occurences.findGroupOccurences(action.group, network); // Check, where this group can be found
       for (var k in occurence) {
