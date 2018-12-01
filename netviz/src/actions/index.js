@@ -68,15 +68,15 @@ export function loadLayerTypes(id) {
 }
 
 // Updating LayerTypes was Succesful
-export function updateLayerTypesSuccess(layerTypes) {
-  return {type: types.UPDATE_LAYER_TYPES_SUCCESS, layerTypes}
+export function updateLayerTypesSuccess(layerTypes, network) {
+  return {type: types.UPDATE_LAYER_TYPES_SUCCESS, layerTypes, network}
 }
 
 // Called to update the LayerTypes
-export function updateLayerTypes(layerTypes, id) {
+export function updateLayerTypes(layerTypes, network, id) {
   return function(dispatch) {
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
     }).catch(error => {
       throw(error);
     });
@@ -299,7 +299,7 @@ export function deleteGroups(groups, layerTypes, network, id) {
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
       dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
       });
     });
   }

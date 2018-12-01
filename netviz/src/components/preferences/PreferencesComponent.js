@@ -42,14 +42,14 @@ class Preferences extends React.Component {
   handleColorChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].color = e.hex;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
   }
 
   // Called when the Name of the Layer Alias changes
   handleAliasChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].alias = e.currentTarget.value;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
   }
 
   // Called when the spacing of the legend elements changes
@@ -137,7 +137,7 @@ class Preferences extends React.Component {
         delete currLegend[i]; // Remove it
       }
     }
-    this.props.actions.loadLayerTypesSuccess(currLegend, this.props.network); // The Layertypes are done, this is called to update them
+    this.props.actions.updateLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
   // Render the Preferences of the Visualization
