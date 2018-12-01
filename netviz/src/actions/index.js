@@ -83,6 +83,18 @@ export function updateLayerTypes(layerTypes, network, id) {
   }
 }
 
+// Called to delete LayerTypes
+export function deleteLayerTypes(layerTypes, network, id) {
+  return function(dispatch) {
+    dispatch(setPreferenceMode('legend'));
+    return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+    }).catch(error => {
+      throw(error);
+    });
+  }
+}
+
 // Set the Extreme dimensions of the Layers in the Network
 export function setLayersExtremes(network, preferences, initializeNetworkGraph) {
   return {type: types.SET_LAYERS_EXTREMES, network, preferences, initializeNetworkGraph}

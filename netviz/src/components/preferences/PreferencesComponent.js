@@ -137,7 +137,7 @@ class Preferences extends React.Component {
         delete currLegend[i]; // Remove it
       }
     }
-    this.props.actions.updateLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
+    this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
   // Render the Preferences of the Visualization
