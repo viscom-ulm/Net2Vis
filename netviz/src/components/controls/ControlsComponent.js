@@ -64,7 +64,7 @@ class Controls extends React.Component {
         alias: 'Group' // Initialize the alias
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
-      this.props.actions.addGroup(groups, settings, this.props.id); // Add the group to the state
+      this.props.actions.addGroup(groups, group, settings, this.props.id); // Add the group to the state
     } else {
       console.warn('Either a duplicate or no grouping possible.');
     }
