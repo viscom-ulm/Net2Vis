@@ -3,16 +3,17 @@ import * as common from './Common';
 // Deletes a selected Group
 export function deleteGroup(selectedItem, groups) {
   var deletionGroup = getGroupByName(selectedItem, groups); // Get the Group that is to be deleted
-  expandSuperGroups(deletionGroup.group, groups); // Expand Groups that depend on that Group
   groups.splice(deletionGroup.id, 1); // Remove the Group
+  expandSuperGroups(deletionGroup.group, groups); // Expand Groups that depend on that Group
 }
 
 // Expand Groups that depend on a given group
 function expandSuperGroups(group, groups) {
   for (var i in groups) { // For all Groups
-    for (var j in groups[i].layers) { // And all their layers
+    for (var j = 0; j < groups[i].layers.length; j++) { // And all their layers
       if (groups[i].layers[j].name === group.name) { // If the layer is the one to be expanded  
         expandLayer(groups[i], j, group); // Expand the Layer
+        j = 0; // Need to go back to be sure not to skip Layers
       }
     }
   }
