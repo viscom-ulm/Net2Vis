@@ -41,23 +41,23 @@ function expandLayer(expandGroup, position, expansionGroup) {
       }
     } else if (i === output.outputID) { // If it is the input to the group that expands the other
       newLayer.properties.output = expandGroup.layers[position].properties.output; // the putput to this layer is the same as the output of the expanded Layer
-      for (var j in expandGroup.layers[position].properties.output) { // Foe all of these outputs
-        var currentPreInput = expandGroup.layers[common.getLayerByID(expandGroup.layers[position].properties.output[j], expandGroup.layers)].properties.input; // Get the Inputs
-        for (var k in currentPreOutput) { // Iterate over the Inputs
-          if (currentPreInput[k] === expandGroup.layers[position].id) { // If the input matches the id of the Layer to be expanded
-            currentPreInput[k] = newLayer.id; // Set teh input to be the new ID
+      for (var m in expandGroup.layers[position].properties.output) { // Foe all of these outputs
+        var currentPreInput = expandGroup.layers[common.getLayerByID(expandGroup.layers[position].properties.output[m], expandGroup.layers)].properties.input; // Get the Inputs
+        for (var n in currentPreOutput) { // Iterate over the Inputs
+          if (currentPreInput[n] === expandGroup.layers[position].id) { // If the input matches the id of the Layer to be expanded
+            currentPreInput[n] = newLayer.id; // Set teh input to be the new ID
           }
         }
       }
-      for (var l in newLayer.properties.input) { // For all inputs of this Layer
-        newLayer.properties.input[l] = newLayer.properties.input[l] + maxID; // The current input gets updated to reflect the new IDs of the group that expands the layer
+      for (var o in newLayer.properties.input) { // For all inputs of this Layer
+        newLayer.properties.input[o] = newLayer.properties.input[o] + maxID; // The current input gets updated to reflect the new IDs of the group that expands the layer
       }
     } else { // Neither in nor output of the group that expands the layer
-      for (var l in newLayer.properties.output) { // For all outputs
-        newLayer.properties.output[l] = newLayer.properties.output[l] + maxID; // The current output gets updated to reflect the new IDs of the group that expands the Layer
+      for (var p in newLayer.properties.output) { // For all outputs
+        newLayer.properties.output[p] = newLayer.properties.output[p] + maxID; // The current output gets updated to reflect the new IDs of the group that expands the Layer
       }
-      for (var l in newLayer.properties.input) { // Fro all Inputs
-        newLayer.properties.input[l] = newLayer.properties.input[l] + maxID;// The current input gets updated to reflect the new IDs of the group that expands the Layer
+      for (var q in newLayer.properties.input) { // Fro all Inputs
+        newLayer.properties.input[q] = newLayer.properties.input[q] + maxID;// The current input gets updated to reflect the new IDs of the group that expands the Layer
       }
     }
     expandGroup.layers.push(newLayer); // Add the new layer
