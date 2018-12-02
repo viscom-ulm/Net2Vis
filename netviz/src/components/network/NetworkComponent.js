@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import * as actions from '../../actions';
 import Layer from './LayerComponent';
 import * as graphs from '../../graphs';
+import * as selection from '../../selection';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
@@ -14,6 +15,18 @@ class Network extends React.Component {
     if (!('layers' in this.props.compressed_network)) {
       this.props.actions.reloadAllState(this.props.id);
     }
+  }
+
+  // When the shift key is held when clicking a layer, a complex selection is triggered 
+  complexSelectionTriggered = (layer, selected) => {
+    var paths = selection.allPaths(this.props.compressed_network.layers[selected[0]], layer.layer, this.props.compressed_network); // Get all Paths from the start node to the end node
+    for (var i in paths) { // For all Paths
+      if (paths[i][paths[i].length - 1].id !== layer.layer.id) { // If one did not reach the end Node
+        return; // Do not change the selection
+      }
+    }
+    var toSelect = selection.reducePaths(paths); // Reduce the Paths to just each layer once
+    this.props.actions.selectLayers(toSelect); // Select the Layers
   }
 
   // Render the individual Network Layers
@@ -40,7 +53,7 @@ class Network extends React.Component {
     return(
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes} edges={edges}/>
+          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes} edges={edges} complexAction={this.complexSelectionTriggered}/>
         )}
       </g>
     );
