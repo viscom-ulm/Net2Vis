@@ -15,7 +15,11 @@ class Layer extends React.Component {
     if (this.props.selection.includes(this.props.layer.layer.id)) { // If selected
       this.props.actions.deselectLayer(this.props.layer.layer.id); // Deselect
     } else { // If not selected
-      this.props.actions.selectLayer(this.props.layer.layer.id); // Select
+      if (e.shiftKey) {
+        this.props.complexAction(this.props.layer, this.props.selection);
+      } else {
+        this.props.actions.selectLayer(this.props.layer.layer.id); // Select
+      }
     }
   };
 
