@@ -4,7 +4,7 @@ import * as common from './Common';
 export function concatenateLayers(occurence, network, group) {
   var compressedNetwork = {layers: []}
   if (layerIdsExist(occurence, network)) { // Check if all layers that should be concatenated still exist.
-    var newID = maxID(network) + 1; // Get a new ID for the concatenation Layer
+    var newID = common.maxID(network) + 1; // Get a new ID for the concatenation Layer
     var newLayer = { // Initialize the new layer
       id: newID,
       name: group.name,
@@ -55,15 +55,6 @@ function layerIdExists(id, network) {
   return false; // No layer with the searched ID
 }
 
-// Returning the maximum ID in the current network.
-function maxID(network) {
-  var id = 0; // Initialize the max ID
-  for (var i in network.layers) { // Check all layers
-    id = network.layers[i].id > id ? network.layers[i].id : id; // Set to bigger of current layer id and id
-  }
-  return id;
-}
-
 // Check if a layer is in the occurence list
 function checkInOccurence(occurence, id) {
   for (var i in occurence) { // Iterate over the list
@@ -101,7 +92,7 @@ function changeOutputIfNeccessary(occurence, layer, newID, newLayer) {
 // Get the input dimensions for the new Layer
 function getNewInputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the Occurence List
-    if (occurence[i].input.length === 0) { // No Inputs for a Layer
+    if (occurence[i].properties.input.length === 0) { // No Inputs for a Layer
       var id = common.getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.in; // Return the input dimensions for this layer from the network
@@ -113,7 +104,7 @@ function getNewInputDimensions(occurence, network) {
 // Get the output dimensions for the new Layer
 function getNewOutputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the occurence List
-    if (occurence[i].output.length === 0) { // Not Outputs for a Layer
+    if (occurence[i].properties.output.length === 0) { // Not Outputs for a Layer
       var id = common.getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network

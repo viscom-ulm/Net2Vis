@@ -145,21 +145,6 @@ def update_groups(id):
   file = open(os.path.join('models', id, 'groups.json'),'w')
   file.write(content.decode("utf-8"))
   return content, ok_status, text_type
-  
-# Add a new Group.
-@app.route('/api/add_group/<id>', methods=['POST'])
-def add_group(id):
-  check_exists(id)
-  content = request.data
-  with open(os.path.join('models', id, 'groups.json'), "r+") as file:
-    data = file.read()
-    data = json.loads(data)
-    data.append(json.loads(content))
-    print(data)
-    file.seek(0)
-    file.write(json.dumps(data))
-    file.truncate()
-  return content, ok_status, text_type
 
 # Get the Preferences.
 @app.route('/api/get_legend_preferences/<id>')

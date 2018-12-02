@@ -11,6 +11,8 @@ import * as grouping from '../../groups/Grouping';
 import * as duplicates from '../../groups/Duplicates';
 import * as auto from '../../groups/Automation';
 import * as colors from '../../colors';
+import * as addition from '../../groups/Addition';
+import * as sort from '../../groups/Sort';
 
 import downloadLogo from '../../media/download_icon.png';
 import groupLogo from '../../media/group_icon.png';
@@ -40,36 +42,33 @@ class Controls extends React.Component {
 
   // Group some Layers together
   groupLayers = () => {
-    var group = grouping.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
-    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
-      var settings = this.props.layer_types_settings;
-      settings[group.name] = {
-        color: colors.generateNewColor(settings),
-        alias: 'Group'
-      }
-      this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
-    } else {
-      console.warn('Either a duplicate or no grouping possible.')
-    }
+    this.addGroup(this.props.selection); // Add a new Group based on the current Layer Selection
   }
 
   // Automatically Group Layers that are very common in this order
   autoGroupLayers = () => {
     var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
-    if (repetition !== undefined) {
-      var group = grouping.groupLayers(this.props.compressed_network, repetition.ids); // Group the layers of the repetition
-      if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
-        var settings = this.props.layer_types_settings;
-        settings[group.name] = {
-          color: colors.generateNewColor(settings),
-          alias: 'Group'
-        }
-        this.props.actions.addGroup(group, settings, this.props.id); // Add the group to the state
-      } else {
-        console.warn('Either a duplicate or no grouping possible.')
-      }
+    if (repetition !== undefined) { // If a Repetition could be found
+      this.addGroup(repetition.ids); // Add a Group based on the repetition
     } else {
-      console.warn('No repetition of at least two layers could be found.')
+      console.warn('No repetition of at least two layers could be found.');
+    }
+  }
+
+  addGroup = (ids) => {
+    var group = grouping.groupLayers(this.props.compressed_network, ids); // Group the Layers based on given IDs
+    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+      var groups = this.props.groups; // Get the current Groups
+      var settings = this.props.layer_types_settings; // Get the current settings
+      settings[group.name] = {
+        color: colors.generateNewColor(settings), // Generate a new Color for the group
+        alias: 'Group' // Initialize the alias
+      }
+      addition.addGroup(groups, group); // Add the new Group to the existing ones
+      sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
+      this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
+    } else {
+      console.warn('Either a duplicate or no grouping possible.');
     }
   }
 
@@ -97,6 +96,7 @@ class Controls extends React.Component {
 Controls.propTypes = {
   id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
+  network: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
   selection: PropTypes.array.isRequired,
@@ -111,6 +111,7 @@ function mapStateToProps(state, ownProps) {
   return {
     id: state.id,
     display: state.display,
+    network: state.network,
     compressed_network: state.compressed_network,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     selection: state.selection,
