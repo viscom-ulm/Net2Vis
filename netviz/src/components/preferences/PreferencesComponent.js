@@ -161,7 +161,7 @@ class Preferences extends React.Component {
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
                 <InputField value={group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
-                <InputField value={'Delete'} type={'button'} description={'Delete Group'} action={this.deleteGroup}/>
+                <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup}/>
               </div>
             );
           } else {
@@ -170,7 +170,7 @@ class Preferences extends React.Component {
                 <p>Layer</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
-                <InputField value={'Delete'} type={'button'} description={'Delete Layer Settings'} action={this.deleteLayerSettings}/>
+                <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
               </div>
             );
           }
