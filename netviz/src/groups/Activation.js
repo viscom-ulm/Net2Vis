@@ -36,13 +36,14 @@ function findGroupDependenciesByName(selectedItem, groups) {
 
 // Activate a selected Group
 export function activateGroup(selectedItem, groups) {
-  var groupIndices = findGroupDependants(selectedItem, groups)
+  var groupIndices = findGroupDependents(selectedItem, groups) // Get the indices for all groups to be deactivated
   for (var i in groupIndices) { // For all of these indices
     groups[groupIndices[i]].active = true; // Deactivate the group
   }
 }
 
-function findGroupDependants(selectedItem, groups) {
+// Find all Groups a given Group depends on
+function findGroupDependents(selectedItem, groups) {
   var indices = findGroupDependentsByName(selectedItem, groups); // Get all the indices of dependancy
   var unique = indices.filter(onlyUnique); // Remove duplicates from the array
   return unique;
@@ -50,7 +51,7 @@ function findGroupDependants(selectedItem, groups) {
 
 // Find all groups, that the current group depends on
 function findGroupDependentsByName(selectedItem, groups) {
-  var deps = []; // Initialize the dependants array
+  var deps = []; // Initialize the dependents array
   for (var i = 0; i < groups.length; i++) { // For all Groups
     if (groups[i].name === selectedItem) { // If this is the current Group
       deps.push(i); // Add it to the Dependents
