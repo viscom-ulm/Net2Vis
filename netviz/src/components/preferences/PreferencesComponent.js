@@ -7,6 +7,7 @@ import InputField from './InputField'
 import * as actions from '../../actions';
 import Features from './FeaturesComponent';
 import * as removal from '../../groups/Removal';
+import * as activation from '../../groups/Activation';
 
 // Component for displaying the Preferences of the Visualization
 class Preferences extends React.Component {
@@ -106,15 +107,11 @@ class Preferences extends React.Component {
 
   // Toggles a Group and others that build on it
   toggleGroup = (e) => {
-    var currGroups = this.props.groups; // Get the currently present groups
     var selectedGroup = removal.getGroupByName(this.props.selected_legend_item, this.props.groups);
     if (selectedGroup.group.active === true) { // If the currently selected group is active
-      var groupIndices = removal.findGroupDependants(this.props.selected_legend_item, this.props.groups); // Get the indices for all groups to be deactivated
-      for (var i in groupIndices) { // For all of these indices
-        currGroups[groupIndices[i]].active = false; // Deactivate the group
-      }
+      activation.deactivateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
     } else { // Group was inactive
-      currGroups[selectedGroup.id].active = true; // Activate the group
+      activation.activateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
     }
     this.props.actions.updateGroups(this.props.groups, this.props.network, this.props.id); // Push the groups update to the state
   }
