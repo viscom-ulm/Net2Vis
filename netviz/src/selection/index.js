@@ -9,6 +9,7 @@ export function allPaths(s, d, network) {
 
 // Traverse the Network from node u on
 function traverseWay(u, d, network, path, paths) {
+  path.push(u);
   if (u.id === d.id) { // If u is the destination
     paths.push(path); // Add the path to the pathes
   } else if (u.properties.output.length === 0) { // If an output node has been reached
