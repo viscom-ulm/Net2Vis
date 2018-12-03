@@ -7,6 +7,7 @@ import * as actions from '../../actions';
 import Layer from './LayerComponent';
 import * as graphs from '../../graphs';
 import * as selection from '../../selection';
+import * as common from '../../groups/Common';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
@@ -19,7 +20,7 @@ class Network extends React.Component {
 
   // When the shift key is held when clicking a layer, a complex selection is triggered 
   complexSelectionTriggered = (layer, selected) => {
-    var paths = selection.allPaths(this.props.compressed_network.layers[selected[0]], layer.layer, this.props.compressed_network); // Get all Paths from the start node to the end node
+    var paths = selection.allPaths(this.props.compressed_network.layers[common.getLayerByID(selected[0], this.props.compressed_network.layers)], layer.layer, this.props.compressed_network); // Get all Paths from the start node to the end node
     for (var i in paths) { // For all Paths
       if (paths[i][paths[i].length - 1].id !== layer.layer.id) { // If one did not reach the end Node
         return; // Do not change the selection

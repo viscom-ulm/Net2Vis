@@ -222,7 +222,6 @@ export function selectLayer(id) {
 
 // Select multiple Layers
 export function selectLayers(layers) {
-  console.log(layers);
   return {type: types.SELECT_LAYERS, layers}
 }
 
