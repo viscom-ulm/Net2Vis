@@ -104,11 +104,24 @@ function findRepetitionsForPath(path, repetitions) {
       if (repetitions[repName] === undefined) { // Repetition does not already exist
         repetitions[repName] = { // Initialize the repetition
           layers: layers, // Set the Layers
-          ids: ids, // Set the ids needed for grouping
+          ids: [ids], // Set the ids needed for grouping
           amount: 1 // Initialize the amount of occurences
         }
       } else { // Repetition does exist
-        repetitions[repName].amount = repetitions[repName].amount + 1; // Increase the occurence count
+        var overlap = false; // Placeholder for wether there is an overlap
+        for (var l in repetitions[repName].ids) { // Check all ID arrays
+          for (var m in repetitions[repName].ids[l]) { // Check each element
+            for (var n in ids) { // Check each id of the current path
+              if (repetitions[repName].ids[l][m] === ids[n]) { // If the ID has halready been used (i.e. repetition would overlap)
+                overlap = true; // Set the overlap placeholder to true
+              }
+            }
+          }
+        }
+        if (!overlap) { // If there is no overlap
+          repetitions[repName].amount = repetitions[repName].amount + 1; // Increase the occurence count
+          repetitions[repName].ids.push(ids); // Add the new IDs
+        }
       }
     }
   }

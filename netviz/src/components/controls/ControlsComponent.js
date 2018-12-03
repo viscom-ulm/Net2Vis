@@ -49,7 +49,7 @@ class Controls extends React.Component {
   autoGroupLayers = () => {
     var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
     if (repetition !== undefined) { // If a Repetition could be found
-      this.addGroup(repetition.ids); // Add a Group based on the repetition
+      this.addGroup(repetition.ids[0]); // Add a Group based on the repetition
     } else {
       console.warn('No repetition of at least two layers could be found.');
     }
