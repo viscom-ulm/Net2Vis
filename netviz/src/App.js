@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import AppRouter from './AppRouter';
 import Controls from './components/controls/ControlsComponent'
 import combinedReducers from './reducers';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 // Create the Store using all the Reducers and applying the Middleware
 const store = createStore(
@@ -19,6 +20,7 @@ const store = createStore(
 const App = () => (
   <Provider store={store}>
     <div className='full'>
+      <CssBaseline />
       <header>
         <Controls/>
       </header>

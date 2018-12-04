@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {SketchPicker} from 'react-color';
+import Button from '@material-ui/core/Button';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const InputField = ({value, type, description, action, options}) => {
@@ -39,7 +40,7 @@ const InputField = ({value, type, description, action, options}) => {
   } else if (type === 'button') {
     return (
       <div className='preferenceItem'>
-        <button onClick={(e) => action(e)} className='inputElementSelect'>{description}</button>
+        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElementSelect'>{description}</Button>
       </div>
     );
   } else if (type === 'switch') {
