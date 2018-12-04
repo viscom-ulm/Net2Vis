@@ -196,7 +196,7 @@ class Preferences extends React.Component {
                 <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
               </div>
               <div>
-                <InputField value={'Group'} type={'button'} description={'Group'} action={this.addGroup}/>
+                <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
                 <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
               </div>
            </div>
