@@ -49,7 +49,7 @@ class Controls extends React.Component {
               <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
               <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
             </div>
-            <div className='menu'>
+            <div>
               <IconButton color='inherit' aria-label='Download' onClick={this.downloadSVG}>
                 <GetApp/>
               </IconButton>
