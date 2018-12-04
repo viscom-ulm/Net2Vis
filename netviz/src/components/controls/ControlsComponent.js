@@ -4,18 +4,14 @@ import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {saveAs} from 'file-saver';
 
-import ToggleButton from './ToggleButton';
-import ClickableButton from './ClickableButton';
-import * as actions from '../../actions';
-import * as grouping from '../../groups/Grouping';
-import * as duplicates from '../../groups/Duplicates';
-import * as auto from '../../groups/Automation';
-import * as colors from '../../colors';
-import * as addition from '../../groups/Addition';
-import * as sort from '../../groups/Sort';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import GetApp from '@material-ui/icons/GetApp';
 
-import downloadLogo from '../../media/download_icon.png';
-import groupLogo from '../../media/group_icon.png';
+import ToggleButton from './ToggleButton';
+import * as actions from '../../actions';
 
 // Controls at top of the Application
 class Controls extends React.Component {
@@ -40,85 +36,45 @@ class Controls extends React.Component {
     saveAs(new Blob([legend_downloadable], {type: "text/svg;charset=utf-8"}), 'legend.svg'); // save the svg on disk
   }
 
-  // Group some Layers together
-  groupLayers = () => {
-    this.addGroup(this.props.selection); // Add a new Group based on the current Layer Selection
-  }
-
-  // Automatically Group Layers that are very common in this order
-  autoGroupLayers = () => {
-    var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
-    if (repetition !== undefined) { // If a Repetition could be found
-      this.addGroup(repetition.ids[0]); // Add a Group based on the repetition
-    } else {
-      console.warn('No repetition of at least two layers could be found.');
-    }
-  }
-
-  addGroup = (ids) => {
-    var group = grouping.groupLayers(this.props.compressed_network, ids); // Group the Layers based on given IDs
-    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
-      var groups = this.props.groups; // Get the current Groups
-      var settings = this.props.layer_types_settings; // Get the current settings
-      settings[group.name] = {
-        color: colors.generateNewColor(settings), // Generate a new Color for the group
-        alias: 'Group' // Initialize the alias
-      }
-      addition.addGroup(groups, group); // Add the new Group to the existing ones
-      sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
-      this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
-    } else {
-      console.warn('Either a duplicate or no grouping possible.');
-    }
-  }
-
   render() {
     const display = this.props.display;
     return(
-      <div className='wrapper'>
-        <div className='menu'>
-          <div className='header noselect'>NetViz</div>
-          <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
-          <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
-          <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
-        </div>
-        <div className='menu'>
-          <ClickableButton name="Auto Group" image={groupLogo} action={this.autoGroupLayers}/>
-          <ClickableButton name="Group" image={groupLogo} action={this.groupLayers}/>
-          <ClickableButton name="Download" image={downloadLogo} action={this.downloadSVG}/>
-        </div>
-      </div>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Net2Vis
+          </Typography>
+          <div className='wrapper'>
+            <div className='menu'>
+              <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
+              <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
+              <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
+            </div>
+            <div className='menu'>
+              <IconButton color='inherit' aria-label='Download' onClick={this.downloadSVG}>
+                <GetApp/>
+              </IconButton>
+            </div>
+          </div>
+        </Toolbar>
+      </AppBar>
     );
   }
 }
 
 // Controls state of the Application
 Controls.propTypes = {
-  id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
-  network: PropTypes.object.isRequired,
-  compressed_network: PropTypes.object.isRequired,
-  layer_extreme_dimensions: PropTypes.object.isRequired,
-  selection: PropTypes.array.isRequired,
   group_transform: PropTypes.object.isRequired,
   legend_transform: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired,
-  layer_types_settings: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    id: state.id,
     display: state.display,
-    network: state.network,
-    compressed_network: state.compressed_network,
-    layer_extreme_dimensions: state.layer_extreme_dimensions,
-    selection: state.selection,
     group_transform: state.group_transform,
     legend_transform: state.legend_transform,
-    groups: state.groups,
-    layer_types_settings: state.layer_types_settings
   };
 }
 

@@ -16,7 +16,6 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 50px;
     color: white;
     background-color: #A32638;
     
@@ -24,6 +23,7 @@ header {
         display: flex;
         justify-content: space-between;
         width: 100%;
+        margin-left: 50px;
     }
 
     .menu {
@@ -34,33 +34,23 @@ header {
     .menuitem {
         display: flex;
         flex-direction: row;
-        height: 48px;
-        border-bottom: 2px solid #A32638;
+        height: calc(100% - 2px);
+        border-bottom: 2px solid rgba(0,0,0,0);
         padding-left: 12px;
         padding-right: 12px;
     }
 
     .menuitem:hover {
-        background-color: rgb(141, 47, 61);
+        background-color: #c5c5c5;
         text-decoration: none;
         cursor: pointer;
     }
 
-    div.header {
-        display: block;
-        color: white;
-        text-align: center;
-        font-size: 25px;
-        width: 150px;
-        height: 50px;
-        line-height: 50px;
-    }
-    
     div {
         display: block;
         color: white;
         text-align: center;
-        line-height: 50px;
+        line-height: 62px;
     }
     
     div a:hover {
@@ -82,7 +72,7 @@ header {
 
 // Some Content Helpers
 .content {
-    padding: 50px 0px 0px 0px;
+    padding: 70px 0px 0px 0px;
     height: 100%;
 }
 
