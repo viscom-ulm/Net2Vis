@@ -2,19 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {
-  ReflexContainer,
-  ReflexSplitter,
-  ReflexElement
-} from 'react-reflex'
-
-import 'react-reflex/styles.css'
 
 import * as actions from '../actions'
 import Network from './network/NetworkComponent'
 import Legend from './legend/LegendComponent'
 import Preferences from './preferences/PreferencesComponent';
 import Code from './code/CodeComponent'
+import { Grid, Paper } from '@material-ui/core';
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
@@ -67,36 +61,41 @@ class Main extends React.Component {
   // Render the Main Content and call other Elements
   render() {
     return (
-      <ReflexContainer orientation='vertical' windowResizeAware={true}>
+      <Grid container direction='row' spacing={8} className='mainGrid'>
         {
           this.props.code_toggle &&
-          <ReflexElement propagateDimensions={true} size={400}>
-            <Code />
-          </ReflexElement>
+          <Grid item className='codeGrid'>
+            <Paper className='codePaper'>
+              <Code />
+            </Paper>
+          </Grid>
         }
-        <ReflexElement propagateDimensions={true}>
-          <ReflexContainer orientation='horizontal' windowResizeAware={true}>
-            <ReflexElement propagateDimensions={true} className='networkComponent'>
-              <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
-                <Network />
-              </svg>
-            </ReflexElement>
-            <ReflexSplitter/>
+        <Grid item xs>
+          <Grid container direction='column' spacing={8} className='mainGrid'>
+            <Grid item className='svgGrid'>
+              <Paper className='full'>
+                <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
+                  <Network />
+                </svg>
+              </Paper>
+            </Grid>
             {
               this.props.legend_toggle &&
-              <ReflexElement propagateDimensions={true} size={300}>
-                <Legend />
-              </ReflexElement>
+              <Grid item className='legendGrid'>
+                <Paper className='full'>
+                  <Legend />
+                </Paper>
+              </Grid>
             }
-          </ReflexContainer>
-        </ReflexElement>
+          </Grid>
+        </Grid>
         {
           this.props.preferences_toggle &&
-          <ReflexElement propagateDimensions={true} size={300}>
+          <Grid item className='preferencesGrid'>
             <Preferences />
-          </ReflexElement>
+          </Grid>
         }
-      </ReflexContainer>
+      </Grid>
     );
   }
 }

@@ -34,7 +34,6 @@ class Code extends React.Component {
     return(// Editor with Syntax highlighting
         <AceEditor
           mode="python"
-          theme="monokai"
           wrapEnabled={true}
           enableBasicAutocompletion={true}
           enableLiveAutocompletion={true}

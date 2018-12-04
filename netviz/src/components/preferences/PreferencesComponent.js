@@ -3,11 +3,20 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
+import Typography from '@material-ui/core/Typography';
+
 import InputField from './InputField'
 import * as actions from '../../actions';
 import Features from './FeaturesComponent';
 import * as removal from '../../groups/Removal';
 import * as activation from '../../groups/Activation';
+
+import * as grouping from '../../groups/Grouping';
+import * as duplicates from '../../groups/Duplicates';
+import * as auto from '../../groups/Automation';
+import * as colors from '../../colors';
+import * as addition from '../../groups/Addition';
+import * as sort from '../../groups/Sort';
 
 // Component for displaying the Preferences of the Visualization
 class Preferences extends React.Component {
@@ -137,47 +146,102 @@ class Preferences extends React.Component {
     this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
+  // Group some Layers together
+  groupLayers = () => {
+    this.addGroup(this.props.selection); // Add a new Group based on the current Layer Selection
+  }
+
+  // Automatically Group Layers that are very common in this order
+  autoGroupLayers = () => {
+    var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
+    if (repetition !== undefined) { // If a Repetition could be found
+      this.addGroup(repetition.ids[0]); // Add a Group based on the repetition
+    } else {
+      console.warn('No repetition of at least two layers could be found.');
+    }
+  }
+
+  addGroup = (ids) => {
+    var group = grouping.groupLayers(this.props.compressed_network, ids); // Group the Layers based on given IDs
+    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+      var groups = this.props.groups; // Get the current Groups
+      var settings = this.props.layer_types_settings; // Get the current settings
+      settings[group.name] = {
+        color: colors.generateNewColor(settings), // Generate a new Color for the group
+        alias: 'Group' // Initialize the alias
+      }
+      addition.addGroup(groups, group); // Add the new Group to the existing ones
+      sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
+      this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
+    } else {
+      console.warn('Either a duplicate or no grouping possible.');
+    }
+  }
+
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
       switch (this.props.preferences_mode) {
         case 'network':
           return(
-            <div id='Preferences'>
-              <p>Network</p>
-              <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
-              <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
-              <Features/>
-              <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
-              <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+            <div className='preferencesWrapper'>
+              <div>
+                <Typography variant="h6" color="inherit">
+                  Network
+                </Typography>
+                <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
+                <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
+                <Features/>
+                <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
+                <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+              </div>
+              <div>
+                <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
+                <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
+              </div>
            </div>
           );
         case 'color':
           var group = this.isInGroups(this.props.selected_legend_item);
           if (group !== null) {
             return(
-              <div id='Preferences'>
-                <p>Group</p>
+            <div className='preferencesWrapper'>
+              <div>
+                <Typography variant="h6" color="inherit">
+                  Group
+                </Typography>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
                 <InputField value={group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
+              </div>
+              <div>
                 <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup}/>
               </div>
+            </div>
             );
           } else {
             return(
-              <div id='Preferences'>
-                <p>Layer</p>
+            <div className='preferencesWrapper'>
+              <div>
+                <Typography variant="h6" color="inherit">
+                  Layer
+                </Typography>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+              </div>
+              <div>
                 <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
               </div>
+            </div>
             );
           }
         case 'legend':
           return(
-            <div id='Preferences'>
-              <p>Legend</p>
+            <div className='preferencesWrapper'>
+              <div>
+              <Typography variant="h6" color="inherit">
+                Legend
+              </Typography>
               <InputField value={this.props.legend_preferences.element_spacing.value} type={this.props.legend_preferences.element_spacing.type} description={this.props.legend_preferences.element_spacing.description} action={this.handleLegendElementSpacingChange}/>
               <InputField value={this.props.legend_preferences.layer_width.value} type={this.props.legend_preferences.layer_width.type} description={this.props.legend_preferences.layer_width.description} action={this.handleLegendLayerWidthChange}/>
               <InputField value={this.props.legend_preferences.layer_height.value} type={this.props.legend_preferences.layer_height.type} description={this.props.legend_preferences.layer_height.description} action={this.handleLegendLayerHeightChange}/>
@@ -185,6 +249,7 @@ class Preferences extends React.Component {
               <InputField value={this.props.legend_preferences.layers_spacing_vertical.value} type={this.props.legend_preferences.layers_spacing_vertical.type} description={this.props.legend_preferences.layers_spacing_vertical.description} action={this.handleLegendLayersSpacingVerticalChange}/>
               <InputField value={this.props.legend_preferences.complex_spacing.value} type={this.props.legend_preferences.complex_spacing.type} description={this.props.legend_preferences.complex_spacing.description} action={this.handleLegendComplexSpacingChange}/>
             </div>
+          </div>
           );
         default:
           return null;
@@ -205,7 +270,9 @@ Preferences.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
   legend_preferences: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
-  network: PropTypes.object.isRequired
+  network: PropTypes.object.isRequired,
+  compressed_network: PropTypes.object.isRequired,
+  selection: PropTypes.array.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -219,7 +286,9 @@ function mapStateToProps(state, ownProps) {
     layer_types_settings: state.layer_types_settings,
     legend_preferences: state.legend_preferences,
     groups: state.groups,
-    network: state.network
+    network: state.network,
+    compressed_network: state.compressed_network,
+    selection: state.selection
   };
 }
 
