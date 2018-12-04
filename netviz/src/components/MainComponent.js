@@ -71,7 +71,7 @@ class Main extends React.Component {
         <Grid item xs>
           <Grid container direction='column' spacing={8} className='mainGrid'>
             <Grid item xs>
-              <Paper className='paper'>
+              <Paper className='full'>
                 <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
                   <Network />
                 </svg>
@@ -80,7 +80,7 @@ class Main extends React.Component {
             {
               this.props.legend_toggle &&
               <Grid item>
-                <Paper className='paper'>
+                <Paper className='full'>
                   <Legend />
                 </Paper>
               </Grid>

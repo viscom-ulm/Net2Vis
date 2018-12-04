@@ -182,7 +182,7 @@ class Preferences extends React.Component {
       switch (this.props.preferences_mode) {
         case 'network':
           return(
-            <div id='Preferences'>
+            <div>
               <p>Network</p>
               <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
               <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
@@ -197,7 +197,7 @@ class Preferences extends React.Component {
           var group = this.isInGroups(this.props.selected_legend_item);
           if (group !== null) {
             return(
-              <div id='Preferences'>
+              <div>
                 <p>Group</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
@@ -207,7 +207,7 @@ class Preferences extends React.Component {
             );
           } else {
             return(
-              <div id='Preferences'>
+              <div>
                 <p>Layer</p>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
@@ -217,7 +217,7 @@ class Preferences extends React.Component {
           }
         case 'legend':
           return(
-            <div id='Preferences'>
+            <div>
               <p>Legend</p>
               <InputField value={this.props.legend_preferences.element_spacing.value} type={this.props.legend_preferences.element_spacing.type} description={this.props.legend_preferences.element_spacing.description} action={this.handleLegendElementSpacingChange}/>
               <InputField value={this.props.legend_preferences.layer_width.value} type={this.props.legend_preferences.layer_width.type} description={this.props.legend_preferences.layer_width.description} action={this.handleLegendLayerWidthChange}/>
