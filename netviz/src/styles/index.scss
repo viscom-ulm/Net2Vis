@@ -86,6 +86,11 @@ header {
     height: 100%;
 }
 
+.codePaper {
+    width: 100%;
+    height: calc(100% - 8px);
+}
+
 // Different Areas
 #ColorPicker {
     padding: 10px;
@@ -127,7 +132,7 @@ header {
 }
 
 .preferenceItem {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     padding-right: 10px;
 }
 
@@ -155,4 +160,12 @@ header {
 
 .ace_scrollbar {
     display: none !important;
+}
+
+.ace_editor {
+    background: rgba(0,0,0,0) !important;
+}
+
+.ace_gutter {
+    background: #f5f5f5 !important;
 }

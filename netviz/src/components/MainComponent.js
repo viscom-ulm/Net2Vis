@@ -65,7 +65,9 @@ class Main extends React.Component {
         {
           this.props.code_toggle &&
           <Grid item className='codeGrid'>
-            <Code />
+            <Paper className='codePaper'>
+              <Code />
+            </Paper>
           </Grid>
         }
         <Grid item xs>
@@ -79,7 +81,7 @@ class Main extends React.Component {
             </Grid>
             {
               this.props.legend_toggle &&
-              <Grid item>
+              <Grid item className='legendGrid'>
                 <Paper className='full'>
                   <Legend />
                 </Paper>
