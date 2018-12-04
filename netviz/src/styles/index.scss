@@ -1,13 +1,9 @@
 // General Properties
 html,
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
     height: 100%;
     overflow: hidden;
     font-family: Roboto, sans-serif;
-    color: black;
 }
 
 // Header only Properties (For Menu Bar)
@@ -74,6 +70,7 @@ header {
 .content {
     padding: 70px 0px 0px 0px;
     height: 100%;
+    background-color: #f5f5f5;
 }
 
 .full {
@@ -107,8 +104,32 @@ header {
 #Preferences {
     height: 100%;
     width: 100%;
-    position: absolute;
     background-color: #f5f5f5;
+}
+
+.mainGrid {
+    height: 100%;
+}
+
+.codeGrid {
+    height: 100%;
+    width: 400px;
+}
+
+.svgGrid {
+    height: 100%;
+    width: 100%;
+}
+
+.preferencesGrid {
+    height: 100%;
+    width: 300px;
+}
+
+.paper {
+    width: 100%;
+    height: 100%;
+    //margin: 4px;
 }
 
 #CodeArea {
@@ -150,4 +171,8 @@ header {
 
 .reflex-size-aware {
     overflow: hidden;
+}
+
+.ace_scrollbar {
+    display: none !important;
 }
