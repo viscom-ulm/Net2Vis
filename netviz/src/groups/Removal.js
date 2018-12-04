@@ -23,7 +23,7 @@ function expandSuperGroups(group, groups) {
 function expandLayer(expandGroup, position, expansionGroup) {
   var input = common.findInputNode(expansionGroup); // Get the inputNode of the group to be inserted into the other
   var output = common.findOutputNode(expansionGroup); // Get the outputNode of the group to be inserted into the other
-  var maxID = common.maxID(expandGroup); // Get the maximum ID of the group to always be bigger
+  var maxID = common.maxID(expandGroup) + 1; // Get the maximum ID of the group to always be bigger
   for (var i in expansionGroup.layers) { // Iterate over all layers in the group to be inserted
     var newLayer = JSON.parse(JSON.stringify(expansionGroup.layers[i])); // Generate a copy of the current layer
     newLayer.id = newLayer.id + maxID; // Set a new and unused ID for the current layer
