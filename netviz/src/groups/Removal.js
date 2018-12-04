@@ -44,7 +44,7 @@ function expandLayer(expandGroup, position, expansionGroup) {
       newLayer.properties.output = expandGroup.layers[position].properties.output; // the putput to this layer is the same as the output of the expanded Layer
       for (var m in expandGroup.layers[position].properties.output) { // Foe all of these outputs
         var currentPreInput = expandGroup.layers[common.getLayerByID(expandGroup.layers[position].properties.output[m], expandGroup.layers)].properties.input; // Get the Inputs
-        for (var n in currentPreOutput) { // Iterate over the Inputs
+        for (var n in currentPreInput) { // Iterate over the Inputs
           if (currentPreInput[n] === expandGroup.layers[position].id) { // If the input matches the id of the Layer to be expanded
             currentPreInput[n] = newLayer.id; // Set teh input to be the new ID
           }
