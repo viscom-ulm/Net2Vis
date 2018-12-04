@@ -1,53 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {SketchPicker} from 'react-color';
-import Button from '@material-ui/core/Button';
+
+import { TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const InputField = ({value, type, description, action, options}) => {
   if(type === 'number') {
     return (
       <div className='preferenceItem'>
-        {description}:
-        <input className='inputElement' type="number" step="10" value={value} onChange={(e) => action(e)}/>
+
+        <TextField id="standard-number" type="number" label={description} value={value} onChange={(e) => action(e)} margin="normal" className='inputElement' inputProps={{ min: "0", max: "1000", step: "10" }}/>
       </div>
     );
   } else if (type === 'color') {
     return (
       <div className='preferenceItem'>
-        {description}:
         <SketchPicker width={260} disableAlpha={true} presetColors={[]} color={ value } onChange={ (e) => action(e) } />
-      </div>
-    );
-  } else if (type === 'choice') {
-    return (
-      <div className='preferenceItem'>
-        {description}:
-        <select className='inputElementSelect' value={value} onChange={ (e) => action(e) }>
-          {options.map((opt, index) => 
-            <option value={opt} key={index}>{opt}</option>
-          )}
-        </select>
       </div>
     );
   } else if (type === 'text') {
     return (
       <div className='preferenceItem'>
-        {description}:
-        <input className='inputElement' type="text" value={value} onChange={(e) => action(e)}/>
+        <TextField id="standard-name" label={description} value={value} onChange={(e) => action(e)} margin="normal" className='inputElement'/>
       </div>
     );
   } else if (type === 'button') {
     return (
       <div className='preferenceItem'>
-        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElementSelect'>{description}</Button>
+        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement'>{description}</Button>
       </div>
     );
   } else if (type === 'switch') {
     return (
       <div className='preferenceItem'>
-        {description}:
-        <input type="checkbox" checked={value} onClick={(e) => action(e)}/>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={value}
+              onChange={(e) => action(e)}
+              value="checkedB"
+              color="primary"
+            />
+          }
+          label={description}
+        />
       </div>
     );
   }

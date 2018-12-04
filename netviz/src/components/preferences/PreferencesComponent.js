@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
+import Typography from '@material-ui/core/Typography';
+
 import InputField from './InputField'
 import * as actions from '../../actions';
 import Features from './FeaturesComponent';
@@ -182,43 +184,64 @@ class Preferences extends React.Component {
       switch (this.props.preferences_mode) {
         case 'network':
           return(
-            <div>
-              <p>Network</p>
-              <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
-              <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
-              <Features/>
-              <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
-              <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
-              <InputField value={'Group'} type={'button'} description={'Group'} action={this.addGroup}/>
-              <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
+            <div className='preferencesWrapper'>
+              <div>
+                <Typography variant="h6" color="inherit">
+                  Network
+                </Typography>
+                <InputField value={this.props.preferences.layer_display_min_height.value} type={this.props.preferences.layer_display_min_height.type} description={this.props.preferences.layer_display_min_height.description} action={this.handleMinChange}/>
+                <InputField value={this.props.preferences.layer_display_max_height.value} type={this.props.preferences.layer_display_max_height.type} description={this.props.preferences.layer_display_max_height.description} action={this.handleMaxChange}/>
+                <Features/>
+                <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
+                <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+              </div>
+              <div>
+                <InputField value={'Group'} type={'button'} description={'Group'} action={this.addGroup}/>
+                <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
+              </div>
            </div>
           );
         case 'color':
           var group = this.isInGroups(this.props.selected_legend_item);
           if (group !== null) {
             return(
+            <div className='preferencesWrapper'>
               <div>
-                <p>Group</p>
+                <Typography variant="h6" color="inherit">
+                  Group
+                </Typography>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
                 <InputField value={group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
+              </div>
+              <div>
                 <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup}/>
               </div>
+            </div>
             );
           } else {
             return(
+            <div className='preferencesWrapper'>
               <div>
-                <p>Layer</p>
+                <Typography variant="h6" color="inherit">
+                  Layer
+                </Typography>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
                 <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+              </div>
+              <div>
                 <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
               </div>
+            </div>
             );
           }
         case 'legend':
           return(
-            <div>
-              <p>Legend</p>
+            <div className='preferencesWrapper'>
+              <div>
+              <Typography variant="h6" color="inherit">
+                Legend
+              </Typography>
               <InputField value={this.props.legend_preferences.element_spacing.value} type={this.props.legend_preferences.element_spacing.type} description={this.props.legend_preferences.element_spacing.description} action={this.handleLegendElementSpacingChange}/>
               <InputField value={this.props.legend_preferences.layer_width.value} type={this.props.legend_preferences.layer_width.type} description={this.props.legend_preferences.layer_width.description} action={this.handleLegendLayerWidthChange}/>
               <InputField value={this.props.legend_preferences.layer_height.value} type={this.props.legend_preferences.layer_height.type} description={this.props.legend_preferences.layer_height.description} action={this.handleLegendLayerHeightChange}/>
@@ -226,6 +249,7 @@ class Preferences extends React.Component {
               <InputField value={this.props.legend_preferences.layers_spacing_vertical.value} type={this.props.legend_preferences.layers_spacing_vertical.type} description={this.props.legend_preferences.layers_spacing_vertical.description} action={this.handleLegendLayersSpacingVerticalChange}/>
               <InputField value={this.props.legend_preferences.complex_spacing.value} type={this.props.legend_preferences.complex_spacing.type} description={this.props.legend_preferences.complex_spacing.description} action={this.handleLegendComplexSpacingChange}/>
             </div>
+          </div>
           );
         default:
           return null;
