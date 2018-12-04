@@ -47,7 +47,6 @@ class Controls extends React.Component {
           <div className='wrapper'>
             <div className='menu'>
               <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
-              <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
               <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
             </div>
             <div className='menu'>

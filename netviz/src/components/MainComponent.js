@@ -72,7 +72,7 @@ class Main extends React.Component {
         }
         <Grid item xs>
           <Grid container direction='column' spacing={8} className='mainGrid'>
-            <Grid item xs>
+            <Grid item className='svgGrid'>
               <Paper className='full'>
                 <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
                   <Network />
