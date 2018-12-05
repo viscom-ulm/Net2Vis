@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import Typography from '@material-ui/core/Typography';
 
 import NetworkPreferences from './NetworkPreferencesComponent';
+import GroupPreferences from './GroupPreferencesComponent';
 
 import InputField from './InputField'
 import * as actions from '../../actions';
@@ -124,19 +125,7 @@ class Preferences extends React.Component {
           var group = this.isInGroups(this.props.selected_legend_item);
           if (group !== null) {
             return(
-            <div className='preferencesWrapper'>
-              <div>
-                <Typography variant="h6" color="inherit">
-                  Group
-                </Typography>
-                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
-                <InputField value={group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
-              </div>
-              <div>
-                <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup}/>
-              </div>
-            </div>
+              <GroupPreferences group={group}/>
             );
           } else {
             return(
