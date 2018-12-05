@@ -6,7 +6,7 @@ import AceEditor from 'react-ace'
 import 'brace/mode/python';
 import 'brace/snippets/python';
 import 'brace/ext/language_tools';
-import 'brace/theme/monokai';
+import 'brace/theme/chrome';
 
 import * as actions from '../../actions';
 
@@ -34,6 +34,7 @@ class Code extends React.Component {
     return(// Editor with Syntax highlighting
         <AceEditor
           mode="python"
+          theme="chrome"
           wrapEnabled={true}
           enableBasicAutocompletion={true}
           enableLiveAutocompletion={true}
