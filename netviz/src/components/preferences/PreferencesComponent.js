@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import NetworkPreferences from './NetworkPreferencesComponent';
 import GroupPreferences from './GroupPreferencesComponent';
+import LayerPreferences from './LayerPreferencesComponent';
 
 import InputField from './InputField'
 import * as actions from '../../actions';
@@ -15,20 +16,6 @@ import * as activation from '../../groups/Activation';
 
 // Component for displaying the Preferences of the Visualization
 class Preferences extends React.Component {
-  // Called when the Color of the Colorpicker changes
-  handleColorChange = (e) => {
-    var layerTypes = this.props.layer_types_settings;
-    layerTypes[this.props.selected_legend_item].color = e.hex;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
-  }
-
-  // Called when the Name of the Layer Alias changes
-  handleAliasChange = (e) => {
-    var layerTypes = this.props.layer_types_settings;
-    layerTypes[this.props.selected_legend_item].alias = e.currentTarget.value;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
-  }
-
   // Called when the spacing of the legend elements changes
   handleLegendElementSpacingChange = (e) => {
     var preferences = this.props.legend_preferences;
@@ -81,38 +68,6 @@ class Preferences extends React.Component {
     return null;
   }
 
-  // Toggles a Group and others that build on it
-  toggleGroup = (e) => {
-    var selectedGroup = removal.getGroupByName(this.props.selected_legend_item, this.props.groups);
-    if (selectedGroup.group.active === true) { // If the currently selected group is active
-      activation.deactivateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
-    } else { // Group was inactive
-      activation.activateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
-    }
-    this.props.actions.updateGroups(this.props.groups, this.props.network, this.props.id); // Push the groups update to the state
-  }
-  
-  // Removes a Group and others that build on it from the State
-  deleteGroup = (e) => {
-    var currLegend = this.props.layer_types_settings; // Current Legend Items in the State
-    var name = this.props.selected_legend_item; // Get the name of the currently selected Item
-    removal.deleteGroup(name, this.props.groups); // Delete the group and expand Groups that depend on it
-    delete currLegend[name]; // Delete the LegendItem
-    this.props.actions.deleteGroups(this.props.groups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
-  }
-
-  // Deletes the Settings for a Layer
-  deleteLayerSettings = (e) => {
-    var currLegend = this.props.layer_types_settings; // Get the current Settings for the Legend
-    var selectedItem = this.props.selected_legend_item; // Get the currently selected Legend Item
-    for (var i in currLegend) { // Check all Legend Items
-      if (selectedItem === String(i)) { // If is is the searched one
-        delete currLegend[i]; // Remove it
-      }
-    }
-    this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
-  }
-
   // Render the Preferences of the Visualization
   render() {
     if(this.props.preferences_toggle) {
@@ -129,18 +84,7 @@ class Preferences extends React.Component {
             );
           } else {
             return(
-            <div className='preferencesWrapper'>
-              <div>
-                <Typography variant="h6" color="inherit">
-                  Layer
-                </Typography>
-                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-                <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
-              </div>
-              <div>
-                <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
-              </div>
-            </div>
+              <LayerPreferences/>
             );
           }
         case 'legend':
