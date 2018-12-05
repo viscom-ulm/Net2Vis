@@ -30,7 +30,7 @@ class ComplexLegendItem extends React.Component {
       stokeLinejoin: 'round'
     };  
     return(
-      <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, ${-this.props.height/2})`}>
+      <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>
         {current_edges.map((edge, index) =>
           <EdgeComponent edge={edge.points} layer_max_height={this.props.legend_preferences.layer_height.value} horizontal_spacing={this.props.legend_preferences.layers_spacing_horizontal} color={this.props.active ? 'black' : 'lightgrey'} key={index}/>
         )}

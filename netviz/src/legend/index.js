@@ -60,3 +60,12 @@ function getLegendItemGraph(group, legendPreferences) {
   dagre.layout(graph); // Layout the graph to be displayed in a nice fashion
   return graph;
 }
+
+// Get the Input Node to a Graph
+export function getInputNode(nodes) {
+  for (var j in nodes) { // Iterate over all layers in the Group
+    if(nodes[j].layer.properties.input.length === 0) { // Layer has no inputs contained in the Group
+      return j;
+    }
+  }
+}
