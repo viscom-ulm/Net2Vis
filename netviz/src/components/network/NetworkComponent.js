@@ -24,6 +24,8 @@ class Network extends React.Component {
     for (var i in paths) { // For all Paths
       if (paths[i][paths[i].length - 1].id !== layer.layer.id) { // If one did not reach the end Node
         return; // Do not change the selection
+      } else if (!selection.checkMultiInput(paths)) {
+        return;
       }
     }
     var toSelect = selection.reducePaths(paths); // Reduce the Paths to just each layer once

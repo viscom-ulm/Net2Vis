@@ -46,3 +46,27 @@ export function reducePaths(paths) {
   }
   return items;
 }
+
+// Check multi inputs for if all their inputs are contained in the paths
+export function checkMultiInput(paths) {
+  for (var i in paths) { // For all Paths
+    for (var j in paths[i]) { // For all Layers in these Paths
+      if (paths[i][j].properties.input.length > 1) { // If it has more than one Input
+        for (var k in paths[i][j].properties.input) { // For all these Inputs
+          var inPaths = false; // Placeholder for if the input is contained in the paths
+          for (var l in paths) { // For all paths
+            for (var m in paths[l]) { // For all Layers in these Paths
+              if (paths[l][m].id === paths[i][j].properties.input[k]) { // Check if the current Layer ID matches the inspected Input
+                inPaths = true; // Set the Placeholder to true
+              }
+            }
+          }
+          if (!inPaths) { // If the input is not in the paths
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
