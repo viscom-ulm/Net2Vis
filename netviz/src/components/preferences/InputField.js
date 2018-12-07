@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {SketchPicker} from 'react-color';
+import {TwitterPicker} from 'react-color';
 
 import { TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
 
@@ -14,6 +15,11 @@ const InputField = ({value, type, description, action, options}) => {
       </div>
     );
   } else if (type === 'color') {
+    return (
+      <div className='preferenceItem'>
+        <TwitterPicker width={260} triangle={'hide'} onChange={ (e) => action(e) } />
+      </div>
+    );
     return (
       <div className='preferenceItem'>
         <SketchPicker width={260} disableAlpha={true} presetColors={[]} color={ value } onChange={ (e) => action(e) } />
