@@ -3,10 +3,12 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
-import TooltipComponent from './TooltipComponent';
 import * as actions from '../../actions';
+
+import TooltipComponent from './TooltipComponent';
 import EdgeComponent from './EdgeComponent';
 import * as paths from '../../paths';
+import * as colors from '../../colors';
 
 // Layer Component providing individual Layer Visualizations
 class Layer extends React.Component {  
@@ -52,7 +54,7 @@ class Layer extends React.Component {
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
     const current_edges = paths.getOutgoingEdges(this.props.layer, this.props.edges); // Get relevant Edges going out from the current Layer
-    var stroke = "black"; // Set the default stroke color to black
+    var stroke = colors.darkenColor(set.color); // Set the default stroke color to black
     if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
       stroke = "red"; // Set stroke color to red
     }

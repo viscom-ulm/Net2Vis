@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import EdgeComponent from '../network/EdgeComponent';
 
 import * as paths from '../../paths';
+import * as colors from '../../colors';
 
 class ComplexLegendItem extends React.Component {
   render() {
@@ -26,8 +27,8 @@ class ComplexLegendItem extends React.Component {
     const current_edges = paths.getOutgoingEdges(pathableLayer, this.props.edges); // Get relevant Edges going out from the current Layer
     const style = {
       fill: color,
-      stroke: this.props.active ? 'black' : 'lightgrey',
-      stokeLinejoin: 'round'
+      stroke: this.props.active ? colors.darkenColor(color) : 'lightgrey',
+      strokeLinejoin: 'round'
     };  
     return(
       <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>

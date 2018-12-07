@@ -44,3 +44,10 @@ function findOptimalHue(colors) {
   }
   return hue;
 }
+
+// Darken a given color
+export function darkenColor(color) {
+  var color = tinycolor(color);
+  color.darken();
+  return color.toHexString();
+}

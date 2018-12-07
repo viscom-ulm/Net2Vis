@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 import * as legend from '../../legend';
+import * as colors from '../../colors';
 
 import ComplexLegendItem from './ComplexLegendItem';
 
@@ -10,8 +11,8 @@ class LegendItem extends React.Component {
   render() {
     const style = {
       fill: this.props.representation.layer.representer.setting.color,
-      stroke: this.props.representation.layer.active ? 'black' : 'lightgrey',
-      stokeLinejoin: 'round'
+      stroke: this.props.representation.layer.active ? colors.darkenColor(this.props.representation.layer.representer.setting.color) : 'lightgrey',
+      strokeLinejoin: 'round'
     };  
     const textStyle = {
       fill: this.props.representation.layer.active ? 'black' : 'lightgrey'
