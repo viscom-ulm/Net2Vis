@@ -50,6 +50,6 @@ export default {
     },
     color_mode: {
         selection: 'Palette',
-        generation: 'Interpolation'
+        generation: 'Palette'
     }
 }
