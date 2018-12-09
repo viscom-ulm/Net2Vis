@@ -21,7 +21,7 @@ class Code extends React.Component {
 
   // When the Code changes, Update it on the Backend
   handleOnChange = (newValue) => {
-    this.props.actions.updateCode(newValue, this.props.id, this.props.groups);
+    this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation);
   };
 
   // Render the Code into the Code View if Toggled
@@ -57,7 +57,8 @@ Code.propTypes = {
   id: PropTypes.string.isRequired,
   code: PropTypes.string.isRequired,
   error: PropTypes.object.isRequired,
-  groups: PropTypes.array.isRequired
+  groups: PropTypes.array.isRequired,
+  color_mode: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component 
@@ -67,14 +68,16 @@ function mapStateToProps(state, ownProps) {
       id: state.id,
       code: state.code,
       error: state.error,
-      groups: state.groups
+      groups: state.groups,
+      color_mode: state.color_mode
     };
   } else {
     return {
       id: state.id,
       code: '',
       error: state.error,
-      groups: state.groups
+      groups: state.groups,
+      color_mode: state.color_mode
     };
   }
 }

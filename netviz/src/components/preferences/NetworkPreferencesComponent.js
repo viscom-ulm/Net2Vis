@@ -68,7 +68,7 @@ class NetworkPreferences extends React.Component {
       var groups = this.props.groups; // Get the current Groups
       var settings = this.props.layer_types_settings; // Get the current settings
       settings[group.name] = {
-        color: colors.generateNewColor(settings), // Generate a new Color for the group
+        color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
         alias: 'Group' // Initialize the alias
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
@@ -109,7 +109,8 @@ NetworkPreferences.propTypes = {
   groups: PropTypes.array.isRequired,
   network: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
-  selection: PropTypes.array.isRequired
+  selection: PropTypes.array.isRequired,
+  color_mode: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -121,7 +122,8 @@ function mapStateToProps(state, ownProps) {
     groups: state.groups,
     network: state.network,
     compressed_network: state.compressed_network,
-    selection: state.selection
+    selection: state.selection,
+    color_mode: state.color_mode
   };
 }
 

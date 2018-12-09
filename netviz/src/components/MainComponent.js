@@ -15,7 +15,7 @@ class Main extends React.Component {
   componentWillReceiveProps(newProps) {
     const { id } = newProps.match.params;
     this.props.actions.setID(id);
-    this.props.actions.reloadAllState(id);
+    this.props.actions.reloadAllState(id, this.props.color_mode.generation);
   }
 
   componentWillMount() {
@@ -104,6 +104,7 @@ Main.propTypes = {
   legend_toggle: PropTypes.bool,
   code_toggle: PropTypes.bool.isRequired,
   preferences_toggle: PropTypes.bool.isRequired,
+  color_mode: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, ownProps) {
@@ -111,6 +112,7 @@ function mapStateToProps(state, ownProps) {
     legend_toggle: state.display.legend_toggle,
     code_toggle: state.display.code_toggle,
     preferences_toggle: state.display.preferences_toggle,
+    color_mode: state.color_mode
   };
 }
 

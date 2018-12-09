@@ -52,15 +52,15 @@ export function addSettingForLayerType(setting, name) {
 }
 
 // Loading LayerTypes was Successful
-export function loadLayerTypesSuccess(layerTypes, network) {
-  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network};
+export function loadLayerTypesSuccess(layerTypes, network, generationMode) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};
 }
 
 // Called to load the LayerTypes
-export function loadLayerTypes(id) {
+export function loadLayerTypes(id, generationMode) {
   return function(dispatch) {
     return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), generationMode));
     }).catch(error => {
       throw(error);
     });
@@ -197,14 +197,14 @@ export function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id, groups) {
+export function updateCode(code, id, groups, generationMode) {
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
         networkLoaded(network, groups, dispatch);      
         return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
+          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
         });
       }).catch(error => {
         throw(error);
@@ -246,7 +246,7 @@ export function setSelectedLegendItem(name) {
 }
 
 // Check that all components are reloaded from the Server in the correct order.
-export function reloadAllState(id) {
+export function reloadAllState(id, generationMode) {
   return function(dispatch) {
     return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
@@ -257,7 +257,7 @@ export function reloadAllState(id) {
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data));
+              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
               return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
                 dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
               });
@@ -353,4 +353,14 @@ export function updateLegendPreferences(preferences, id) {
       console.warn('Preferences invalid: ' + error);
     });
   }
+}
+
+// Set the color mode for the selection
+export function setColorSelectionMode(mode) {
+  return {type: types.SET_SELECTION_COLOR_MODE, mode};
+}
+
+// Set the color mode for the Generation
+export function setColorGenerationMode(mode) {
+  return {type: types.SET_GENERATION_COLOR_MODE, mode};
 }
