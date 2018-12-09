@@ -79,7 +79,13 @@ class NetworkPreferences extends React.Component {
     }
   }
 
+  // Color generation mode Changes
+  handleColorModeChange = (e) => {
+    this.props.actions.setColorGenerationMode(e.target.value);
+  }
+
   render() {
+    var options = ['Interpolation', 'Palette']
     return(
       <div className='preferencesWrapper'>
         <div>
@@ -91,6 +97,7 @@ class NetworkPreferences extends React.Component {
           <Features/>
           <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
           <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+          <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>

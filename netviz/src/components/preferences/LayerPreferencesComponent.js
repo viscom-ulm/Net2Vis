@@ -37,7 +37,13 @@ class LayerPreferences extends React.Component {
     this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
+  // Color selection mode Changes
+  handleColorModeChange = (e) => {
+    this.props.actions.setColorSelectionMode(e.target.value);
+  }
+
   render() {
+    var options = ['Palette', 'Picker']
     return(
       <div className='preferencesWrapper'>
         <div>
@@ -45,7 +51,8 @@ class LayerPreferences extends React.Component {
             Layer
           </Typography>
           <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-          <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} action={this.handleColorChange}/>
+          <InputField value={this.props.color_mode.selection} type={'select'} description={'Layer Color'} options={options} action={this.handleColorModeChange}/>
+          <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
         </div>
         <div>
           <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
@@ -61,6 +68,7 @@ LayerPreferences.propTypes = {
   selected_legend_item: PropTypes.string.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   network: PropTypes.object.isRequired,
+  color_mode: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -70,6 +78,7 @@ function mapStateToProps(state, ownProps) {
     selected_legend_item: state.selected_legend_item,
     layer_types_settings: state.layer_types_settings,
     network: state.network,
+    color_mode: state.color_mode
   };
 }
 
