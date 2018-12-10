@@ -7,6 +7,7 @@ import * as actions from '../../actions';
 
 import TooltipComponent from './TooltipComponent';
 import EdgeComponent from './EdgeComponent';
+import FeaturesLabelComponent from './FeaturesLabelComponent';
 import * as paths from '../../paths';
 import * as colors from '../../colors';
 
@@ -67,6 +68,10 @@ class Layer extends React.Component {
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
           <path d={pathData} style={{fill:set.color, stroke: stroke, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
           <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
+          {
+            this.props.preferences.show_features.value &&
+            <FeaturesLabelComponent features={dimensions.out[dimensions.out.length-1]} x={this.props.layer.width / 2.0} layer_height={layer_height} extreme_dimensions={extreme_dimensions} layer={this.props.layer} edges={this.props.edges}/>
+          }
         </g>
       </g>
     );
