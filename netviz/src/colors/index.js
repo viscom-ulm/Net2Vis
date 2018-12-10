@@ -1,7 +1,29 @@
 import * as tinycolor from 'tinycolor2';
 
+// Get the used color Palette
+export function getColorPalette() {
+  var palette = ['#2196F3', '#8BC34A', '#F44336', '#795548', '#FFEB3B', '#9C27B0', '#9E9E9E', '#009688', '#FF9800', '#3F51B5', '#4CAF50', '#03A9F4', '#E91E63', '#00BCD4', '#FFC107', '#673AB7', '#607D8B'];
+  return palette;
+}
+
+// Generate a new Color based on the currently set mode
+export function generateNewColor(layerTypes, mode) {
+  if (mode === 'Palette') {
+    return generatePaletteColor(layerTypes);
+  } else if (mode === 'Interpolation') {
+    return generateInterpolatedColor(layerTypes);
+  }
+}
+
+// Generate a new color using the color palette
+function generatePaletteColor(layerTypes) {
+  var palette = getColorPalette();
+  var index = Object.keys(layerTypes).length % palette.length;
+  return palette[index];
+}
+
 // Generate a new color that is different to all existing ones
-export function generateNewColor(layerTypes) {
+function generateInterpolatedColor(layerTypes) {
   var saturation = 0.8; // Fixed Saturation Value
   var value = 0.7; // Fixed color Value
   var colors = []; // Placeholder for colors that are already present
@@ -47,7 +69,7 @@ function findOptimalHue(colors) {
 
 // Darken a given color
 export function darkenColor(color) {
-  var color = tinycolor(color);
-  color.darken();
-  return color.toHexString();
+  var darkenedColor = tinycolor(color); // Get the color to be darkened
+  darkenedColor.darken(); // Darken the color
+  return darkenedColor.toHexString(); // Return it as Hex
 }

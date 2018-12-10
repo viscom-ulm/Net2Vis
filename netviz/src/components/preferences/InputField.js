@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {SketchPicker} from 'react-color';
+import {SketchPicker, TwitterPicker} from 'react-color';
 
-import { TextField, Button, FormControlLabel, Switch } from '@material-ui/core';
+import * as colors from '../../colors'
+
+import { TextField, Button, FormControlLabel, FormControl, Switch, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const InputField = ({value, type, description, action, options}) => {
@@ -14,11 +16,20 @@ const InputField = ({value, type, description, action, options}) => {
       </div>
     );
   } else if (type === 'color') {
-    return (
-      <div className='preferenceItem'>
-        <SketchPicker width={260} disableAlpha={true} presetColors={[]} color={ value } onChange={ (e) => action(e) } />
-      </div>
-    );
+    if (options === 'Palette') {
+      var palette = colors.getColorPalette();
+      return (
+        <div className='preferenceItem'>
+          <TwitterPicker width={280} triangle={'hide'} colors={palette} color={ value } onChange={ (e) => action(e) } />
+        </div>
+      );
+    } else if (options === 'Picker'){
+      return (
+        <div className='preferenceItem'>
+          <SketchPicker width={260} disableAlpha={true} presetColors={[]} color={ value } onChange={ (e) => action(e) } />
+        </div>
+      );
+    }
   } else if (type === 'text') {
     return (
       <div className='preferenceItem'>
@@ -45,6 +56,21 @@ const InputField = ({value, type, description, action, options}) => {
           }
           label={description}
         />
+      </div>
+    );
+  } else if (type === 'select') {
+    return (
+      <div className='preferenceItem'>
+        <FormControl className='inputElement'>
+          <InputLabel shrink>
+            {description}
+          </InputLabel>
+          <Select onChange={(e) => action(e)} value={value}>
+            {options.map((option, index) =>
+              <MenuItem value={option} key={index}>{option}</MenuItem>
+            )}
+          </Select>
+        </FormControl>
       </div>
     );
   }
