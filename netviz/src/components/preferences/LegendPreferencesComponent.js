@@ -9,6 +9,13 @@ import Typography from '@material-ui/core/Typography';
 
 import InputField from './InputField'
 
+import * as grouping from '../../groups/Grouping';
+import * as duplicates from '../../groups/Duplicates';
+import * as auto from '../../groups/Automation';
+import * as colors from '../../colors';
+import * as addition from '../../groups/Addition';
+import * as sort from '../../groups/Sort';
+
 // Component for displaying the Preferences of the Visualization
 class LegendPreferences extends React.Component {
   // Called when the spacing of the legend elements changes
@@ -53,6 +60,38 @@ class LegendPreferences extends React.Component {
     this.props.actions.updateLegendPreferences(preferences, this.props.id);
   }
 
+  // Group some Layers together
+  groupLayers = () => {
+    this.addGroup(this.props.selection); // Add a new Group based on the current Layer Selection
+  }
+
+  // Automatically Group Layers that are very common in this order
+  autoGroupLayers = () => {
+    var repetition = auto.getMostCommonRepetition(this.props.compressed_network); // Get the most common repetition
+    if (repetition !== undefined) { // If a Repetition could be found
+      this.addGroup(repetition.ids[0]); // Add a Group based on the repetition
+    } else {
+      console.warn('No repetition of at least two layers could be found.');
+    }
+  }
+
+  addGroup = (ids) => {
+    var group = grouping.groupLayers(this.props.compressed_network, ids); // Group the Layers based on given IDs
+    if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
+      var groups = this.props.groups; // Get the current Groups
+      var settings = this.props.layer_types_settings; // Get the current settings
+      settings[group.name] = {
+        color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
+        alias: 'Group' // Initialize the alias
+      }
+      addition.addGroup(groups, group); // Add the new Group to the existing ones
+      sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
+      this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
+    } else {
+      console.warn('Either a duplicate or no grouping possible.');
+    }
+  }
+
   render() {
     return(
       <div className='preferencesWrapper'>
@@ -67,6 +106,10 @@ class LegendPreferences extends React.Component {
           <InputField value={this.props.legend_preferences.layers_spacing_vertical.value} type={this.props.legend_preferences.layers_spacing_vertical.type} description={this.props.legend_preferences.layers_spacing_vertical.description} action={this.handleLegendLayersSpacingVerticalChange}/>
           <InputField value={this.props.legend_preferences.complex_spacing.value} type={this.props.legend_preferences.complex_spacing.type} description={this.props.legend_preferences.complex_spacing.description} action={this.handleLegendComplexSpacingChange}/>
         </div>
+        <div>
+          <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
+          <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
+        </div>
       </div>
     );
   }
@@ -76,6 +119,12 @@ class LegendPreferences extends React.Component {
 LegendPreferences.propTypes = {
   id: PropTypes.string.isRequired,
   legend_preferences: PropTypes.object.isRequired,
+  layer_types_settings: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired,
+  network: PropTypes.object.isRequired,
+  compressed_network: PropTypes.object.isRequired,
+  selection: PropTypes.array.isRequired,
+  color_mode: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -83,6 +132,12 @@ function mapStateToProps(state, ownProps) {
   return {
     id: state.id,
     legend_preferences: state.legend_preferences,
+    layer_types_settings: state.layer_types_settings,
+    groups: state.groups,
+    network: state.network,
+    compressed_network: state.compressed_network,
+    selection: state.selection,
+    color_mode: state.color_mode
   };
 }
 

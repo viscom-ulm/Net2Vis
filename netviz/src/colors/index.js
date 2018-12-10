@@ -5,6 +5,7 @@ export function getColorPalette() {
   var palette = ['#2196F3', '#8BC34A', '#F44336', '#795548', '#FFEB3B', '#9C27B0', '#9E9E9E', '#009688', '#FF9800', '#3F51B5', '#4CAF50', '#03A9F4', '#E91E63', '#00BCD4', '#FFC107', '#673AB7', '#607D8B'];
   return palette;
 }
+
 // Generate a new Color based on the currently set mode
 export function generateNewColor(layerTypes, mode) {
   if (mode === 'Palette') {
