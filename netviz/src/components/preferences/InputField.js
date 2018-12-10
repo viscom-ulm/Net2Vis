@@ -70,7 +70,7 @@ const InputField = ({value, type, description, action, options}) => {
               <MenuItem value={option} key={index}>{option}</MenuItem>
             )}
           </Select>
-          </FormControl>
+        </FormControl>
       </div>
     );
   }
