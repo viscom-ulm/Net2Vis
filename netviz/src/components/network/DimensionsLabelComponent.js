@@ -10,18 +10,18 @@ const DimensionsLabelComponent = ({dimensions, x, edge, layer_max_height}) => {
       y_pos = edge.points[j].y; // Update the y_pos point Placeholder
     }
   }
-  var dimTxts = [];
-  for (var i = 0; i < dimensions.length - 1; i++) {
-    dimTxts.push(dimensions[i]);
+  var dimTxts = []; // Initialize the dimensions Texts
+  for (var i = 0; i < dimensions.length - 1; i++) { // For all dimensions except the last
+    dimTxts.push(dimensions[i]); // Add it to the texts
   }
-  var same = true;
-  for (var k = 0; k < dimTxts.length - 1; k++) {
-    if (dimTxts[j] !== dimTxts[j + 1]) {
-      same = false;
+  var same = true; // Sameness placeholder for the dimensions
+  for (var k = 0; k < dimTxts.length - 1; k++) { // For all dimensions
+    if (dimTxts[k] !== dimTxts[k + 1]) { // If they differ
+      same = false; // Not same
     }
   }
-  if (same) {
-    dimTxts.length = 1;
+  if (same) { // If all dimensions are the same
+    dimTxts.length = 1; // Reduce the texts to just one text
   }
   return (
     <g>
