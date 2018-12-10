@@ -47,7 +47,7 @@ function findOptimalHue(colors) {
 
 // Darken a given color
 export function darkenColor(color) {
-  var color = tinycolor(color);
-  color.darken();
-  return color.toHexString();
+  var darkenedColor = tinycolor(color); // Get the color to be darkened
+  darkenedColor.darken(); // Darken the color
+  return darkenedColor.toHexString(); // Return it as Hex
 }
