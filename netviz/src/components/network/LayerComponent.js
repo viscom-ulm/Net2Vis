@@ -8,6 +8,8 @@ import * as actions from '../../actions';
 import TooltipComponent from './TooltipComponent';
 import EdgeComponent from './EdgeComponent';
 import FeaturesLabelComponent from './FeaturesLabelComponent';
+import DimensionsLabelComponent from './DimensionsLabelComponent';
+
 import * as paths from '../../paths';
 import * as colors from '../../colors';
 
@@ -63,7 +65,13 @@ class Layer extends React.Component {
     return (
       <g>
         {current_edges.map((edge, index) =>
-          <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} color={'black'} key={index}/>
+          <g key={index}>
+            <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} color={'black'}/>
+            {
+              this.props.preferences.show_dimensions.value &&
+              <DimensionsLabelComponent dimensions={dimensions.out} x={this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value / 2.0)} edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value}/>
+            }
+          </g>
         )}
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
           <path d={pathData} style={{fill:set.color, stroke: stroke, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
