@@ -47,5 +47,9 @@ export default {
         layers_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
         complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'}
+    },
+    color_mode: {
+        selection: 'Palette',
+        generation: 'Palette'
     }
 }

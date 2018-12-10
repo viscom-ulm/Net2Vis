@@ -19,7 +19,7 @@ export default function layerTypesSettignsReducer(state = initialState.layer_typ
       for (var i in action.network.layers) { // For all layers
         if (lTypes[action.network.layers[i].name] === undefined) { // If the layer is not yet in layertypes
           lTypes[action.network.layers[i].name] = { // Add the layer type
-            color: colors.generateNewColor(lTypes), // Set the color
+            color: colors.generateNewColor(lTypes, action.generationMode), // Set the color
             alias:  action.network.layers[i].name // Set the name
           }
         }

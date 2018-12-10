@@ -68,7 +68,7 @@ class NetworkPreferences extends React.Component {
       var groups = this.props.groups; // Get the current Groups
       var settings = this.props.layer_types_settings; // Get the current settings
       settings[group.name] = {
-        color: colors.generateNewColor(settings), // Generate a new Color for the group
+        color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
         alias: 'Group' // Initialize the alias
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
@@ -79,7 +79,13 @@ class NetworkPreferences extends React.Component {
     }
   }
 
+  // Color generation mode Changes
+  handleColorModeChange = (e) => {
+    this.props.actions.setColorGenerationMode(e.target.value);
+  }
+
   render() {
+    var options = ['Interpolation', 'Palette']
     return(
       <div className='preferencesWrapper'>
         <div>
@@ -91,6 +97,7 @@ class NetworkPreferences extends React.Component {
           <Features/>
           <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
           <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
+          <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
@@ -109,7 +116,8 @@ NetworkPreferences.propTypes = {
   groups: PropTypes.array.isRequired,
   network: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
-  selection: PropTypes.array.isRequired
+  selection: PropTypes.array.isRequired,
+  color_mode: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -121,7 +129,8 @@ function mapStateToProps(state, ownProps) {
     groups: state.groups,
     network: state.network,
     compressed_network: state.compressed_network,
-    selection: state.selection
+    selection: state.selection,
+    color_mode: state.color_mode
   };
 }
 

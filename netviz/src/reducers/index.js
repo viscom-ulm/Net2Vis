@@ -16,6 +16,7 @@ import selected_legend_item from './SelectedLegendItemReducer';
 import groups from './GroupsReducer';
 import compressed_network from './CompressionReducer';
 import legend_preferences from './LegendPreferencesReducer';
+import color_mode from './ColorModeReducer';
 
 // Combine all Reducers
 export default combineReducers({
@@ -34,5 +35,6 @@ export default combineReducers({
     selected_legend_item,
     groups,
     compressed_network,
-    legend_preferences
+    legend_preferences,
+    color_mode
 })
