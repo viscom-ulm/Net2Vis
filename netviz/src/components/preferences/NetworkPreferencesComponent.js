@@ -62,6 +62,7 @@ class NetworkPreferences extends React.Component {
     }
   }
 
+  // Add a Group to the State
   addGroup = (ids) => {
     var group = grouping.groupLayers(this.props.compressed_network, ids); // Group the Layers based on given IDs
     if (group !== undefined && (!duplicates.groupDoesExist(group, this.props.groups))) { // Check if the group could be made and does not already exist
@@ -77,6 +78,20 @@ class NetworkPreferences extends React.Component {
     } else {
       console.warn('Either a duplicate or no grouping possible.');
     }
+  }
+
+  // Toggle the display state of the Dimensions Labels
+  toggleDimensionsLabel = (e) => {
+    var preferences = this.props.preferences;
+    preferences.show_dimensions.value = !preferences.show_dimensions.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  }
+
+  // Toggle the display state of the Features Labels
+  toggleFeaturesLabel = (e) => {
+    var preferences = this.props.preferences;
+    preferences.show_features.value = !preferences.show_features.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
   // Color generation mode Changes
@@ -98,6 +113,8 @@ class NetworkPreferences extends React.Component {
           <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
           <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
           <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
+          <InputField value={this.props.preferences.show_dimensions.value} type={this.props.preferences.show_dimensions.type} description={this.props.preferences.show_dimensions.description} action={this.toggleDimensionsLabel}/>
+          <InputField value={this.props.preferences.show_features.value} type={this.props.preferences.show_features.type} description={this.props.preferences.show_features.description} action={this.toggleFeaturesLabel}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
