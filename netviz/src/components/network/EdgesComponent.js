@@ -22,7 +22,7 @@ class Edges extends React.Component {
     if (this.props.layer.layer.properties.input.length === 0) { // If no inputs
       additionalLabelInput = {
         dimensions: dimensions.in, // Dimensions for this label are the input dimensions of the layer
-        x: (2.0 * this.props.layer.x) - dimensionsLabelX, // X position of the label to be left of layer
+        x: (2.0 * this.props.layer.x) - dimensionsLabelX - (this.props.preferences.stroke_width.value), // X position of the label to be left of layer
         edge: { // Edge position is layer y
           points: [{y: this.props.layer.y}]
         }
