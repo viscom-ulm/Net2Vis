@@ -31,6 +31,7 @@ class Main extends React.Component {
     }
     document.addEventListener('mousemove', this.handleMouseMove);
     this.props.actions.setPreferenceMode('network');
+    this.props.actions.setSelectedLegendItem('');
     if(!e.shiftKey) {
       this.props.actions.deselectLayers();
     } 
