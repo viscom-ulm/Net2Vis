@@ -12,9 +12,10 @@ import InputField from './InputField'
 import * as grouping from '../../groups/Grouping';
 import * as duplicates from '../../groups/Duplicates';
 import * as auto from '../../groups/Automation';
-import * as colors from '../../colors';
+import * as removal from '../../groups/Removal';
 import * as addition from '../../groups/Addition';
 import * as sort from '../../groups/Sort';
+import * as colors from '../../colors';
 
 // Component for displaying the Preferences of the Visualization
 class LegendPreferences extends React.Component {
@@ -92,6 +93,15 @@ class LegendPreferences extends React.Component {
     }
   }
 
+  // Automaticalle remove the most complex Group
+  autoUngroupLayers = () => {
+    var currLegend = this.props.layer_types_settings; // Current most complex Group
+    var name = this.props.groups[this.props.groups.length - 1].name; // Get the name of the currently selected Item
+    removal.deleteGroup(name, this.props.groups); // Delete the group and expand Groups that depend on it
+    delete currLegend[name]; // Delete the LegendItem
+    this.props.actions.deleteGroups(this.props.groups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
+  }
+
   render() {
     return(
       <div className='preferencesWrapper'>
@@ -109,6 +119,7 @@ class LegendPreferences extends React.Component {
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
           <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
+          <InputField value={'AutoUngroup'} type={'button'} description={'Automatically Remove Group'} action={this.autoUngroupLayers} options={'secondary'}/>
         </div>
       </div>
     );
