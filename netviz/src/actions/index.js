@@ -364,3 +364,8 @@ export function setColorSelectionMode(mode) {
 export function setColorGenerationMode(mode) {
   return {type: types.SET_GENERATION_COLOR_MODE, mode};
 }
+
+// Set the Network Bbox
+export function setNetworkBbox(bbox) {
+  return {type: types.SET_NETWORK_BBOX, bbox};
+}

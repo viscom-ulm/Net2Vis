@@ -55,5 +55,6 @@ export default {
     color_mode: {
         selection: 'Palette',
         generation: 'Palette'
-    }
+    },
+    network_bbox: {},
 }

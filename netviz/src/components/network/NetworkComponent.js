@@ -49,12 +49,10 @@ class Network extends React.Component {
     const group_t = this.props.group_transform;
     const layer_types_settings = this.props.layer_types_settings;
     var networkElement = document.getElementById('networkComponent'); // Get the main SVG Element
-    var mainGroup = document.getElementById('main_group'); // Get the main group of the SVG Element
     var centerTransformation = {x: 0, y: 0} // Transformation to center the Graph initially
-    if(networkElement !== null && mainGroup !== null) { // If the elements exist already
-      var bbox = mainGroup.getBBox();
-      centerTransformation.x = (networkElement.getBoundingClientRect().width / 2.0) - (bbox.width / 2.0) - bbox.x; // Transformation to center the graph in x direction
-      centerTransformation.y = (networkElement.getBoundingClientRect().height / 2.0) - (bbox.height / 2.0) - bbox.y; // Transformation to center the graph in y direction
+    if(this.props.network_bbox.x !== undefined) { // If the elements exist already
+      centerTransformation.x = (networkElement.getBoundingClientRect().width / 2.0) - (this.props.network_bbox.width * group_t.scale / 2.0) - (this.props.network_bbox.x * group_t.scale); // Transformation to center the graph in x direction
+      centerTransformation.y = (networkElement.getBoundingClientRect().height / 2.0) - (this.props.network_bbox.height * group_t.scale / 2.0) - (this.props.network_bbox.y * group_t.scale); // Transformation to center the graph in y direction
     }
     const transform = `translate(${(group_t.x + centerTransformation.x)}, ${(group_t.y + centerTransformation.y)}) scale(${group_t.scale})`; // Manipulate the position of the graph
     return(
@@ -68,6 +66,31 @@ class Network extends React.Component {
       </g>
     );
   }
+
+  // After the component was rendered, check if the BBox stayed the same
+  componentDidUpdate() {
+    const currentBBox = document.getElementById('main_group').getBBox(); // Get the main group of the SVG Element
+    var changed = false; // Changed placeholder
+    if (this.props.network_bbox.x !== currentBBox.x) { // X changed
+      changed = true;
+      this.props.network_bbox.x = currentBBox.x;
+    }
+    if (this.props.network_bbox.y !== currentBBox.y) { // Y Changed
+      changed = true;
+      this.props.network_bbox.y = currentBBox.y;
+    }
+    if (this.props.network_bbox.width !== currentBBox.width) { // Width Changed
+      changed = true;
+      this.props.network_bbox.width = currentBBox.width;
+    }
+    if (this.props.network_bbox.height !== currentBBox.height) { // Height changed
+      changed = true;
+      this.props.network_bbox.height = currentBBox.height;
+    }
+    if(changed) { // Anything changed
+      this.props.actions.setNetworkBbox(currentBBox); // Push the new Bbox to the state
+    }
+  }
 }
 
 // PropTypes of the Network, containing all Layer, the Transformation of the Main Group and Settings for the Layer Types 
@@ -78,7 +101,8 @@ Network.propTypes = {
   preferences: PropTypes.object.isRequired,
   layer_extreme_dimensions: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
-  color_mode: PropTypes.object.isRequired
+  color_mode: PropTypes.object.isRequired,
+  network_bbox: PropTypes.object.isRequired
 };
 
 // Map the State of the Application to the Props of this Class
@@ -90,7 +114,8 @@ function mapStateToProps(state, ownProps) {
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     compressed_network: state.compressed_network,
-    color_mode: state.color_mode
+    color_mode: state.color_mode,
+    network_bbox: state.network_bbox
   };
 }
 
