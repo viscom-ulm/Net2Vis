@@ -102,7 +102,7 @@ class Layer extends React.Component {
           <DimensionsLabelComponent dimensions={additionalLabelOutput.dimensions} x={additionalLabelOutput.x} edge={additionalLabelOutput.edge} layer_max_height={this.props.preferences.layer_display_max_height.value}/>
         }
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
-          <path d={pathData} style={{fill:set.color, stroke: stroke, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
+        <path d={pathData} style={{fill:set.color, stroke: stroke, strokeWidth: this.props.preferences.stroke_width.value, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
           <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
           {
             this.props.preferences.show_features.value &&
