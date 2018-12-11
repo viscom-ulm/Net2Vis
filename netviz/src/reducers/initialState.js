@@ -57,4 +57,5 @@ export default {
         generation: 'Palette'
     },
     network_bbox: {},
+    legend_bbox: {}
 }

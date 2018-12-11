@@ -18,6 +18,7 @@ import compressed_network from './CompressionReducer';
 import legend_preferences from './LegendPreferencesReducer';
 import color_mode from './ColorModeReducer';
 import network_bbox from './NetworkBboxReducer';
+import legend_bbox from './LegendBboxReducer';
 
 // Combine all Reducers
 export default combineReducers({
@@ -39,4 +40,5 @@ export default combineReducers({
     legend_preferences,
     color_mode,
     network_bbox,
+    legend_bbox
 })

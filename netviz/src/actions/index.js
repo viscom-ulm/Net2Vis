@@ -369,3 +369,8 @@ export function setColorGenerationMode(mode) {
 export function setNetworkBbox(bbox) {
   return {type: types.SET_NETWORK_BBOX, bbox};
 }
+
+// Set the Legend Bbox
+export function setLegendBbox(bbox) {
+  return {type: types.SET_LEGEND_BBOX, bbox};
+}

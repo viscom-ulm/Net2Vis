@@ -50,12 +50,10 @@ class Legend extends React.Component {
   render() {
     const group_t = this.props.legend_transform;
     const legendElement = document.getElementById('legendComponent'); // Get the main SVG Element
-    var mainGroup = document.getElementById('legend_group'); // Get the main group of the SVG Element
     var centerTransformation = {x: 0, y: 0} // Transformation to center the Graph initially
-    if(legendElement !== null && mainGroup !== null) { // If the elements exist already
-      var bbox = mainGroup.getBBox();
-      centerTransformation.x = (legendElement.getBoundingClientRect().width / 2.0) - (bbox.width / 2.0) - bbox.x; // Transformation to center the graph in x direction
-      centerTransformation.y = (legendElement.getBoundingClientRect().height / 2.0) - (bbox.height / 2.0) - bbox.y; // Transformation to center the graph in y direction
+    if(this.props.legend_bbox.x !== undefined) { // If the elements exist already
+      centerTransformation.x = (legendElement.getBoundingClientRect().width / 2.0) - (this.props.legend_bbox.width * group_t.scale / 2.0) - (this.props.legend_bbox.x * group_t.scale); // Transformation to center the graph in x direction
+      centerTransformation.y = (legendElement.getBoundingClientRect().height / 2.0) - (this.props.legend_bbox.height * group_t.scale / 2.0) - (this.props.legend_bbox.y * group_t.scale); // Transformation to center the graph in y direction
     }
     const legend_transform = `translate(${(group_t.x + centerTransformation.x)}, ${(group_t.y + centerTransformation.y)}) scale(${group_t.scale})`; // Manipulate the position of the graph
     const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences); // Generate a representation of the legendItem to be rendered
@@ -69,6 +67,31 @@ class Legend extends React.Component {
       </svg>
     );
   }
+
+  // After the component was rendered, check if the BBox stayed the same
+  componentDidUpdate() {
+    const currentBBox = document.getElementById('legend_group').getBBox(); // Get the main group of the SVG Element
+    var changed = false; // Changed placeholder
+    if (this.props.legend_bbox.x !== currentBBox.x) { // X changed
+      changed = true;
+      this.props.legend_bbox.x = currentBBox.x;
+    }
+    if (this.props.legend_bbox.y !== currentBBox.y) { // Y Changed
+      changed = true;
+      this.props.legend_bbox.y = currentBBox.y;
+    }
+    if (this.props.legend_bbox.width !== currentBBox.width) { // Width Changed
+      changed = true;
+      this.props.legend_bbox.width = currentBBox.width;
+    }
+    if (this.props.legend_bbox.height !== currentBBox.height) { // Height changed
+      changed = true;
+      this.props.legend_bbox.height = currentBBox.height;
+    }
+    if(changed) { // Anything changed
+      this.props.actions.setLegendBbox(currentBBox); // Push the new Bbox to the state
+    }
+  }
 }
 
 Legend.propTypes = {
@@ -76,7 +99,8 @@ Legend.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
   legend_preferences: PropTypes.object.isRequired,
-  selected_legend_item: PropTypes.string.isRequired
+  selected_legend_item: PropTypes.string.isRequired,
+  legend_bbox: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -85,7 +109,8 @@ function mapStateToProps(state, ownProps) {
     layer_types_settings: state.layer_types_settings,
     groups: state.groups,
     legend_preferences: state.legend_preferences,
-    selected_legend_item: state.selected_legend_item
+    selected_legend_item: state.selected_legend_item,
+    legend_bbox: state.legend_bbox
   };
 }
 
