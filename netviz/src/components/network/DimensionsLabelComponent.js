@@ -10,24 +10,14 @@ const DimensionsLabelComponent = ({dimensions, x, edge, layer_max_height}) => {
       y_pos = edge.points[j].y; // Update the y_pos point Placeholder
     }
   }
-  var dimTxts = []; // Initialize the dimensions Texts
-  for (var i = 0; i < dimensions.length - 1; i++) { // For all dimensions except the last
-    dimTxts.push(dimensions[i]); // Add it to the texts
+  var dimTxt = dimensions[0]; // Initialize the dimensions Texts
+  for (var i = 1; i < dimensions.length - 1; i++) { // For all dimensions except the last
+    dimTxt = dimTxt + 'x' + dimensions[i]; // Add it to the texts
   }
-  var same = true; // Sameness placeholder for the dimensions
-  for (var k = 0; k < dimTxts.length - 1; k++) { // For all dimensions
-    if (dimTxts[k] !== dimTxts[k + 1]) { // If they differ
-      same = false; // Not same
-    }
-  }
-  if (same) { // If all dimensions are the same
-    dimTxts.length = 1; // Reduce the texts to just one text
-  }
+  const transform = `translate(${x}, ${5+y_pos+(layer_max_height/2.0)})`; // Manipulate the position of the graph
   return (
-    <g>
-      {dimTxts.map((dimTxt, index) =>
-        <text textAnchor='middle' dominantBaseline='hanging' x={x} y={y_pos+(layer_max_height/2)+(index*16)} key={index}>{dimTxt}</text>
-      )}
+    <g transform={transform}>
+      <text textAnchor='start' dominantBaseline='middle' transform={`rotate(90)`}>{dimTxt}</text>
     </g>
   );
 };
