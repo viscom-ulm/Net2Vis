@@ -38,7 +38,8 @@ class Legend extends React.Component {
 
   // Scroll Listener, handling SVG zoom Actions
   handleScroll = (e) => {
-    this.props.actions.zoomLegend(e.deltaY);
+    const delta = e.deltaY / Math.abs(e.deltaY);
+    this.props.actions.zoomLegend(delta);
   }
 
   // When a layer is clicked, change its selection state
