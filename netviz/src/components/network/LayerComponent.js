@@ -34,13 +34,21 @@ class Layer extends React.Component {
 
   // Calculate the height values of the layer (begin and end) based on the spatial resolution
   calculateLayerHeight = (extreme_dimensions, dimensions) => {
-    var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the heights to max-values for 1D-Layers
-    if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer only if multidimensional Tensor
+    var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the height placeholder
+    if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer for a multidimensional Tensor
       const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of all Layers
       const lay_diff = extreme_layer.max_size - extreme_layer.min_size; // Get the difference between Max and Min for the Extremes of the Layer
       const dim_diff = extreme_dimensions.max_size - extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
       const perc = [(dimensions.in[0] - extreme_layer.min_size) / lay_diff, (dimensions.out[0] - extreme_layer.min_size) / lay_diff]; // Calculate the linear interpolation factor for boths sides of the Glyph 
       height = [perc[0] * dim_diff + extreme_dimensions.min_size, perc[1] * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph through interpolation
+    } else { // Not a convolutional Layer
+      const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of all Dense Layers
+      const lay_diff = extreme_layer.max_dense - extreme_layer.min_dense; // Get the difference between Max and Min for the Extremes of the Layer
+      const dim_diff = extreme_dimensions.max_size - extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
+      var perc = (dimensions.out - extreme_layer.min_dense) / lay_diff; // Calculate the linear interpolation factor for boths sides of the Glyph 
+      if (perc < 1.0) { // If this is not the flatten layer
+        height = [perc * dim_diff + extreme_dimensions.min_size, perc * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph through interpolation
+      }
     }
     return height;
   }
@@ -60,6 +68,7 @@ class Layer extends React.Component {
     if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
       stroke = "red"; // Set stroke color to red
     }
+    const features = Array.isArray(dimensions.out) ? dimensions.out[dimensions.out.length-1] : dimensions.out;
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
@@ -67,7 +76,7 @@ class Layer extends React.Component {
         <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
         {
           this.props.preferences.show_features.value &&
-          <FeaturesLabelComponent features={dimensions.out[dimensions.out.length-1]} x={this.props.layer.width / 2.0} layer_height={layer_height} extreme_dimensions={extreme_dimensions} layer={this.props.layer} edges={this.props.edges}/>
+          <FeaturesLabelComponent features={features} x={this.props.layer.width / 2.0} layer_height={layer_height} extreme_dimensions={extreme_dimensions} layer={this.props.layer} edges={this.props.edges}/>
         }
       </g>
     );
