@@ -17,15 +17,17 @@ class Layer extends React.Component {
   handleLayerClicked = (e) => {
     if (this.props.selection.includes(this.props.layer.layer.id)) { // If selected
       this.props.actions.deselectLayer(this.props.layer.layer.id); // Deselect
+      this.props.actions.setSelectedLegendItem('');
+      this.props.actions.setPreferenceMode('network');
     } else { // If not selected
-      if (e.shiftKey) {
-        if (this.props.selection.length === 0) { // If no Layer was selected
-          this.props.actions.selectLayer(this.props.layer.layer.id); // Select the Layer
-        } else { // A Layer has already been selected
-          this.props.complexAction(this.props.layer, this.props.selection); // A complex selection is to be made
-        }
+      if (e.shiftKey && this.props.selection.length !== 0) {
+        this.props.complexAction(this.props.layer, this.props.selection); // A complex selection is to be made
+        this.props.actions.setSelectedLegendItem('');
+        this.props.actions.setPreferenceMode('network');
       } else {
         this.props.actions.selectLayer(this.props.layer.layer.id); // Select
+        this.props.actions.setSelectedLegendItem(this.props.layer.layer.name);
+        this.props.actions.setPreferenceMode('color');
       }
     }
   };

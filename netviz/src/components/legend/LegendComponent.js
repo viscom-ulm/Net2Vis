@@ -16,6 +16,7 @@ class Legend extends React.Component {
     }
     document.addEventListener('mousemove', this.handleMouseMove);
     this.props.actions.setPreferenceMode('legend');
+    this.props.actions.setSelectedLegendItem('');
   };
   
   // MouseUp Listener for SVG, ending the drag option by removing the MouseMove Listener
@@ -62,7 +63,7 @@ class Legend extends React.Component {
       <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='legendComponent'>
         <g id='legend_group' transform={legend_transform}>
           {legend_representation.map(representation => 
-            <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked}/>
+            <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked} selected={this.props.selected_legend_item}/>
           )}
         </g>
       </svg>
@@ -74,7 +75,8 @@ Legend.propTypes = {
   legend_transform: PropTypes.object.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
-  legend_preferences: PropTypes.object.isRequired
+  legend_preferences: PropTypes.object.isRequired,
+  selected_legend_item: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
@@ -82,7 +84,8 @@ function mapStateToProps(state, ownProps) {
     legend_transform: state.legend_transform,
     layer_types_settings: state.layer_types_settings,
     groups: state.groups,
-    legend_preferences: state.legend_preferences
+    legend_preferences: state.legend_preferences,
+    selected_legend_item: state.selected_legend_item
   };
 }
 

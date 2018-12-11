@@ -17,7 +17,7 @@ class Edges extends React.Component {
     // Get the Properties to use them in the Rendering
     const dimensions = this.props.layer.layer.properties.dimensions; // Get the Dimensions of the current Layer
     const current_edges = paths.getOutgoingEdges(this.props.layer, this.props.edges); // Get relevant Edges going out from the current Layer
-    const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value / 2.0) + (this.props.preferences.stroke_width.value / 2.0);
+    const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value / 2.0);
     var additionalLabelInput = undefined; // Placeholder for label if this is an input of the Net
     if (this.props.layer.layer.properties.input.length === 0) { // If no inputs
       additionalLabelInput = {

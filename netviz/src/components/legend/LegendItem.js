@@ -15,6 +15,9 @@ class LegendItem extends React.Component {
       strokeLinejoin: 'round',
       strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
+    if (this.props.selected === this.props.representation.layer.representer.name) {
+      style.stroke = 'red'
+    }
     const textStyle = {
       fill: this.props.representation.layer.active ? 'black' : 'lightgrey'
     };
