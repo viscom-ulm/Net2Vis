@@ -36,7 +36,11 @@ class NetworkPreferences extends React.Component {
   // Spacing of the Layers Changes
   handleSpacingHorizontalChange = (e) => {
     var preferences = this.props.preferences;
-    preferences.layers_spacing_horizontal.value = parseInt(e.currentTarget.value, 10);
+    var newSpacing = parseInt(e.currentTarget.value, 10);
+    preferences.layers_spacing_horizontal.value = newSpacing;
+    if (newSpacing < 20) {
+      preferences.show_dimensions.value = false;
+    }
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
   
@@ -84,6 +88,9 @@ class NetworkPreferences extends React.Component {
   toggleDimensionsLabel = (e) => {
     var preferences = this.props.preferences;
     preferences.show_dimensions.value = !preferences.show_dimensions.value;
+    if (preferences.layers_spacing_horizontal.value < 20) {
+      preferences.show_dimensions.value = false;
+    }
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
