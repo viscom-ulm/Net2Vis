@@ -67,7 +67,7 @@ class GroupPreferences extends React.Component {
           <InputField value={this.props.group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
         </div>
         <div>
-          <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup}/>
+          <InputField value={'Delete'} type={'button'} description={'Ungroup'} action={this.deleteGroup} options={"secondary"}/>
         </div>
       </div>
     );

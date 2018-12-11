@@ -312,7 +312,7 @@ export function updateGroups(groups, network, id) {
 // Delete groups from the network.
 export function deleteGroups(groups, layerTypes, network, id) {
   return function(dispatch) {
-    dispatch(setPreferenceMode('legend'));
+    dispatch(setPreferenceMode('network'));
     return GroupsApi.updateGroups(groups, id).then(groups => {
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
       dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));

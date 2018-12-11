@@ -36,6 +36,13 @@ const InputField = ({value, type, description, action, options}) => {
       </div>
     );
   } else if (type === 'button') {
+    if (options === 'secondary') {
+      return (
+        <div className='preferenceItem'>
+          <Button onClick={(e) => action(e)} variant="contained" color="secondary" className='inputElement'>{description}</Button>
+        </div>
+      );
+    }
     return (
       <div className='preferenceItem'>
         <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement'>{description}</Button>

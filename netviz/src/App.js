@@ -9,7 +9,7 @@ import combinedReducers from './reducers';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {blue, pink} from '@material-ui/core/colors'
+import {blue, red} from '@material-ui/core/colors'
 
 // Create the Store using all the Reducers and applying the Middleware
 const store = createStore(
@@ -20,7 +20,7 @@ const store = createStore(
 const theme = createMuiTheme({
   palette: {
     primary: blue,
-    secondary: pink,
+    secondary: red,
   },
   typography: {
     useNextVariants: true,
