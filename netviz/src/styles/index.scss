@@ -169,3 +169,11 @@ header {
 .ace_gutter {
     background: #f5f5f5 !important;
 }
+
+svg text {
+cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
