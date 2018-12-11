@@ -28,7 +28,8 @@ class ComplexLegendItem extends React.Component {
     const style = {
       fill: color,
       stroke: this.props.active ? colors.darkenColor(color) : 'lightgrey',
-      strokeLinejoin: 'round'
+      strokeLinejoin: 'round',
+      strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
     return(
       <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>

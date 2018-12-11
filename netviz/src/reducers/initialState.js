@@ -50,6 +50,7 @@ export default {
         layers_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
         complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'},
+        stroke_width: {value: 2, type: 'number', description: 'Stroke Width'}
     },
     color_mode: {
         selection: 'Palette',
