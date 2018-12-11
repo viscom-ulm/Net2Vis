@@ -74,7 +74,6 @@ def get_network(id):
     result = jsonify({'success': True, 'data': net})
     return  result, ok_status, json_type
   else:
-    print(graph)
     result = jsonify({'success': False, 'data': graph})
     return  result, ok_status, json_type
     

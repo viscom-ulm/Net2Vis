@@ -19,7 +19,6 @@ def translate_keras(filename):
             for layer in layers_extracted:
                 previousNode = add_layer_type(layer, graph, previousNode)
             graph.resolve_input_names()
-            print(graph)
             return graph
         except SyntaxError as err:
             print('Syntax Error')
