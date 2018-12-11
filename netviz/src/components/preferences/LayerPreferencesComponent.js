@@ -55,7 +55,7 @@ class LayerPreferences extends React.Component {
           <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
         </div>
         <div>
-          <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings}/>
+          <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings} options={"secondary"}/>
         </div>
       </div>
     );
