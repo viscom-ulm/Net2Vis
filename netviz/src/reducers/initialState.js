@@ -35,7 +35,9 @@ export default {
         max_size: 2,
         min_size: 1,
         max_features: 2,
-        min_features: 1
+        min_features: 1,
+        max_dense: 2,
+        min_dense: 1
     },
     error: {},
     selection: [],
