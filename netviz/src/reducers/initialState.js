@@ -26,7 +26,9 @@ export default {
         layer_display_max_width: {value: 80, type: 'number', description: 'Maximum width of Layers'},
         layers_spacing_horizontal: {value: 0, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 0, type: 'number', description: 'Vertical spacing between Layers'},
-        features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'}
+        features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'},
+        show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
+        show_features: {value: true, type: 'switch', description: 'Features Label'}
     },
     layer_extreme_dimensions: {
         max_size: 2,
