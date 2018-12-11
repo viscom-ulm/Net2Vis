@@ -12,7 +12,8 @@ class LegendItem extends React.Component {
     const style = {
       fill: this.props.representation.layer.representer.setting.color,
       stroke: this.props.representation.layer.active ? colors.darkenColor(this.props.representation.layer.representer.setting.color) : 'lightgrey',
-      strokeLinejoin: 'round'
+      strokeLinejoin: 'round',
+      strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
     const textStyle = {
       fill: this.props.representation.layer.active ? 'black' : 'lightgrey'

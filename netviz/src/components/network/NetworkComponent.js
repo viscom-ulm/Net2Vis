@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
 import * as actions from '../../actions';
+
 import Layer from './LayerComponent';
+import Edges from './EdgesComponent';
+
 import * as graphs from '../../graphs';
 import * as selection from '../../selection';
 import * as common from '../../groups/Common';
@@ -57,7 +60,10 @@ class Network extends React.Component {
     return(
       <g id='main_group' transform={transform}>
         {nodes.map(layer => 
-          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} nodes={nodes} edges={edges} complexAction={this.complexSelectionTriggered}/>
+          <Edges layer={layer} key={layer.layer.id} edges={edges}/>
+        )}
+        {nodes.map(layer => 
+          <Layer layer={layer} settings={layer_types_settings[layer.layer.name]} key={layer.layer.id} edges={edges} complexAction={this.complexSelectionTriggered}/>
         )}
       </g>
     );

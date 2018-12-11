@@ -11,7 +11,6 @@ const InputField = ({value, type, description, action, options}) => {
   if(type === 'number') {
     return (
       <div className='preferenceItem'>
-
         <TextField id="standard-number" type="number" label={description} value={value} onChange={(e) => action(e)} margin="normal" className='inputElement' inputProps={{ min: "0", max: "1000", step: "10" }}/>
       </div>
     );
