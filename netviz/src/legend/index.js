@@ -5,8 +5,9 @@ import * as common from '../groups/Common'
 export function getLegend(layerTypesSettings, groups, legendPreferences) {
   var position = 10;
   var legend = [];
-  for (var i in layerTypesSettings) {
-    var layer = getLayer(groups, i, layerTypesSettings, legendPreferences);
+  var keys = Object.keys(layerTypesSettings).reverse()
+  for (var i in keys) {
+    var layer = getLayer(groups, keys[i], layerTypesSettings, legendPreferences);
     legend.push({position: position, layer: layer});
     position = position + layer.width + legendPreferences.element_spacing.value;
   }
