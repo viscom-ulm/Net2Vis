@@ -20,11 +20,10 @@ text_type = {'ContentType': 'text/plain'}
 ##################
 # Convert the Network to be sendable in JSON.
 def make_jsonifyable(network):
-  net = copy.deepcopy(network)
-  replace_references(net)
+  replace_references(network)
   processed = []
-  for i in range(len(net.layers)):
-    layer = net.layers[i]
+  for i in range(len(network.layers)):
+    layer = network.layers[i]
     lay = layer.__dict__
     dict = {
       'name': type(layer).__name__,
@@ -72,7 +71,6 @@ def get_network(id):
     graph.calculate_layer_dimensions()
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
-    print(net)
     return  result, ok_status, json_type
   else:
     result = jsonify({'success': False, 'data': graph})
