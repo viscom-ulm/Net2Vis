@@ -111,6 +111,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
+  // Toggle the display state of Input/Output Samples
+  toggleSamples = (e) => {
+    var preferences = this.props.preferences;
+    preferences.show_samples.value = !preferences.show_samples.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  }
+
   // Color generation mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorGenerationMode(e.target.value);
@@ -132,6 +139,7 @@ class NetworkPreferences extends React.Component {
           <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
           <InputField value={this.props.preferences.show_dimensions.value} type={this.props.preferences.show_dimensions.type} description={this.props.preferences.show_dimensions.description} action={this.toggleDimensionsLabel}/>
           <InputField value={this.props.preferences.show_features.value} type={this.props.preferences.show_features.type} description={this.props.preferences.show_features.description} action={this.toggleFeaturesLabel}/>
+          <InputField value={this.props.preferences.show_samples.value} type={this.props.preferences.show_samples.type} description={this.props.preferences.show_samples.description} action={this.toggleSamples}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>

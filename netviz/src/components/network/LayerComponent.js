@@ -7,6 +7,7 @@ import * as actions from '../../actions';
 
 import TooltipComponent from './TooltipComponent';
 import FeaturesLabelComponent from './FeaturesLabelComponent';
+import SampleComponent from './SampleComponent';
 
 import * as paths from '../../paths';
 import * as colors from '../../colors';
@@ -55,6 +56,27 @@ class Layer extends React.Component {
   
   // Render the Layer
   render() {
+    const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value);
+    var inputSample = undefined; // Placeholder for label if this is an input of the Net
+    if (this.props.layer.layer.properties.input.length === 0) { // If no inputs
+      inputSample = {
+        dimensions: dimensions.in, // Dimensions for this label are the input dimensions of the layer
+        x: (2.0 * this.props.layer.x) - dimensionsLabelX - (this.props.preferences.stroke_width.value), // X position of the label to be left of layer
+        edge: { // Edge position is layer y
+          points: [{y: this.props.layer.y}]
+        }
+      }
+    }
+    var outputSample = undefined; // Placeholder for label if this is an output of the net
+    if (this.props.layer.layer.properties.output.length === 0) { // If no outputs
+      inputSample = {
+        dimensions: dimensions.out, // Dimensions for this label are the output dimensions of the layer
+        x: dimensionsLabelX, // X position of the label ro be right of layer
+        edge: { // Edge position is layer y
+          points: [{y: this.props.layer.y}]
+        }
+      }
+    }
     // Get the Properties to use them in the Rendering
     const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
     const name = set.alias ? set.alias : this.props.layer.layer.name;
@@ -71,12 +93,22 @@ class Layer extends React.Component {
     const features = Array.isArray(dimensions.out) ? dimensions.out[dimensions.out.length-1] : dimensions.out;
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
-      <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
-        <path d={pathData} style={{fill:set.color, stroke: stroke, strokeWidth: this.props.preferences.stroke_width.value, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
-        <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
+      <g>
+        <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
+          <path d={pathData} style={{fill:set.color, stroke: stroke, strokeWidth: this.props.preferences.stroke_width.value, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
+          <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
+          {
+            this.props.preferences.show_features.value &&
+            <FeaturesLabelComponent features={features} x={this.props.layer.width / 2.0} layer_height={layer_height} extreme_dimensions={extreme_dimensions} layer={this.props.layer} edges={this.props.edges}/>
+          }
+        </g>
         {
-          this.props.preferences.show_features.value &&
-          <FeaturesLabelComponent features={features} x={this.props.layer.width / 2.0} layer_height={layer_height} extreme_dimensions={extreme_dimensions} layer={this.props.layer} edges={this.props.edges}/>
+          this.props.preferences.show_samples.value && additionalLabelInput !== undefined && Array.isArray(dimensions.out) &&
+          <SampleComponent extent={layer_height[0]} x={inputSample.x} edge={inputSample.edge}/>
+        }
+        {
+          this.props.preferences.show_samples.value && additionalLabelOutput !== undefined && Array.isArray(dimensions.out) &&
+          <SampleComponent extent={layer_height[1]} x={outputSample.x} edge={outputSample.edge}/>
         }
       </g>
     );

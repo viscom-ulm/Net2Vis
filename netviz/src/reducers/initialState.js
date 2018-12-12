@@ -29,6 +29,7 @@ export default {
         features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'},
         show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
         show_features: {value: true, type: 'switch', description: 'Features Label'},
+        show_samples: {value: true, type: 'switch', description: 'Input/Output Samples'},
         stroke_width: {value: 4, type:'number', description: 'Stroke Width'}
     },
     layer_extreme_dimensions: {
