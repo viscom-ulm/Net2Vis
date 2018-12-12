@@ -6,6 +6,7 @@ import {bindActionCreators} from 'redux';
 import LegendItem from './LegendItem';
 import * as actions from '../../actions';
 import * as legend from '../../legend';
+import * as sort from '../../groups/Sort';
 
 class Legend extends React.Component {
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
@@ -57,6 +58,7 @@ class Legend extends React.Component {
       centerTransformation.y = (legendElement.getBoundingClientRect().height / 2.0) - (this.props.legend_bbox.height * group_t.scale / 2.0) - (this.props.legend_bbox.y * group_t.scale); // Transformation to center the graph in y direction
     }
     const legend_transform = `translate(${(group_t.x + centerTransformation.x)}, ${(group_t.y + centerTransformation.y)}) scale(${group_t.scale})`; // Manipulate the position of the graph
+    sort.sortGroups(this.props.groups, this.props.layer_types_settings); // Sort the groups so that the ones that depend on others are at the end
     const legend_representation = legend.getLegend(this.props.layer_types_settings, this.props.groups, this.props.legend_preferences); // Generate a representation of the legendItem to be rendered
     return(
       <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='legendComponent'>
