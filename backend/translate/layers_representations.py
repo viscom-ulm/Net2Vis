@@ -227,6 +227,35 @@ class UpSampling2D(Layer):
     }
 
 
+# Representation of Conv2D Layers. 
+class Conv3D(Layer):
+  # Initialize with filter number and convolution kernel.
+  def __init__(self, name):
+    Layer.__init__(self)
+    self.name = name
+    self.properties = {
+      'filters': 0,
+      'kernel_size': [1, 1, 1], 
+      'strides': [1, 1, 1],
+      'padding': 'valid',
+      'data_format': None,
+      'dilation_rate': [1, 1, 1],
+      'activation': None,
+      'use_bias': True
+    }
+
+  # Dimension Calculation for Convolution Layers.
+  def calculate_dimensions(self, input_dim):
+    if self.properties['padding'] == 'valid': # Check padding Type and calculate Padding. 
+      p = [0, 0, 0]
+    else: # Same Padding.
+      p = [int((self.properties['kernel_size'][0]-1)/2), int((self.properties['kernel_size'][1]-1)/2), int((self.properties['kernel_size'][2]-1)/2)]
+    self.dimensions = {
+      'in': input_dim[0]['out'],
+      'out': [calculate_next_layer(p[0], self.properties['strides'][0], input_dim[0]['out'][0], self.properties['kernel_size'][0]), calculate_next_layer(p[1], self.properties['strides'][1], input_dim[0]['out'][1], self.properties['kernel_size'][1]), calculate_next_layer(p[2], self.properties['strides'][2], input_dim[0]['out'][2], self.properties['kernel_size'][2]), self.properties['filters']]
+    }
+
+
 # Calculate the Size of the Next Layer with Padding, Strides, Input Size and Kernel Size
 def calculate_next_layer(padding, stride, input_size, kernel_size):
   return int((input_size + (2 * padding) - kernel_size) / stride) + 1

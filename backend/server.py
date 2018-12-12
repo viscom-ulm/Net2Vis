@@ -72,6 +72,7 @@ def get_network(id):
     graph.calculate_layer_dimensions()
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
+    print(net)
     return  result, ok_status, json_type
   else:
     result = jsonify({'success': False, 'data': graph})

@@ -66,6 +66,9 @@ def add_layer_type(layer, graph, previousNode):
     elif ('UpSampling2D' in layer['class_name']): # UpSampling Layer.
         new_layer = layers_representations.UpSampling2D(layer['config']['name'])
         return add_to_graph(new_layer, layer, graph, previousNode)
+    elif('Conv3D' in layer['class_name']): # Convolution Layer 3D.
+        new_layer = layers_representations.Conv3D(layer['config']['name'])
+        return add_to_graph(new_layer, layer, graph, previousNode)
 
 # Takes a new layer, adds the Properties and then adds the Layer to the Graph.
 def add_to_graph(new_layer, layer, graph, previousNode):
