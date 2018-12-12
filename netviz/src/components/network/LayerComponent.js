@@ -56,12 +56,26 @@ class Layer extends React.Component {
   
   // Render the Layer
   render() {
-    const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value);
+    // Get the Properties to use them in the Rendering
+    const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
+    const name = set.alias ? set.alias : this.props.layer.layer.name;
+    const dimensions = this.props.layer.layer.properties.dimensions; // Get the Dimensions of the current Layer
+    const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
+    const layer_height = this.calculateLayerHeight(extreme_dimensions, dimensions); // Calculate the height of the Layer
+    const pathData = paths.calculateGlyphPath(extreme_dimensions, layer_height, this.props.layer, this.props.edges); // Calculate the Path of the Layer
+    const tooltipRef = React.createRef(); // Reference for the Tooltip
+    const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
+    var stroke = colors.darkenColor(set.color); // Set the default stroke color to black
+    if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
+      stroke = "red"; // Set stroke color to red
+    }
+    const features = Array.isArray(dimensions.out) ? dimensions.out[dimensions.out.length-1] : dimensions.out;
+    const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value) + (this.props.preferences.stroke_width.value);
     var inputSample = undefined; // Placeholder for label if this is an input of the Net
     if (this.props.layer.layer.properties.input.length === 0) { // If no inputs
       inputSample = {
         dimensions: dimensions.in, // Dimensions for this label are the input dimensions of the layer
-        x: (2.0 * this.props.layer.x) - dimensionsLabelX - (this.props.preferences.stroke_width.value), // X position of the label to be left of layer
+        x: (2.0 * this.props.layer.x) - dimensionsLabelX - layer_height[0], // X position of the label to be left of layer
         edge: { // Edge position is layer y
           points: [{y: this.props.layer.y}]
         }
@@ -77,20 +91,6 @@ class Layer extends React.Component {
         }
       }
     }
-    // Get the Properties to use them in the Rendering
-    const set = this.props.settings ? this.props.settings : {color: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
-    const name = set.alias ? set.alias : this.props.layer.layer.name;
-    const dimensions = this.props.layer.layer.properties.dimensions; // Get the Dimensions of the current Layer
-    const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
-    const layer_height = this.calculateLayerHeight(extreme_dimensions, dimensions); // Calculate the height of the Layer
-    const pathData = paths.calculateGlyphPath(extreme_dimensions, layer_height, this.props.layer, this.props.edges); // Calculate the Path of the Layer
-    const tooltipRef = React.createRef(); // Reference for the Tooltip
-    const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
-    var stroke = colors.darkenColor(set.color); // Set the default stroke color to black
-    if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
-      stroke = "red"; // Set stroke color to red
-    }
-    const features = Array.isArray(dimensions.out) ? dimensions.out[dimensions.out.length-1] : dimensions.out;
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g>
@@ -103,12 +103,12 @@ class Layer extends React.Component {
           }
         </g>
         {
-          this.props.preferences.show_samples.value && additionalLabelInput !== undefined && Array.isArray(dimensions.out) &&
-          <SampleComponent extent={layer_height[0]} x={inputSample.x} edge={inputSample.edge}/>
+          this.props.preferences.show_samples.value && inputSample !== undefined && Array.isArray(dimensions.out) &&
+          <SampleComponent extent={layer_height[0]} x={inputSample.x} edge={inputSample.edge} layer_max_height={this.props.preferences.layer_display_max_height.value} strokeWidth={this.props.preferences.stroke_width.value / 2.0}/>
         }
         {
-          this.props.preferences.show_samples.value && additionalLabelOutput !== undefined && Array.isArray(dimensions.out) &&
-          <SampleComponent extent={layer_height[1]} x={outputSample.x} edge={outputSample.edge}/>
+          this.props.preferences.show_samples.value && outputSample !== undefined && Array.isArray(dimensions.out) &&
+          <SampleComponent extent={layer_height[1]} x={outputSample.x} edge={outputSample.edge} layer_max_height={this.props.preferences.layer_display_max_height.value} strokeWidth={this.props.preferences.stroke_width.value / 2.0}/>
         }
       </g>
     );
