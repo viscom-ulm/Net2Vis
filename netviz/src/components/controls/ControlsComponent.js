@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {saveAs} from 'file-saver';
+import * as JSZip from 'jszip';
+
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -34,8 +36,12 @@ class Controls extends React.Component {
     const legend_transform = `scale(${this.props.legend_transform.scale}) translate(${-bBox.x}, ${-bBox.y})`; // Set the transform for the legend to match the scaling and be centred
     var legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
 
-    saveAs(new Blob([graph_downloadable], {type: "text/svg;charset=utf-8"}), 'model.svg'); // save the svg on disk
-    saveAs(new Blob([legend_downloadable], {type: "text/svg;charset=utf-8"}), 'legend.svg'); // save the svg on disk
+    var zip = new JSZip(); // Create a Zip file
+    zip.file('model.svg', graph_downloadable); // Add the Model
+    zip.file('legend.svg', legend_downloadable); // Add the Legend
+    zip.generateAsync({type:"blob"}).then(function(content) { // Zip the file
+      saveAs(content, "net2vis.zip"); // Download it
+    });
   }
 
   render() {
