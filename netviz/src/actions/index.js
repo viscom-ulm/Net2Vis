@@ -5,6 +5,7 @@ import PreferencesApi from '../api/PreferencesApi';
 import LegendPreferencesApi from '../api/LegendPreferencesApi';
 import GroupsApi from '../api/GroupsApi';
 import * as types from './types';
+import * as sort from '../groups/Sort';
 
 // Set the ID of the current Network
 export function setID(id) {
@@ -285,6 +286,7 @@ export function loadGroupsSuccess(groups) {
 export function addGroup(groups, network, layerTypes, id) {
   return function(dispatch) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
       dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
@@ -300,9 +302,10 @@ export function updateGroupsSuccess(groups) {
 }
 
 // Update the Groups
-export function updateGroups(groups, network, id) {
+export function updateGroups(groups, layerTypes, network, id) {
   return function(dispatch) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
       dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
     });
@@ -314,6 +317,7 @@ export function deleteGroups(groups, layerTypes, network, id) {
   return function(dispatch) {
     dispatch(setPreferenceMode('network'));
     return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
       dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {

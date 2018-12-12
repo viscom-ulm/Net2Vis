@@ -34,9 +34,9 @@ class GroupPreferences extends React.Component {
     if (selectedGroup.group.active === true) { // If the currently selected group is active
       activation.deactivateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
     } else { // Group was inactive
-      activation.activateGroup(this.props.selected_legend_item, this.props.groups); // Deactivate the current Group
+      activation.activateGroup(this.props.selected_legend_item, this.props.groups, this.props.layer_types_settings); // Deactivate the current Group
     }
-    this.props.actions.updateGroups(this.props.groups, this.props.network, this.props.id); // Push the groups update to the state
+    this.props.actions.updateGroups(this.props.groups, this.props.layer_types_settings, this.props.network, this.props.id); // Push the groups update to the state
   }
   
   // Removes a Group and others that build on it from the State
