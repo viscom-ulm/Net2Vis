@@ -5,31 +5,46 @@ import * as common from '../groups/Common'
 export function getLegend(layerTypesSettings, groups, legendPreferences) {
   var position = 10;
   var legend = [];
-  var keys = Object.keys(layerTypesSettings).reverse()
-  for (var i in keys) {
-    var layer = getLayer(groups, keys[i], layerTypesSettings, legendPreferences);
-    legend.push({position: position, layer: layer});
-    position = position + layer.width + legendPreferences.element_spacing.value;
+  for (var i in groups.reverse()) {
+    var groupLayer = getGroupLayer(groups[i], groups[i].name, layerTypesSettings, legendPreferences);
+    if (groupLayer !== undefined) {
+      legend.push({position: position, layer: groupLayer});
+      position = position + groupLayer.width + legendPreferences.element_spacing.value;
+    }
+  }
+  for (var j in layerTypesSettings) {
+    var layer = getLayer(groups, j, layerTypesSettings, legendPreferences);
+    if (layer !== undefined) {
+      legend.push({position: position, layer: layer});
+      position = position + layer.width + legendPreferences.element_spacing.value;
+    }
   }
   return legend;
+}
+
+// Get the subnetwork for a Group
+function getGroupLayer(group, layerName, layerTypesSettings, legendPreferences) {
+  if (layerTypesSettings[layerName] !== undefined) {
+    const graph = getLegendItemGraph(group, legendPreferences);
+    return {
+      trivial: false,
+      active: group.active,
+      width: graph.graph().width + legendPreferences.complex_spacing.value + legendPreferences.layer_width.value,
+      height: graph.graph().height,
+      representer: {
+        name: layerName,
+        setting: layerTypesSettings[layerName]
+      },
+      graph: graph
+    }
+  }
 }
 
 // Get the Subnetwork for a specific Layer
 function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
   for (var i in groups) {
     if (groups[i].name === layerName) {
-      const graph = getLegendItemGraph(groups[i], legendPreferences);
-      return {
-        trivial: false,
-        active: groups[i].active,
-        width: graph.graph().width + legendPreferences.complex_spacing.value + legendPreferences.layer_width.value,
-        height: graph.graph().height,
-        representer: {
-          name: layerName,
-          setting: layerTypesSettings[layerName]
-        },
-        graph: graph
-      }
+      return undefined;
     }
   }
   return {
