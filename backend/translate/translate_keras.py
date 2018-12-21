@@ -34,7 +34,6 @@ def translate_keras(filename):
 
 # Add a Layer for the line. Layers are identified by their name and equipped using the spec.
 def add_layer_type(layer_json, model_layer, graph, previousNode):
-    print(layer_json)
     new_layer = layer.Layer(layer_json['class_name'], layer_json['config']['name'], model_layer)
     new_layer.add_specs(layer_json['config'])
     return add_to_graph(new_layer, layer_json, graph, previousNode)
