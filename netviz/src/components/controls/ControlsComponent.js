@@ -3,73 +3,85 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types';
 import {saveAs} from 'file-saver';
+import * as JSZip from 'jszip';
+
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import GetApp from '@material-ui/icons/GetApp';
 
 import ToggleButton from './ToggleButton';
-import ClickableButton from './ClickableButton';
 import * as actions from '../../actions';
-import * as graphs from '../../graphs';
-
-import downloadLogo from '../../media/download_icon.png';
-import groupLogo from '../../media/group_icon.png';
 
 // Controls at top of the Application
 class Controls extends React.Component {
   // Triggers download functionality of the network graph
   downloadSVG = () => {
-    var svg_text = document.getElementById('main_group').innerHTML; // Get the inner elements of the svg
-    const transform = `translate(${10}, ${-this.props.graph_extreme_dimensions.min_y + 5})`;
-    svg_text = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (this.props.graph_extreme_dimensions.max_x - this.props.graph_extreme_dimensions.min_x) + "' height='" + (this.props.graph_extreme_dimensions.max_y - this.props.graph_extreme_dimensions.min_y + 10) + "'><g transform='" + transform + "'>" + svg_text + "</g></svg>"; // append svg tag
-    saveAs(new Blob([svg_text], {type: "text/svg;charset=utf-8"}), 'model.svg'); // save the svg on disk
-  }
+    const general_transform =  `translate(5, 5)`;
+    var graph_element = document.getElementById('main_group'); // Get the main SVG Element
+    var graph_bBox = graph_element.getBBox();
+    var graph_width = graph_bBox.width * this.props.group_transform.scale; // Calculate the width of this Element
+    var graph_height = graph_bBox.height * this.props.group_transform.scale; // Calculate the height of this Element
+    var graph_text = graph_element.innerHTML; // Get the inner elements of the svg
+    const graph_transform = `scale(${this.props.group_transform.scale}) translate(${-graph_bBox.x}, ${-graph_bBox.y})`; // Set the transform for the graph to match the scaling and be centred
+    var graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
 
-  // Group some Layers together
-  groupLayers = () => {
-    var group = graphs.groupLayers(this.props.compressed_network, this.props.selection); // Group the Layers
-    if (group !== undefined) { // Check if the group could be made
-      this.props.actions.addGroup(group, this.props.id); // Add the group to the state
-    }
+    var legend_element = document.getElementById('legend_group'); // Get the legend SVG Element
+    var bBox = legend_element.getBBox();
+    var legend_width = (bBox.width*1.0) * this.props.legend_transform.scale; // Calculate the width of this Element
+    var legend_height = (bBox.height*1.0) * this.props.legend_transform.scale; // Calculate the height of this Element
+    var legend_text = legend_element.innerHTML; // Get the inner elements of the svg
+    const legend_transform = `scale(${this.props.legend_transform.scale}) translate(${-bBox.x}, ${-bBox.y})`; // Set the transform for the legend to match the scaling and be centred
+    var legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
+
+    var zip = new JSZip(); // Create a Zip file
+    zip.file('model.svg', graph_downloadable); // Add the Model
+    zip.file('legend.svg', legend_downloadable); // Add the Legend
+    zip.generateAsync({type:"blob"}).then(function(content) { // Zip the file
+      saveAs(content, "net2vis.zip"); // Download it
+    });
   }
 
   render() {
     const display = this.props.display;
     return(
-      <div className='wrapper'>
-        <div className='menu'>
-          <div className='header noselect'>NetViz</div>
-          <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
-          <ToggleButton name="Legend" state={display.legend_toggle} action={this.props.actions.toggleLegend}/>
-          <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
-        </div>
-        <div className='menu'>
-          <ClickableButton name="Group" image={groupLogo} action={this.groupLayers}/>
-          <ClickableButton name="Download" image={downloadLogo} action={this.downloadSVG}/>
-        </div>
-      </div>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Net2Vis
+          </Typography>
+          <div className='wrapper'>
+            <div className='menu'>
+              <ToggleButton name="Code" state={display.code_toggle} action={this.props.actions.toggleCode}/>
+              <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
+            </div>
+            <div>
+              <IconButton color='inherit' aria-label='Download' onClick={this.downloadSVG}>
+                <GetApp/>
+              </IconButton>
+            </div>
+          </div>
+        </Toolbar>
+      </AppBar>
     );
   }
 }
 
 // Controls state of the Application
 Controls.propTypes = {
-  id: PropTypes.string.isRequired,
   display: PropTypes.object.isRequired,
-  compressed_network: PropTypes.object.isRequired,
-  preferences: PropTypes.object.isRequired,
-  layer_extreme_dimensions: PropTypes.object.isRequired,
-  graph_extreme_dimensions: PropTypes.object.isRequired,
-  selection: PropTypes.array.isRequired
+  group_transform: PropTypes.object.isRequired,
+  legend_transform: PropTypes.object.isRequired,
 };
 
 // Mapping the Controls state to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    id: state.id,
     display: state.display,
-    compressed_network: state.compressed_network,
-    preferences: state.preferences,
-    layer_extreme_dimensions: state.layer_extreme_dimensions,
-    graph_extreme_dimensions: state.graph_extreme_dimensions,
-    selection: state.selection
+    group_transform: state.group_transform,
+    legend_transform: state.legend_transform,
   };
 }
 

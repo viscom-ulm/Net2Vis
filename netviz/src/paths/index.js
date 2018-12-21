@@ -97,7 +97,7 @@ export function getOutgoingEdges(layer, edges) {
 }
 
 // Get all incoming Edges for the current Node
-function getIncomingEdges(layer, edges) {
+export function getIncomingEdges(layer, edges) {
   var current = [];
   for(var i in edges) { // Go over all Edges
     if(layer.layer.id === parseInt(edges[i].w, 10)) { // Check if current node is sink of edge
@@ -108,7 +108,7 @@ function getIncomingEdges(layer, edges) {
 }
 
 // Reduces the position elements of an Edge to just one, that represents the part with no inclination
-function reducePosition(edges) {
+export function reducePosition(edges) {
   var positions = [];
   for(var i in edges) { // For all Edges
     var prev = edges[i].points.points[0].y; // Initialize the previous point Placeholder

@@ -1,13 +1,9 @@
 // General Properties
 html,
 body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
     height: 100%;
     overflow: hidden;
-    font: 15px arial, sans-serif;
-    color: white;
+    font-family: Roboto, sans-serif;
 }
 
 // Header only Properties (For Menu Bar)
@@ -16,7 +12,6 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    height: 50px;
     color: white;
     background-color: #A32638;
     
@@ -24,6 +19,7 @@ header {
         display: flex;
         justify-content: space-between;
         width: 100%;
+        margin-left: 50px;
     }
 
     .menu {
@@ -34,33 +30,23 @@ header {
     .menuitem {
         display: flex;
         flex-direction: row;
-        height: 48px;
-        border-bottom: 2px solid #A32638;
+        height: calc(100% - 2px);
+        border-bottom: 2px solid rgba(0,0,0,0);
         padding-left: 12px;
         padding-right: 12px;
     }
 
     .menuitem:hover {
-        background-color: rgb(141, 47, 61);
+        background-color: #1B80DE;
         text-decoration: none;
         cursor: pointer;
     }
 
-    div.header {
+    div {
         display: block;
         color: white;
         text-align: center;
-        font-size: 25px;
-        width: 150px;
-        height: 50px;
-        line-height: 50px;
-    }
-    
-    div a {
-        display: block;
-        color: white;
-        text-align: center;
-        line-height: 50px;
+        line-height: 62px;
     }
     
     div a:hover {
@@ -80,10 +66,19 @@ header {
     }
 }
 
+.preferencesWrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 // Some Content Helpers
 .content {
-    padding: 50px 0px 0px 0px;
+    padding: 70px 0px 0px 0px;
     height: 100%;
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
 
 .full {
@@ -91,57 +86,39 @@ header {
     height: 100%;
 }
 
-.flexvertical {
-    display: flex;
-    flex-direction: column;
+.codePaper {
     width: 100%;
-    height: 100%;
-}
-
-.flexhorizontal {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 100%;
-}
-
-.flexlegend {
-    justify-content: center;
+    height: calc(100% - 8px);
 }
 
 // Different Areas
-#Legend {
+#ColorPicker {
+    padding: 10px;
+}
+
+// Grids for the Areas of the Application
+.mainGrid {
+    height: 100%;
+}
+
+.codeGrid {
+    height: 100%;
+    width: 400px;
+}
+
+.svgGrid {
+    height: calc(100% - 300px);
+    width: 100%;
+}
+
+.preferencesGrid {
+    height: 100%;
+    width: 300px;
+}
+
+.legendGrid {
     height: 300px;
     width: 100%;
-    flex-shrink: 0;
-    background-color: #FFFFFF;
-    border-top: #000000;
-    border-top-style: solid;
-}
-
-#ColorPicker {
-    width: 280px;
-}
-
-#Preferences {
-    width: 300px;
-    height: 100%;
-    flex-shrink: 0;
-    background-color: #272822;
-    order: 1;
-}
-
-#Code {
-    width: 400px;
-    height: 100%;
-    flex-shrink: 0;
-    order: -1;
-}
-
-#CodeArea {
-    width: 100%;
-    height: 100%;
-    resize: none;
 }
 
 // Classes for Styling of individual Elements
@@ -155,17 +132,17 @@ header {
 }
 
 .preferenceItem {
-    padding: 10px;
+    padding-bottom: 8px;
+    padding-right: 10px;
 }
 
 .inputElement {
-    width: calc(100% - 20px);
+    width: 100%;
     height: 30px;
 }
 
-.inputElementSelect {
+.inputElement {
     width: calc(100%);
-    height: 30px;
 }
 
 .legendItem {
@@ -175,4 +152,28 @@ header {
     line-height: 50px;
     text-align: center;
     color: black;
+}
+
+.reflex-size-aware {
+    overflow: hidden;
+}
+
+.ace_scrollbar {
+    display: none !important;
+}
+
+.ace_editor {
+    background: rgba(0,0,0,0) !important;
+}
+
+.ace_gutter {
+    background: #f5f5f5 !important;
+}
+
+svg text {
+cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

@@ -5,12 +5,13 @@ export default {
     code: '',
     group_transform: {
         x: 0,
-        y: 50,
+        y: 0,
         scale: 1
     },
     legend_transform: {
         x: 0,
-        y: 0
+        y: 0,
+        scale: 1
     },
     display: {
         code_toggle: true,
@@ -25,24 +26,24 @@ export default {
         layer_display_max_width: {value: 80, type: 'number', description: 'Maximum width of Layers'},
         layers_spacing_horizontal: {value: 0, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 0, type: 'number', description: 'Vertical spacing between Layers'},
-        features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'}
+        features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'},
+        show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
+        show_features: {value: true, type: 'switch', description: 'Features Label'},
+        show_samples: {value: true, type: 'switch', description: 'Input/Output Samples'},
+        stroke_width: {value: 4, type:'number', description: 'Stroke Width'}
     },
     layer_extreme_dimensions: {
         max_size: 2,
         min_size: 1,
         max_features: 2,
-        min_features: 1
+        min_features: 1,
+        max_dense: 2,
+        min_dense: 1
     },
     error: {},
     selection: [],
     preferences_mode: 'network',
     selected_legend_item: '',
-    graph_extreme_dimensions: {
-        min_x: 0,
-        min_y: 0,
-        max_x: 0,
-        max_y: 0
-    },
     groups: [],
     compressed_network: {},
     legend_preferences: {
@@ -51,6 +52,13 @@ export default {
         layer_width: {value: 10, type: 'number', description: 'Layer Width'},
         layers_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
-        complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'}
-    }
+        complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'},
+        stroke_width: {value: 2, type: 'number', description: 'Stroke Width'}
+    },
+    color_mode: {
+        selection: 'Palette',
+        generation: 'Palette'
+    },
+    network_bbox: {},
+    legend_bbox: {}
 }

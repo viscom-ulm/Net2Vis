@@ -5,6 +5,7 @@ import PreferencesApi from '../api/PreferencesApi';
 import LegendPreferencesApi from '../api/LegendPreferencesApi';
 import GroupsApi from '../api/GroupsApi';
 import * as types from './types';
+import * as sort from '../groups/Sort';
 
 // Set the ID of the current Network
 export function setID(id) {
@@ -19,6 +20,11 @@ export function moveGroup(group_displacement) {
 // Zoom the main SVG group
 export function zoomGroup(group_zoom) {
   return {type: types.ZOOM_GROUP, group_zoom};
+}
+
+// Zoom the main SVG group
+export function zoomLegend(legend_zoom) {
+  return {type: types.ZOOM_LEGEND, legend_zoom};
 }
 
 // Displace the legend SVG
@@ -47,15 +53,15 @@ export function addSettingForLayerType(setting, name) {
 }
 
 // Loading LayerTypes was Successful
-export function loadLayerTypesSuccess(layerTypes) {
-  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes};
+export function loadLayerTypesSuccess(layerTypes, network, generationMode) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};
 }
 
 // Called to load the LayerTypes
-export function loadLayerTypes(id) {
+export function loadLayerTypes(id, generationMode) {
   return function(dispatch) {
     return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), generationMode));
     }).catch(error => {
       throw(error);
     });
@@ -63,15 +69,27 @@ export function loadLayerTypes(id) {
 }
 
 // Updating LayerTypes was Succesful
-export function updateLayerTypesSuccess(layerTypes) {
-  return {type: types.UPDATE_LAYER_TYPES_SUCCESS, layerTypes}
+export function updateLayerTypesSuccess(layerTypes, network) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network}
 }
 
 // Called to update the LayerTypes
-export function updateLayerTypes(layerTypes, id) {
+export function updateLayerTypes(layerTypes, network, id) {
   return function(dispatch) {
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+    }).catch(error => {
+      throw(error);
+    });
+  }
+}
+
+// Called to delete LayerTypes
+export function deleteLayerTypes(layerTypes, network, id) {
+  return function(dispatch) {
+    dispatch(setPreferenceMode('legend'));
+    return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
     }).catch(error => {
       throw(error);
     });
@@ -110,7 +128,7 @@ export function updatePreferences(preferences, id) {
     return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
       dispatch(updatePreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
 }
@@ -180,12 +198,15 @@ export function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id, groups) {
+export function updateCode(code, id, groups, generationMode) {
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
         networkLoaded(network, groups, dispatch);      
+        return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
+        });
       }).catch(error => {
         throw(error);
       })
@@ -198,6 +219,11 @@ export function updateCode(code, id, groups) {
 // Select Layer
 export function selectLayer(id) {
   return {type: types.SELECT_LAYER, id}
+}
+
+// Select multiple Layers
+export function selectLayers(layers) {
+  return {type: types.SELECT_LAYERS, layers}
 }
 
 // Deselect Layer
@@ -221,7 +247,7 @@ export function setSelectedLegendItem(name) {
 }
 
 // Check that all components are reloaded from the Server in the correct order.
-export function reloadAllState(id) {
+export function reloadAllState(id, generationMode) {
   return function(dispatch) {
     return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
@@ -232,7 +258,7 @@ export function reloadAllState(id) {
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes)));
+              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
               return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
                 dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
               });
@@ -251,26 +277,52 @@ export function reloadAllState(id) {
   }
 }
 
-// Update the extreme dimensions of the whole graph.
-export function updateGraphExtremeDimensions(extreme_dimensions) {
-  return { type: types.UPDATE_GRAPH_EXTREME_DIMENSIONS, extreme_dimensions}
-}
-
 // Loading Groups was Successful
 export function loadGroupsSuccess(groups) {
   return {type: types.LOAD_GROUPS_SUCCESS, groups};
 }
 
-// Adding Group was Successful
-export function addGroupSuccess(group) {
-  return {type: types.ADD_GROUP, group}
+// Add a new Grouping
+export function addGroup(groups, network, layerTypes, id) {
+  return function(dispatch) {
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+      return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
+      });
+    });
+  }
 }
 
-// Add a new Grouping
-export function addGroup(group, id) {
+// Updating Groups was Successful
+export function updateGroupsSuccess(groups) {
+  return {type: types.UPDATE_GROUPS, groups}
+}
+
+// Update the Groups
+export function updateGroups(groups, layerTypes, network, id) {
   return function(dispatch) {
-    return GroupsApi.addGroup(group, id).then(group => {
-      dispatch(addGroupSuccess(JSON.parse(group)));
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+    });
+  }
+}
+
+// Delete groups from the network.
+export function deleteGroups(groups, layerTypes, network, id) {
+  return function(dispatch) {
+    dispatch(setPreferenceMode('network'));
+    return GroupsApi.updateGroups(groups, id).then(groups => {
+      sort.sortGroups(groups, layerTypes);
+      dispatch(updateGroupsSuccess(JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+      return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+        dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+      });
     });
   }
 }
@@ -302,7 +354,27 @@ export function updateLegendPreferences(preferences, id) {
     return LegendPreferencesApi.updateLegendPreferences(preferences, id).then(preferences => {
       dispatch(updateLegendPreferencesSuccess(JSON.parse(preferences)));
     }).catch(error => {
-      console.warn('Preferences invalid.');
+      console.warn('Preferences invalid: ' + error);
     });
   }
+}
+
+// Set the color mode for the selection
+export function setColorSelectionMode(mode) {
+  return {type: types.SET_SELECTION_COLOR_MODE, mode};
+}
+
+// Set the color mode for the Generation
+export function setColorGenerationMode(mode) {
+  return {type: types.SET_GENERATION_COLOR_MODE, mode};
+}
+
+// Set the Network Bbox
+export function setNetworkBbox(bbox) {
+  return {type: types.SET_NETWORK_BBOX, bbox};
+}
+
+// Set the Legend Bbox
+export function setLegendBbox(bbox) {
+  return {type: types.SET_LEGEND_BBOX, bbox};
 }

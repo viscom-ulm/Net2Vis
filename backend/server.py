@@ -20,14 +20,13 @@ text_type = {'ContentType': 'text/plain'}
 ##################
 # Convert the Network to be sendable in JSON.
 def make_jsonifyable(network):
-  net = copy.deepcopy(network)
-  replace_references(net)
+  replace_references(network)
   processed = []
-  for i in range(len(net.layers)):
-    layer = net.layers[i]
+  for i in range(len(network.layers)):
+    layer = network.layers[i]
     lay = layer.__dict__
     dict = {
-      'name': type(layer).__name__,
+      'name': layer.type,
       'id': i,
       'properties': lay
     }
@@ -58,6 +57,7 @@ def check_exists(id):
     copyfile(os.path.join('default', 'layer_types_current.json'), os.path.join('models', id, 'layer_types_current.json'))
     copyfile(os.path.join('default', 'preferences.json'), os.path.join('models', id, 'preferences.json'))
     copyfile(os.path.join('default', 'groups.json'), os.path.join('models', id, 'groups.json'))
+    copyfile(os.path.join('default', 'legend_preferences.json'), os.path.join('models', id, 'legend_preferences.json'))
 
 ###############
 # Basic Serving 
@@ -142,21 +142,6 @@ def update_groups(id):
   content = request.data
   file = open(os.path.join('models', id, 'groups.json'),'w')
   file.write(content.decode("utf-8"))
-  return content, ok_status, text_type
-  
-# Add a new Group.
-@app.route('/api/add_group/<id>', methods=['POST'])
-def add_group(id):
-  check_exists(id)
-  content = request.data
-  with open(os.path.join('models', id, 'groups.json'), "r+") as file:
-    data = file.read()
-    data = json.loads(data)
-    data.append(json.loads(content))
-    print(data)
-    file.seek(0)
-    file.write(json.dumps(data))
-    file.truncate()
   return content, ok_status, text_type
 
 # Get the Preferences.
