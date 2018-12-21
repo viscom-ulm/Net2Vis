@@ -10,19 +10,19 @@ export default function layerExtremeDimensionsReducer(state = initialState.layer
       const layers = action.network.layers;
       for (var i in layers) {
         const dimensions = layers[i].properties.dimensions;
-        if (Array.isArray(dimensions.out)) {
+        if (dimensions.out.length > 1) {
           for (let j = 0; j < dimensions.out.length - 1; j++) {
             max = dimensions.out[j] > max ? dimensions.out[j] : max;
             min = dimensions.out[j] < min ? dimensions.out[j] : min;  
           }
           max_f = dimensions.out[dimensions.out.length - 1] > max_f ? dimensions.out[dimensions.out.length - 1] : max_f;
           min_f = dimensions.out[dimensions.out.length - 1] < min_f ? dimensions.out[dimensions.out.length - 1] : min_f;  
-        } else if (!Array.isArray(dimensions.in)) {
+        } else if (dimensions.in.length === 1) {
           const dimensions = layers[i].properties.dimensions;
-          max_d = dimensions.out > max_d ? dimensions.out : max_d;
-          min_d = dimensions.out < min_d ? dimensions.out : min_d;
+          max_d = dimensions.out[0] > max_d ? dimensions.out[0] : max_d;
+          min_d = dimensions.out[0] < min_d ? dimensions.out[0] : min_d;
         }
-        if (Array.isArray(dimensions.in)) {
+        if (dimensions.in.length > 1) {
           for (let j = 0; j < dimensions.in.length - 1; j++) {
             max = dimensions.in[j] > max ? dimensions.in[j] : max;
             min = dimensions.in[j] < min ? dimensions.in[j] : min;  

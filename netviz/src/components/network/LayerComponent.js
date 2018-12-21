@@ -36,7 +36,7 @@ class Layer extends React.Component {
   // Calculate the height values of the layer (begin and end) based on the spatial resolution
   calculateLayerHeight = (extreme_dimensions, dimensions) => {
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the height placeholder
-    if(Array.isArray(dimensions.out)) { // Calculate the dimensions of the Layer for a multidimensional Tensor
+    if(dimensions.out.length > 1) { // Calculate the dimensions of the Layer for a multidimensional Tensor
       const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of all Layers
       const lay_diff = extreme_layer.max_size - extreme_layer.min_size; // Get the difference between Max and Min for the Extremes of the Layer
       const dim_diff = extreme_dimensions.max_size - extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
@@ -69,7 +69,7 @@ class Layer extends React.Component {
     if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
       stroke = "red"; // Set stroke color to red
     }
-    const features = Array.isArray(dimensions.out) ? dimensions.out[dimensions.out.length-1] : dimensions.out;
+    const features = dimensions.out.length > 1 ? dimensions.out[dimensions.out.length-1] : dimensions.out[0];
     const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value) + (this.props.preferences.stroke_width.value);
     var inputSample = undefined; // Placeholder for label if this is an input of the Net
     if (this.props.layer.layer.properties.input.length === 0) { // If no inputs
@@ -103,11 +103,11 @@ class Layer extends React.Component {
           }
         </g>
         {
-          this.props.preferences.show_samples.value && inputSample !== undefined && Array.isArray(dimensions.out) &&
+          this.props.preferences.show_samples.value && inputSample !== undefined && dimensions.out.length > 1 &&
           <SampleComponent extent={layer_height[0]} x={inputSample.x} edge={inputSample.edge} layer_max_height={this.props.preferences.layer_display_max_height.value} strokeWidth={this.props.preferences.stroke_width.value / 2.0}/>
         }
         {
-          this.props.preferences.show_samples.value && outputSample !== undefined && Array.isArray(dimensions.out) &&
+          this.props.preferences.show_samples.value && outputSample !== undefined && dimensions.out.length > 1 &&
           <SampleComponent extent={layer_height[1]} x={outputSample.x} edge={outputSample.edge} layer_max_height={this.props.preferences.layer_display_max_height.value} strokeWidth={this.props.preferences.stroke_width.value / 2.0}/>
         }
       </g>

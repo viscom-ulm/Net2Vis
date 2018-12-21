@@ -7,7 +7,7 @@ export function buildGraphFromNetwork(network, layer_extreme_dimensions, prefere
   graph.setDefaultEdgeLabel(function() { return {}; }); // Default Egde Label needs to be set
   for (var i in network.layers) { // Add all Layers to the Graph
     const layer = network.layers[i]; // Get the current Layer
-    if (Array.isArray(layer.properties.dimensions.in) && Array.isArray(layer.properties.dimensions.out)) {
+    if (layer.properties.dimensions.in.length > 1 && layer.properties.dimensions.out.length > 1) {
       const max_layer_dim = Math.max(layer.properties.dimensions.in[0], layer.properties.dimensions.out[0]) // Get the maximum dimension of the layer (in vs out)
       var lay_diff =  layer_extreme_dimensions.max_size - layer_extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Layer
       lay_diff = lay_diff === 0 ? 1 : lay_diff; // Check if there is any difference in spatial resolution at all
