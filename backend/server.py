@@ -26,7 +26,7 @@ def make_jsonifyable(network):
     layer = network.layers[i]
     lay = layer.__dict__
     dict = {
-      'name': type(layer).__name__,
+      'name': layer.type,
       'id': i,
       'properties': lay
     }

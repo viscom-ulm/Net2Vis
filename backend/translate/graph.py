@@ -42,9 +42,6 @@ class Graph:
             'in': self.input_shape,
             'out': self.input_shape
         }
-        for layer in self.layers: # Calculate for all Layers.
-            if not layer.dimensions: # Only if no Dimension was set.
-                layer.calculate_dimensions_recursive(input_dim)
 
     # Return the Layer Dimensions as Pretty String.
     def dimensions_str(self):

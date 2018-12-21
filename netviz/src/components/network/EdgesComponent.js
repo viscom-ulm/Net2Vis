@@ -45,17 +45,17 @@ class Edges extends React.Component {
           <g key={index}>
             <EdgeComponent edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value} horizontal_spacing={this.props.preferences.layers_spacing_horizontal} color={'black'}/>
             {
-              this.props.preferences.show_dimensions.value && Array.isArray(dimensions.out) &&
+              this.props.preferences.show_dimensions.value && dimensions.out.length > 1 &&
               <DimensionsLabelComponent dimensions={dimensions.out} x={dimensionsLabelX} edge={edge.points} layer_max_height={this.props.preferences.layer_display_max_height.value}/>
             }
           </g>
         )}
         {
-          this.props.preferences.show_dimensions.value && (additionalLabelInput !== undefined) && Array.isArray(dimensions.out) &&
+          this.props.preferences.show_dimensions.value && (additionalLabelInput !== undefined) && dimensions.out.length > 1 &&
           <DimensionsLabelComponent dimensions={additionalLabelInput.dimensions} x={additionalLabelInput.x} edge={additionalLabelInput.edge} layer_max_height={this.props.preferences.layer_display_max_height.value}/>
         }
         {
-          this.props.preferences.show_dimensions.value && (additionalLabelOutput !== undefined) && Array.isArray(dimensions.out) &&
+          this.props.preferences.show_dimensions.value && (additionalLabelOutput !== undefined) && dimensions.out.length > 1 &&
           <DimensionsLabelComponent dimensions={additionalLabelOutput.dimensions} x={additionalLabelOutput.x} edge={additionalLabelOutput.edge} layer_max_height={this.props.preferences.layer_display_max_height.value}/>
         }
       </g>

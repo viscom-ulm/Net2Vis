@@ -1,6 +1,6 @@
 import json
 from graph import Graph
-import layers_representations
+import layer
 import sys
 import traceback
 
@@ -16,8 +16,8 @@ def translate_keras(filename):
             layers_extracted = model_json['config']['layers']
             graph.set_input_shape(layers_extracted[0]['config']['batch_input_shape'][1:])
             previousNode = ''
-            for layer in layers_extracted:
-                previousNode = add_layer_type(layer, graph, previousNode)
+            for i in range(len(layers_extracted)):
+                previousNode = add_layer_type(layers_extracted[i], model.layers[i], graph, previousNode)
             graph.resolve_input_names()
             return graph
         except SyntaxError as err:
@@ -30,51 +30,19 @@ def translate_keras(filename):
             cl, exc, tb = sys.exc_info()
             ln = traceback.extract_tb(tb)[-1][1]
             return {'error_class': err.__class__.__name__, 'line_number': ln, 'detail': err.args[0]}
-        
+ 
+
 # Add a Layer for the line. Layers are identified by their name and equipped using the spec.
-def add_layer_type(layer, graph, previousNode):
-    if('Dense' in layer['class_name']): # Dense Layer.
-        new_layer = layers_representations.Dense(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif('Conv2D' in layer['class_name']): # Convolution Layer 2D.
-        new_layer = layers_representations.Conv2D(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif('MaxPooling2D' in layer['class_name']): # Max-Pooling Layer 2D.
-        new_layer = layers_representations.MaxPool2D(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('Dropout' in layer['class_name']): # Dropout Layer.
-        new_layer = layers_representations.Dropout(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('Flatten' in layer['class_name']):
-        new_layer = layers_representations.Flatten(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('Activation' in layer['class_name']): # Activation Layer.
-        new_layer = layers_representations.Activation(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('LeakyReLU' in layer['class_name']): # LeakyReLU Layer.
-        new_layer = layers_representations.LeakyReLU(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('BatchNormalization' in layer['class_name']): # BatchNormalization Layer.
-        new_layer = layers_representations.BatchNormalization(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('Add' in layer['class_name']): # Add Layer.
-        new_layer = layers_representations.Add(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('Concatenate' in layer['class_name']): # Concatenation Layer.
-        new_layer = layers_representations.Concatenate(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif ('UpSampling2D' in layer['class_name']): # UpSampling Layer.
-        new_layer = layers_representations.UpSampling2D(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
-    elif('Conv3D' in layer['class_name']): # Convolution Layer 3D.
-        new_layer = layers_representations.Conv3D(layer['config']['name'])
-        return add_to_graph(new_layer, layer, graph, previousNode)
+def add_layer_type(layer_json, model_layer, graph, previousNode):
+    new_layer = layer.Layer(layer_json['class_name'], layer_json['config']['name'], model_layer)
+    new_layer.add_specs(layer_json['config'])
+    return add_to_graph(new_layer, layer_json, graph, previousNode)
+
 
 # Takes a new layer, adds the Properties and then adds the Layer to the Graph.
-def add_to_graph(new_layer, layer, graph, previousNode):
-    new_layer.add_specs(layer['config'])
+def add_to_graph(new_layer, model_layer, graph, previousNode):
     try:
-        new_layer.add_input_names(layer['inbound_nodes'])
+        new_layer.add_input_names(model_layer['inbound_nodes'])
     except Exception as err: 
         if (previousNode != ''):
             new_layer.add_input_names([[[previousNode, 0, 0, {}]]])
