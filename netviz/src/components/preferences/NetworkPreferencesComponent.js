@@ -80,6 +80,7 @@ class NetworkPreferences extends React.Component {
       addition.addGroup(groups, group); // Add the new Group to the existing ones
       sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
       this.props.actions.addGroup(groups, this.props.network, settings, this.props.id); // Add the group to the state
+      this.props.actions.deselectLayers();
     } else {
       console.warn('Either a duplicate or no grouping possible.');
     }
@@ -92,6 +93,7 @@ class NetworkPreferences extends React.Component {
     removal.deleteGroup(name, this.props.groups); // Delete the group and expand Groups that depend on it
     delete currLegend[name]; // Delete the LegendItem
     this.props.actions.deleteGroups(this.props.groups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
+    this.props.actions.deselectLayers();
   }
 
   // Toggle the display state of the Dimensions Labels
