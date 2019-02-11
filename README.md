@@ -32,6 +32,10 @@ For starting up the server, the following steps are needed:
 2. Within the 'backend' folder, issue python3 server.py
 
 The frontend is a react application that can be started as follows:
-1. cd into the ''netviz folder
+1. cd into the 'netviz' folder
 2. npm install
 3. npm start
+
+## Acknolegements
+
+This work was funded by the Carl-Zeiss-Scholarship for Ph.D. students.
