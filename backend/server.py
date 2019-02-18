@@ -5,6 +5,8 @@ import inspect
 import json
 import os
 from shutil import copyfile
+import cairosvg
+import zipfile
 
 sys.path.append('translate')
 from translate_keras import translate_keras
@@ -53,11 +55,19 @@ def replace_references(net):
 def check_exists(id):
   if(not os.path.exists(os.path.join('models', id))):
     os.mkdir(os.path.join('models', id))
+    os.mkdir(os.path.join('models', id, 'visualizations'))
     copyfile(os.path.join('default', 'model_current.py'), os.path.join('models', id, 'model_current.py'))
     copyfile(os.path.join('default', 'layer_types_current.json'), os.path.join('models', id, 'layer_types_current.json'))
     copyfile(os.path.join('default', 'preferences.json'), os.path.join('models', id, 'preferences.json'))
     copyfile(os.path.join('default', 'groups.json'), os.path.join('models', id, 'groups.json'))
     copyfile(os.path.join('default', 'legend_preferences.json'), os.path.join('models', id, 'legend_preferences.json'))
+
+# Zip a folder.
+def zipdir(path, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            ziph.write(os.path.join(root, file))
 
 ###############
 # Basic Serving 
@@ -161,5 +171,24 @@ def update_legend_preferences(id):
   file.write(content.decode("utf-8"))
   return content, ok_status, text_type
 
+# Pack and transform the visualization
+@app.route('/api/process_vis/<id>', methods=['POST'])
+def process_vis(id):
+  check_exists(id)
+  content = request.data
+  json_content = json.loads(content)
+  base_path = os.path.join('models', id, 'visualizations')
+  file = open(os.path.join(base_path, 'graph.svg'),'w')
+  file.write(json_content['graph'])
+  file.flush()
+  cairosvg.svg2pdf(url=os.path.join(base_path, 'graph.svg'), write_to=os.path.join(base_path, 'graph.pdf'))
+  file = open(os.path.join(base_path, 'legend.svg'),'w')
+  file.write(json_content['legend'])
+  file.flush()
+  cairosvg.svg2pdf(url=os.path.join(base_path, 'legend.svg'), write_to=os.path.join(base_path, 'legend.pdf'))
+  zipf = zipfile.ZipFile(os.path.join('models', id, 'visualizations.zip'), 'w', zipfile.ZIP_DEFLATED)
+  zipdir(base_path, zipf)
+  zipf.close()
+  return content, ok_status, text_type
 
 app.run(debug=True)
