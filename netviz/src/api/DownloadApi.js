@@ -1,3 +1,5 @@
+import {saveAs} from 'file-saver';
+
 // Class for calling Backend functions related to Code 
 class DownloadApi {
   // Update the Code on the Backend
@@ -15,7 +17,10 @@ class DownloadApi {
     });
     
     return fetch(request).then(response => { // Return the Result of the Request
-      return response.text();
+      response.blob().then(res => {
+        console.log(res);
+        saveAs(res, "net2vis.zip"); // Download it
+      });
     }).catch(error => {
       return error;
     });

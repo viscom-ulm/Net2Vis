@@ -189,6 +189,9 @@ def process_vis(id):
   zipf = zipfile.ZipFile(os.path.join('models', id, 'visualizations.zip'), 'w', zipfile.ZIP_DEFLATED)
   zipdir(base_path, zipf)
   zipf.close()
-  return content, ok_status, text_type
+  return send_file(os.path.join('models', id, 'visualizations.zip'),
+    mimetype='zip',
+    attachment_filename='visualizations.zip',
+    as_attachment=True)
 
 app.run(debug=True)
