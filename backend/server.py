@@ -69,6 +69,18 @@ def zipdir(path, ziph):
         for file in files:
             ziph.write(os.path.join(root, file))
 
+# Save and convert the svg files into PDFs
+def save_and_convert_svgs(base_path, json_content):
+  file = open(os.path.join(base_path, 'graph.svg'),'w')
+  file.write(json_content['graph'])
+  file.flush()
+  cairosvg.svg2pdf(url=os.path.join(base_path, 'graph.svg'), write_to=os.path.join(base_path, 'graph.pdf'))
+  file = open(os.path.join(base_path, 'legend.svg'),'w')
+  file.write(json_content['legend'])
+  file.flush()
+  cairosvg.svg2pdf(url=os.path.join(base_path, 'legend.svg'), write_to=os.path.join(base_path, 'legend.pdf'))
+
+
 ###############
 # Basic Serving 
 ###############
@@ -176,22 +188,15 @@ def update_legend_preferences(id):
 def process_vis(id):
   check_exists(id)
   content = request.data
-  json_content = json.loads(content)
-  base_path = os.path.join('models', id, 'visualizations')
-  file = open(os.path.join(base_path, 'graph.svg'),'w')
-  file.write(json_content['graph'])
-  file.flush()
-  cairosvg.svg2pdf(url=os.path.join(base_path, 'graph.svg'), write_to=os.path.join(base_path, 'graph.pdf'))
-  file = open(os.path.join(base_path, 'legend.svg'),'w')
-  file.write(json_content['legend'])
-  file.flush()
-  cairosvg.svg2pdf(url=os.path.join(base_path, 'legend.svg'), write_to=os.path.join(base_path, 'legend.pdf'))
-  zipf = zipfile.ZipFile(os.path.join('models', id, 'visualizations.zip'), 'w', zipfile.ZIP_DEFLATED)
-  zipdir(base_path, zipf)
-  zipf.close()
+  json_content = json.loads(content) # Get the Json representation of the Request Body
+  base_path = os.path.join('models', id, 'visualizations') # Base_Path for Visualizations
+  save_and_convert_svgs(base_path, json_content) # Save and convert the svg files into PDFs
+  zipf = zipfile.ZipFile(os.path.join('models', id, 'visualizations.zip'), 'w', zipfile.ZIP_DEFLATED) # Create a Zip File
+  zipdir(base_path, zipf) # Zip a directory into this file
+  zipf.close() # Close the Zip file
   return send_file(os.path.join('models', id, 'visualizations.zip'),
     mimetype='zip',
     attachment_filename='visualizations.zip',
-    as_attachment=True)
+    as_attachment=True) # Send the Zip back to the frontend
 
 app.run(debug=True)
