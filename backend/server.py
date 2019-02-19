@@ -64,10 +64,10 @@ def check_exists(id):
 
 # Zip a folder.
 def zipdir(path, ziph):
-    # ziph is zipfile handle
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            ziph.write(os.path.join(root, file))
+  # ziph is zipfile handle
+  for root, dirs, files in os.walk(path):
+    for file in files:
+      ziph.write(os.path.join(root, file), arcname=file)
 
 # Save and convert the svg files into PDFs
 def save_and_convert_svgs(base_path, json_content):
