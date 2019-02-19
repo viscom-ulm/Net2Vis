@@ -17,7 +17,7 @@ const FeaturesLabelComponent = ({features, x, layer_height, extreme_dimensions, 
   }
   var y = Math.max(y_pos[0], y_pos[1]);
   return (
-    <text textAnchor='middle' dominantBaseline='hanging' x={x} y={y+5}>{features}</text>
+    <text textAnchor='middle' x={x} y={y+5+12}>{features}</text>
   );
 };
 

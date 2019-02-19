@@ -28,13 +28,15 @@ Starting with Net2Vis is pretty easy (assuming python3, npm, and tensorflow/kera
 1. Clone this Repo
 
 For starting up the server, the following steps are needed:
-1. Install Flask
-2. Within the 'backend' folder, issue python3 server.py
+1. Go into the backend folder: `cd backend`
+2. Install Flask for the server functionality using: `pip3 install flask`
+3. Install Cairosvg for conversion of svg images into pdfs with: `pip3 install cairosvg`
+4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
-1. cd into the 'netviz' folder
-2. npm install
-3. npm start
+1. Go into the frontend folder: `cd netviz`
+2. Install the javascript dependencies using: `npm install`
+3. Start the frontend application with: `npm start`
 
 ## Acknolegements
 

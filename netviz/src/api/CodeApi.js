@@ -28,4 +28,4 @@ class CodeApi {
   }
 }
   
-  export default CodeApi;
+export default CodeApi;
