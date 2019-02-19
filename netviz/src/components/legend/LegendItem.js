@@ -24,7 +24,7 @@ class LegendItem extends React.Component {
     if (this.props.representation.layer.trivial) {
       return (
         <g>
-          <text textAnchor='middle' dominantBaseline='hanging' x={this.props.representation.position + (this.props.representation.layer.width / 2.0)} y={this.props.legend_preferences.layer_height.value + 5} style={textStyle}>{this.props.representation.layer.representer.setting.alias}</text>
+          <text textAnchor='middle' x={this.props.representation.position + (this.props.representation.layer.width / 2.0)} y={this.props.legend_preferences.layer_height.value + 5 + 12} style={textStyle}>{this.props.representation.layer.representer.setting.alias}</text>
           <rect x={this.props.representation.position} y='0' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
         </g>
       ) 
@@ -42,9 +42,9 @@ class LegendItem extends React.Component {
       return (
         <g>
           <rect x={this.props.representation.position} y='0' width={this.props.legend_preferences.layer_width.value} height={this.props.legend_preferences.layer_height.value} style={style} onClick={() => this.props.action(this.props.representation.layer.representer.name)}/>
-          <text textAnchor='middle' dominantBaseline='middle' x={this.props.representation.position + this.props.legend_preferences.layer_width.value + (this.props.legend_preferences.complex_spacing.value / 2.0)} y={this.props.legend_preferences.layer_height.value / 2.0} style={textStyle}>=</text>
+          <text textAnchor='middle' x={this.props.representation.position + this.props.legend_preferences.layer_width.value + (this.props.legend_preferences.complex_spacing.value / 2.0)} y={this.props.legend_preferences.layer_height.value / 2.0 + 6} style={textStyle}>=</text>
           <g transform={`translate(0, ${-(displacement + (this.props.legend_preferences.layer_height.value / 2.0))})`}>
-            <text textAnchor='middle' dominantBaseline='hanging' x={this.props.representation.position + (this.props.representation.layer.width / 2.0)} y={this.props.representation.layer.height + (this.props.legend_preferences.layer_height.value / 2.0) + 5} style={textStyle}>{this.props.representation.layer.representer.setting.alias}</text>
+            <text textAnchor='middle' x={this.props.representation.position + (this.props.representation.layer.width / 2.0)} y={this.props.representation.layer.height + (this.props.legend_preferences.layer_height.value / 2.0) + 5 + 12} style={textStyle}>{this.props.representation.layer.representer.setting.alias}</text>
             {nodes.map((layer, i) => 
               <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} active={this.props.representation.layer.active} height={graph.graph().height} key={i} action={this.props.action}/>
             )}
