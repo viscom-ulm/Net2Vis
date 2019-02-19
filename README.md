@@ -38,6 +38,6 @@ The frontend is a react application that can be started as follows:
 2. Install the javascript dependencies using: `npm install`
 3. Start the frontend application with: `npm start`
 
-## Acknolegements
+## Acknowlegements
 
 This work was funded by the Carl-Zeiss-Scholarship for Ph.D. students.
