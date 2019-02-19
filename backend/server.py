@@ -74,10 +74,12 @@ def save_and_convert_svgs(base_path, json_content):
   file = open(os.path.join(base_path, 'graph.svg'),'w')
   file.write(json_content['graph'])
   file.flush()
+  file.close()
   cairosvg.svg2pdf(url=os.path.join(base_path, 'graph.svg'), write_to=os.path.join(base_path, 'graph.pdf'))
   file = open(os.path.join(base_path, 'legend.svg'),'w')
   file.write(json_content['legend'])
   file.flush()
+  file.close()
   cairosvg.svg2pdf(url=os.path.join(base_path, 'legend.svg'), write_to=os.path.join(base_path, 'legend.pdf'))
 
 
