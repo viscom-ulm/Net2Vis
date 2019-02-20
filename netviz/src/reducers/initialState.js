@@ -30,6 +30,7 @@ export default {
         show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
         show_features: {value: true, type: 'switch', description: 'Features Label'},
         show_samples: {value: true, type: 'switch', description: 'Input/Output Samples'},
+        no_colors: {value: false, type: 'switch', description: 'Disable Colors'},
         stroke_width: {value: 4, type:'number', description: 'Stroke Width'}
     },
     layer_extreme_dimensions: {
