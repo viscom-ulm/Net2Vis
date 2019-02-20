@@ -3,6 +3,31 @@ import * as common from '../groups/Common'
 
 // Get a representation for the legend to be drawn
 export function getLegend(layerTypesSettings, groups, legendPreferences) {
+  var legend = legendPreferences.reverse_order.value ? setupLegendReverse(groups, legendPreferences, layerTypesSettings) : setupLegend(groups, legendPreferences, layerTypesSettings);
+  return legend;
+}
+
+function setupLegend(groups, legendPreferences, layerTypesSettings) {
+  var position = 10;
+  var legend = [];
+  for (var j in layerTypesSettings) {
+    var layer = getLayer(groups, j, layerTypesSettings, legendPreferences);
+    if (layer !== undefined) {
+      legend.push({position: position, layer: layer});
+      position = position + layer.width + legendPreferences.element_spacing.value;
+    }
+  }
+  for (var i in groups) {
+    var groupLayer = getGroupLayer(groups[i], groups[i].name, layerTypesSettings, legendPreferences);
+    if (groupLayer !== undefined) {
+      legend.push({position: position, layer: groupLayer});
+      position = position + groupLayer.width + legendPreferences.element_spacing.value;
+    }
+  }
+  return legend;
+}
+
+function setupLegendReverse(groups, legendPreferences, layerTypesSettings) {
   var position = 10;
   var legend = [];
   for (var i in groups.reverse()) {
