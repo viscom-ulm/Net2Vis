@@ -10,7 +10,7 @@ import * as colors from '../../colors';
 class ComplexLegendItem extends React.Component {
   render() {
     var settings = this.props.layer_types_settings[this.props.layer.layer.name];
-    var color = settings.color;
+    var color = this.props.preferences.no_colors.value ? settings.texture : settings.color;
     const extreme_dimensions = {max_size: this.props.legend_preferences.layer_height.value, min_size: this.props.legend_preferences.layer_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const pathableLayer = {
       layer: {
@@ -25,9 +25,10 @@ class ComplexLegendItem extends React.Component {
     }
     const pathData = paths.calculateGlyphPath(extreme_dimensions, [extreme_dimensions.max_size,extreme_dimensions.max_size], pathableLayer, this.props.edges); // Calculate the Path of the Layer
     const current_edges = paths.getOutgoingEdges(pathableLayer, this.props.edges); // Get relevant Edges going out from the current Layer
+    const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(color);
     const style = {
       fill: color,
-      stroke: this.props.active ? colors.darkenColor(color) : 'lightgrey',
+      stroke: this.props.active ? stroke_color : 'lightgrey',
       strokeLinejoin: 'round',
       strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
@@ -47,14 +48,16 @@ class ComplexLegendItem extends React.Component {
 // PropTypes of this Class
 ComplexLegendItem.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
-  legend_preferences: PropTypes.object.isRequired
+  legend_preferences: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 }
 
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
     layer_types_settings: state.layer_types_settings,
-    legend_preferences: state.legend_preferences
+    legend_preferences: state.legend_preferences,
+    preferences: state.preferences
   };
 }
 

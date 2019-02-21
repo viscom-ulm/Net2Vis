@@ -75,7 +75,8 @@ class NetworkPreferences extends React.Component {
       var settings = this.props.layer_types_settings; // Get the current settings
       settings[group.name] = {
         color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
-        alias: 'Group' // Initialize the alias
+        alias: 'Group', // Initialize the alias
+        texture: colors.generateNewTexture(settings) // Generate a new Texture for the group
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
       sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
@@ -120,6 +121,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
+  // Toggle the display of Colors
+  toggleColors = (e) => {
+    var preferences = this.props.preferences;
+    preferences.no_colors.value = !preferences.no_colors.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  }
+
   // Color generation mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorGenerationMode(e.target.value);
@@ -138,10 +146,14 @@ class NetworkPreferences extends React.Component {
           <Features/>
           <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
           <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
-          <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
+          {
+            !this.props.preferences.no_colors.value &&
+            <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
+          }
           <InputField value={this.props.preferences.show_dimensions.value} type={this.props.preferences.show_dimensions.type} description={this.props.preferences.show_dimensions.description} action={this.toggleDimensionsLabel}/>
           <InputField value={this.props.preferences.show_features.value} type={this.props.preferences.show_features.type} description={this.props.preferences.show_features.description} action={this.toggleFeaturesLabel}/>
           <InputField value={this.props.preferences.show_samples.value} type={this.props.preferences.show_samples.type} description={this.props.preferences.show_samples.description} action={this.toggleSamples}/>
+          <InputField value={this.props.preferences.no_colors.value} type={this.props.preferences.no_colors.type} description={this.props.preferences.no_colors.description} action={this.toggleColors}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>

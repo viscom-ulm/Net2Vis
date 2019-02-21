@@ -62,8 +62,14 @@ class GroupPreferences extends React.Component {
             Group
           </Typography>
           <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].alias} type={'text'} description={'Layer Alias'} action={this.handleAliasChange}/>
-          <InputField value={this.props.color_mode.selection} type={'select'} description={'Group Color'} options={options} action={this.handleColorModeChange}/>
-          <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Group Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
+          {
+            !this.props.preferences.no_colors.value &&
+            <InputField value={this.props.color_mode.selection} type={'select'} description={'Group Color'} options={options} action={this.handleColorModeChange}/>
+          }
+          {
+            !this.props.preferences.no_colors.value &&
+            <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Group Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
+          }
           <InputField value={this.props.group.active} type={'switch'} description={'Group Active'} action={this.toggleGroup}/>
         </div>
         <div>
@@ -81,7 +87,8 @@ GroupPreferences.propTypes = {
   selected_legend_item: PropTypes.string.isRequired,
   network: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
-  color_mode: PropTypes.object.isRequired
+  color_mode: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -92,7 +99,8 @@ function mapStateToProps(state, ownProps) {
     selected_legend_item: state.selected_legend_item,
     network: state.network,
     groups: state.groups,
-    color_mode: state.color_mode
+    color_mode: state.color_mode,
+    preferences: state.preferences
   };
 }
 

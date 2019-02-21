@@ -9,6 +9,7 @@ import Legend from './legend/LegendComponent'
 import Preferences from './preferences/PreferencesComponent';
 import Code from './code/CodeComponent'
 import { Grid, Paper } from '@material-ui/core';
+import Patterns from './patterns/PatternComponent';
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
@@ -77,6 +78,7 @@ class Main extends React.Component {
             <Grid item className='svgGrid'>
               <Paper className='full'>
                 <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
+                  <Patterns />
                   <Network />
                 </svg>
               </Paper>
