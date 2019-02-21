@@ -1,6 +1,6 @@
 ![Net2Vis Teaser](net2vis_teaser.png)
 # Net2Vis
-Created by <a href="https://www.uni-ulm.de/en/in/mi/institute/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
+Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
 
 :white_check_mark: Automatic Network Visualization
 
