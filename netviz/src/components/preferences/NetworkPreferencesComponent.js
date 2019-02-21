@@ -75,7 +75,8 @@ class NetworkPreferences extends React.Component {
       var settings = this.props.layer_types_settings; // Get the current settings
       settings[group.name] = {
         color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
-        alias: 'Group' // Initialize the alias
+        alias: 'Group', // Initialize the alias
+        texture: colors.generateNewTexture(settings) // Generate a new Texture for the group
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
       sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
