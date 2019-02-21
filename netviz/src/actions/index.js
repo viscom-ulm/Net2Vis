@@ -47,11 +47,6 @@ export function toggleLegend() {
   return {type: types.TOGGLE_LEGEND};
 }
 
-// Add setting for a Layer Type
-export function addSettingForLayerType(setting, name) {
-  return {type: types.ADD_LAYER_TYPE_SETTING, setting, name};
-}
-
 // Loading LayerTypes was Successful
 export function loadLayerTypesSuccess(layerTypes, network, generationMode) {
   return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};

@@ -83,7 +83,8 @@ class LegendPreferences extends React.Component {
       var settings = this.props.layer_types_settings; // Get the current settings
       settings[group.name] = {
         color: colors.generateNewColor(settings, this.props.color_mode.generation), // Generate a new Color for the group
-        alias: 'Group' // Initialize the alias
+        alias: 'Group', // Initialize the alias
+        texture: colors.generateNewTexture(settings) // Generate a new Texture for the group
       }
       addition.addGroup(groups, group); // Add the new Group to the existing ones
       sort.sortGroups(groups, settings); // Sort the groups so that the ones that depend on others are at the end
@@ -102,6 +103,13 @@ class LegendPreferences extends React.Component {
     this.props.actions.deleteGroups(this.props.groups, currLegend, this.props.network, this.props.id); // Push the deletion to the state
   }
 
+  // Toggle the display state of the Features Labels
+  toggleReverseOrder = (e) => {
+    var preferences = this.props.legend_preferences;
+    preferences.reverse_order.value = !preferences.reverse_order.value;
+    this.props.actions.updateLegendPreferences(preferences, this.props.id);
+  }
+
   render() {
     return(
       <div className='preferencesWrapper'>
@@ -115,6 +123,7 @@ class LegendPreferences extends React.Component {
           <InputField value={this.props.legend_preferences.layers_spacing_horizontal.value} type={this.props.legend_preferences.layers_spacing_horizontal.type} description={this.props.legend_preferences.layers_spacing_horizontal.description} action={this.handleLegendLayersSpacingHorizontalChange}/>
           <InputField value={this.props.legend_preferences.layers_spacing_vertical.value} type={this.props.legend_preferences.layers_spacing_vertical.type} description={this.props.legend_preferences.layers_spacing_vertical.description} action={this.handleLegendLayersSpacingVerticalChange}/>
           <InputField value={this.props.legend_preferences.complex_spacing.value} type={this.props.legend_preferences.complex_spacing.type} description={this.props.legend_preferences.complex_spacing.description} action={this.handleLegendComplexSpacingChange}/>
+          <InputField value={this.props.legend_preferences.reverse_order.value} type={this.props.legend_preferences.reverse_order.type} description={this.props.legend_preferences.reverse_order.description} action={this.toggleReverseOrder}/>
         </div>
         <div>
           <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>

@@ -30,6 +30,7 @@ export default {
         show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
         show_features: {value: true, type: 'switch', description: 'Features Label'},
         show_samples: {value: true, type: 'switch', description: 'Input/Output Samples'},
+        no_colors: {value: false, type: 'switch', description: 'Disable Colors'},
         stroke_width: {value: 4, type:'number', description: 'Stroke Width'}
     },
     layer_extreme_dimensions: {
@@ -53,7 +54,8 @@ export default {
         layers_spacing_horizontal: {value: 5, type: 'number', description: 'Horizontal spacing between Layers'},
         layers_spacing_vertical: {value: 10, type: 'number', description: 'Vertical spacing between Layers'},
         complex_spacing: {value: 15, type: 'number', description: 'Spacing before complex Layer'},
-        stroke_width: {value: 2, type: 'number', description: 'Stroke Width'}
+        stroke_width: {value: 2, type: 'number', description: 'Stroke Width'},
+        reverse_order: {value: false, type: 'switch', description: 'Reverse Legend Order'}
     },
     color_mode: {
         selection: 'Palette',

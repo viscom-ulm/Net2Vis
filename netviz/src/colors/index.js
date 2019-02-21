@@ -6,6 +6,19 @@ export function getColorPalette() {
   return palette;
 }
 
+// Get the used color Palette
+export function getTextures() {
+  var textures = ["url(#muster1)", "url(#muster2)", "url(#muster3)", "url(#muster4)", "url(#muster5)", "url(#muster6)", "url(#muster7)", "url(#muster8)", "url(#muster9)", "url(#muster10)", "url(#muster11)", "url(#muster12)"];
+  return textures;
+}
+
+// Generate a new Texture
+export function generateNewTexture(layerTypes) {
+  var textures = getTextures();
+  var index = Object.keys(layerTypes).length % textures.length;
+  return textures[index]; 
+}
+
 // Generate a new Color based on the currently set mode
 export function generateNewColor(layerTypes, mode) {
   if (mode === 'Palette') {

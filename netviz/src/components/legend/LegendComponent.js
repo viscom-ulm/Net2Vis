@@ -7,6 +7,7 @@ import LegendItem from './LegendItem';
 import * as actions from '../../actions';
 import * as legend from '../../legend';
 import * as sort from '../../groups/Sort';
+import Patterns from '../patterns/PatternComponent';
 
 class Legend extends React.Component {
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
@@ -64,6 +65,7 @@ class Legend extends React.Component {
     const legend_representation = legend.getLegend(settings, groups, this.props.legend_preferences); // Generate a representation of the legendItem to be rendered
     return(
       <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='legendComponent'>
+        <Patterns />
         <g id='legend_group' transform={legend_transform}>
           {legend_representation.map(representation => 
             <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked} selected={this.props.selected_legend_item}/>
