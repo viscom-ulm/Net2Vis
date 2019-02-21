@@ -4,13 +4,6 @@ import * as colors from '../colors';
 
 export default function layerTypesSettignsReducer(state = initialState.layer_types_settings, action) {
   switch(action.type) {
-    case(types.ADD_LAYER_TYPE_SETTING):
-      return Object.assign({}, state, {
-        [action.name]: {
-          color: action.setting.color,
-          alias: action.setting.alias
-        }
-      });
     case types.LOAD_LAYER_TYPES_SUCCESS:
       if (action.network === undefined) {
         return action.layerTypes;
