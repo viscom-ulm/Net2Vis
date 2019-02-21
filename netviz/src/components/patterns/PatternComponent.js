@@ -10,15 +10,15 @@ class Patterns extends React.Component {
           <path d='M0 0L8 8ZM8 0L0 8Z' strokeWidth='0.5' stroke='black'/>
         </pattern>
         <pattern id="muster2" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse">
-          <rect id="square" width="10" height="10"/>
-          <use xlinkHref="#square" transform="translate(10,10)" />
+          <rect width="10" height="10"/>
+          <rect x="10" y="10" width="10" height="10"/>
         </pattern>
         <pattern id="muster3" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
           <circle cx="5" cy="5" r="5" />
         </pattern>
         <pattern id="muster4" x="10" y="10" width="10" height="10" patternTransform="scale(1,2) rotate(45)" patternUnits="userSpaceOnUse" >
-          <rect id="square2" width="5" height="5"/>
-          <use xlinkHref="#square2" transform="translate(5,5)" />
+          <rect width="5" height="5"/>
+          <rect x="5" y="5" width="5" height="5"/>
         </pattern>
         <pattern id="muster5" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse">
           <circle cx="10" cy="10" r="5" />
