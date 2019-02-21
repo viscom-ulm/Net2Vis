@@ -146,7 +146,10 @@ class NetworkPreferences extends React.Component {
           <Features/>
           <InputField value={this.props.preferences.layers_spacing_horizontal.value} type={this.props.preferences.layers_spacing_horizontal.type} description={this.props.preferences.layers_spacing_horizontal.description} action={this.handleSpacingHorizontalChange}/>
           <InputField value={this.props.preferences.layers_spacing_vertical.value} type={this.props.preferences.layers_spacing_vertical.type} description={this.props.preferences.layers_spacing_vertical.description} action={this.handleSpacingVerticalChange}/>
-          <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
+          {
+            !this.props.preferences.no_colors.value &&
+            <InputField value={this.props.color_mode.generation} type={'select'} description={'Porposed Colors'} options={options} action={this.handleColorModeChange}/>
+          }
           <InputField value={this.props.preferences.show_dimensions.value} type={this.props.preferences.show_dimensions.type} description={this.props.preferences.show_dimensions.description} action={this.toggleDimensionsLabel}/>
           <InputField value={this.props.preferences.show_features.value} type={this.props.preferences.show_features.type} description={this.props.preferences.show_features.description} action={this.toggleFeaturesLabel}/>
           <InputField value={this.props.preferences.show_samples.value} type={this.props.preferences.show_samples.type} description={this.props.preferences.show_samples.description} action={this.toggleSamples}/>
