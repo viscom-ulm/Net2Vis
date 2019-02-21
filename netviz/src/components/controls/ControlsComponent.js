@@ -24,7 +24,13 @@ class Controls extends React.Component {
     var graph_height = graph_bBox.height * this.props.group_transform.scale; // Calculate the height of this Element
     var graph_text = graph_element.innerHTML; // Get the inner elements of the svg
     const graph_transform = `scale(${this.props.group_transform.scale}) translate(${-graph_bBox.x}, ${-graph_bBox.y})`; // Set the transform for the graph to match the scaling and be centred
-    var graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
+    var graph_downloadable = "";
+    if (this.props.preferences.no_colors.value) { // No colors should be used, so textures need to be included.
+      var defs_element = document.getElementById('main_defs'); // Get the main SVG Element
+      graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'>" + defs_element.innerHTML + "<g transform='" + general_transform + "'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
+    } else { // Standard case, using colors and therefore not including textures.
+      graph_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (graph_width + 10) + "' height='" + (graph_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + graph_transform + "'>" + graph_text + "</g></g></svg>"; // Wrap together the svg code for the Graph
+    }
 
     var legend_element = document.getElementById('legend_group'); // Get the legend SVG Element
     var bBox = legend_element.getBBox();
@@ -32,7 +38,13 @@ class Controls extends React.Component {
     var legend_height = (bBox.height*1.0) * this.props.legend_transform.scale; // Calculate the height of this Element
     var legend_text = legend_element.innerHTML; // Get the inner elements of the svg
     const legend_transform = `scale(${this.props.legend_transform.scale}) translate(${-bBox.x}, ${-bBox.y})`; // Set the transform for the legend to match the scaling and be centred
-    var legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
+    var legend_downloadable = "";
+    if (this.props.preferences.no_colors.value) { // No colors should be used, so textures need to be included.
+      var defs_element_legend = document.getElementById('main_defs'); // Get the main SVG Element
+      legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'>" + defs_element_legend.innerHTML + "<g transform='" + general_transform + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
+    } else{
+      legend_downloadable = "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" + (legend_width + 10) + "' height='" + (legend_height + 10) + "'><g transform='" + general_transform + "'><g transform='" + legend_transform + "'>" + legend_text + "</g></g></svg>"; // Wrap together the svg code for the Legend
+    }
 
     DownloadApi.sendVisualization(this.props.id, graph_downloadable, legend_downloadable);
   }
@@ -68,6 +80,7 @@ Controls.propTypes = {
   display: PropTypes.object.isRequired,
   group_transform: PropTypes.object.isRequired,
   legend_transform: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 };
 
 // Mapping the Controls state to the Props of this Class
@@ -77,6 +90,7 @@ function mapStateToProps(state, ownProps) {
     display: state.display,
     group_transform: state.group_transform,
     legend_transform: state.legend_transform,
+    preferences: state.preferences
   };
 }
 
