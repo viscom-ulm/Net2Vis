@@ -9,9 +9,10 @@ import ComplexLegendItem from './ComplexLegendItem';
 
 class LegendItem extends React.Component {
   render() {
+    const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(this.props.representation.layer.representer.setting.color);
     const style = {
-      fill: this.props.representation.layer.representer.setting.color,
-      stroke: this.props.representation.layer.active ? colors.darkenColor(this.props.representation.layer.representer.setting.color) : 'lightgrey',
+      fill: this.props.preferences.no_colors.value ? this.props.representation.layer.representer.setting.texture : this.props.representation.layer.representer.setting.color,
+      stroke: this.props.representation.layer.active ? stroke_color : 'lightgrey',
       strokeLinejoin: 'round',
       strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
@@ -58,14 +59,16 @@ class LegendItem extends React.Component {
 // PropTypes of this Class
 LegendItem.propTypes = {
   groups: PropTypes.array.isRequired,
-  legend_preferences: PropTypes.object.isRequired
+  legend_preferences: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 }
 
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
     groups: state.groups,
-    legend_preferences: state.legend_preferences
+    legend_preferences: state.legend_preferences,
+    preferences: state.preferences
   };
 }
 
