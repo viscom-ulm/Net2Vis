@@ -18,7 +18,6 @@ class DownloadApi {
     
     return fetch(request).then(response => { // Return the Result of the Request
       response.blob().then(res => {
-        console.log(res);
         saveAs(res, "net2vis.zip"); // Download it
       });
     }).catch(error => {
