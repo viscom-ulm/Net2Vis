@@ -1,12 +1,23 @@
 ![Net2Vis Teaser](net2vis_teaser.png)
 # Net2Vis
-Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
 
 :white_check_mark: Automatic Network Visualization
 
 :white_check_mark: Levels of Abstraction
 
 :white_check_mark: Unified Design
+
+Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
+
+## Citation
+If you find this code useful please consider citing us:
+
+    @article{bauerle2019net2vis,
+      title={Net2Vis: Transforming Deep Convolutional Networks into Publication-Ready Visualizations},
+      author={B{\"a}uerle, Alex and Ropinski, Timo},
+      journal={arXiv preprint arXiv:1902.04394},
+      year={2019}
+    }
 
 ## What is this?
 Net2Vis automatically generates abstract visualizations for convolutional neural networks from Keras code.
