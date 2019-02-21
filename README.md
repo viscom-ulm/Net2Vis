@@ -9,16 +9,6 @@
 
 Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
 
-## Citation
-If you find this code useful please consider citing us:
-
-    @article{bauerle2019net2vis,
-      title={Net2Vis: Transforming Deep Convolutional Networks into Publication-Ready Visualizations},
-      author={B{\"a}uerle, Alex and Ropinski, Timo},
-      journal={arXiv preprint arXiv:1902.04394},
-      year={2019}
-    }
-
 ## What is this?
 Net2Vis automatically generates abstract visualizations for convolutional neural networks from Keras code.
 
@@ -50,6 +40,16 @@ The frontend is a react application that can be started as follows:
 1. Go into the frontend folder: `cd netviz`
 2. Install the javascript dependencies using: `npm install`
 3. Start the frontend application with: `npm start`
+
+## Citation
+If you find this code useful please consider citing us:
+
+    @article{bauerle2019net2vis,
+      title={Net2Vis: Transforming Deep Convolutional Networks into Publication-Ready Visualizations},
+      author={B{\"a}uerle, Alex and Ropinski, Timo},
+      journal={arXiv preprint arXiv:1902.04394},
+      year={2019}
+    }
 
 ## Acknowlegements
 
