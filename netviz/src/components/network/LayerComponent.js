@@ -84,7 +84,7 @@ class Layer extends React.Component {
     }
     var outputSample = undefined; // Placeholder for label if this is an output of the net
     if (this.props.layer.layer.properties.output.length === 0) { // If no outputs
-      inputSample = {
+      outputSample = {
         dimensions: dimensions.out, // Dimensions for this label are the output dimensions of the layer
         x: dimensionsLabelX, // X position of the label ro be right of layer
         edge: { // Edge position is layer y
@@ -92,6 +92,7 @@ class Layer extends React.Component {
         }
       }
     }
+
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g>
