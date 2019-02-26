@@ -42,6 +42,8 @@ class Layer extends React.Component {
       const dim_diff = extreme_dimensions.max_size - extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
       const perc = [(dimensions.in[0] - extreme_layer.min_size) / lay_diff, (dimensions.out[0] - extreme_layer.min_size) / lay_diff]; // Calculate the linear interpolation factor for boths sides of the Glyph 
       height = [perc[0] * dim_diff + extreme_dimensions.min_size, perc[1] * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph through interpolation
+      height[0] = height[0] > extreme_layer.max_size ? extreme_layer.max_size : height[0]; // Cap the height if something goes wrong
+      height[1] = height[1] > extreme_layer.max_size ? extreme_layer.max_size : height[1]; // Cap the height if something goes wrong
     } else { // Not a convolutional Layer
       const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of all Dense Layers
       const lay_diff = extreme_layer.max_dense - extreme_layer.min_dense; // Get the difference between Max and Min for the Extremes of the Layer
@@ -49,6 +51,8 @@ class Layer extends React.Component {
       var perc = (dimensions.out - extreme_layer.min_dense) / lay_diff; // Calculate the linear interpolation factor for boths sides of the Glyph 
       if (perc < 1.0) { // If this is not the flatten layer
         height = [perc * dim_diff + extreme_dimensions.min_size, perc * dim_diff + extreme_dimensions.min_size]; // Calculate the height for both sides of the Glyph through interpolation
+        height[0] = height[0] > extreme_layer.max_size ? extreme_layer.max_size : height[0]; // Cap the height if something goes wrong
+        height[1] = height[1] > extreme_layer.max_size ? extreme_layer.max_size : height[1]; // Cap the height if something goes wrong
       }
     }
     return height;
