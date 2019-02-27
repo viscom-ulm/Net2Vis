@@ -3,45 +3,80 @@ import * as common from '../layers/Common'
 
 // Get a representation for the legend to be drawn
 export function getLegend(layerTypesSettings, groups, legendPreferences) {
-  var legend = legendPreferences.reverse_order.value ? setupLegendReverse(groups, legendPreferences, layerTypesSettings) : setupLegend(groups, legendPreferences, layerTypesSettings);
-  return legend;
+  var initialParams = {pos: 10};
+  var activeLegend = getActiveLegend(layerTypesSettings, groups, legendPreferences, initialParams);
+  var hiddenLegend = getHiddenLegend(layerTypesSettings, groups, legendPreferences, initialParams);
+  return {
+    active: activeLegend,
+    hidden: hiddenLegend
+  };
 }
 
-function setupLegend(groups, legendPreferences, layerTypesSettings) {
-  var position = 10;
+function getActiveLegend(layerTypesSettings, groups, legendPreferences, initialParams) {
+  var activeLayerTypes = {};
+  for (var i in layerTypesSettings) {
+    if(layerTypesSettings[i].hidden !== true && isGroupActive(i, groups) !== false) {
+      activeLayerTypes[i] = layerTypesSettings[i];
+    }
+  }
+  var activeGroups = [];
+  for (var j in groups) {
+    if (groups[j].active === true) {
+      activeGroups.push(groups[j]);
+    }
+  }
+  return legendPreferences.reverse_order.value ? setupLegendReverse(activeGroups, legendPreferences, activeLayerTypes, initialParams) : setupLegend(activeGroups, legendPreferences, activeLayerTypes, initialParams);
+}
+
+function getHiddenLegend(layerTypesSettings, groups, legendPreferences, initialParams) {
+  var hiddenLayerTypes = {};
+  for (var i in layerTypesSettings) {
+    if(layerTypesSettings[i].hidden === true || isGroupActive(i, groups) === false) {
+      hiddenLayerTypes[i] = layerTypesSettings[i];
+    }
+  }
+  var hiddenGroups = [];
+  for (var j in groups) {
+    if (groups[j].active !== true) {
+      hiddenGroups.push(groups[j]);
+    }
+  }
+  return legendPreferences.reverse_order.value ? setupLegendReverse(hiddenGroups, legendPreferences, hiddenLayerTypes, initialParams) : setupLegend(hiddenGroups, legendPreferences, hiddenLayerTypes, initialParams);
+}
+
+function setupLegend(groups, legendPreferences, layerTypesSettings, params) {
   var legend = [];
   for (var j in layerTypesSettings) {
     var layer = getLayer(groups, j, layerTypesSettings, legendPreferences);
     if (layer !== undefined) {
-      legend.push({position: position, layer: layer});
-      position = position + layer.width + legendPreferences.element_spacing.value;
+      legend.push({position: params.pos, layer: layer});
+      params.pos = params.pos + layer.width + legendPreferences.element_spacing.value;
     }
   }
   for (var i in groups) {
     var groupLayer = getGroupLayer(groups[i], groups[i].name, layerTypesSettings, legendPreferences);
     if (groupLayer !== undefined) {
-      legend.push({position: position, layer: groupLayer});
-      position = position + groupLayer.width + legendPreferences.element_spacing.value;
+      legend.push({position: params.pos, layer: groupLayer});
+      params.pos = params.pos + groupLayer.width + legendPreferences.element_spacing.value;
     }
   }
   return legend;
 }
 
-function setupLegendReverse(groups, legendPreferences, layerTypesSettings) {
-  var position = 10;
+function setupLegendReverse(groups, legendPreferences, layerTypesSettings, params) {
   var legend = [];
   for (var i in groups.reverse()) {
     var groupLayer = getGroupLayer(groups[i], groups[i].name, layerTypesSettings, legendPreferences);
     if (groupLayer !== undefined) {
-      legend.push({position: position, layer: groupLayer});
-      position = position + groupLayer.width + legendPreferences.element_spacing.value;
+      legend.push({position: params.pos, layer: groupLayer});
+      params.pos = params.pos + groupLayer.width + legendPreferences.element_spacing.value;
     }
   }
   for (var j in layerTypesSettings) {
     var layer = getLayer(groups, j, layerTypesSettings, legendPreferences);
     if (layer !== undefined) {
-      legend.push({position: position, layer: layer});
-      position = position + layer.width + legendPreferences.element_spacing.value;
+      legend.push({position: params.pos, layer: layer});
+      params.pos = params.pos + layer.width + legendPreferences.element_spacing.value;
     }
   }
   return legend;
@@ -107,6 +142,17 @@ export function getInputNode(nodes) {
   for (var j in nodes) { // Iterate over all layers in the Group
     if(nodes[j].layer.properties.input.length === 0) { // Layer has no inputs contained in the Group
       return j;
+    }
+  }
+}
+
+function isGroupActive(key, groups) {
+  for (var i in groups) {
+    if (key === groups[i].name) {
+      if (!groups[i].active) {
+        return false;
+      }
+      return true;
     }
   }
 }
