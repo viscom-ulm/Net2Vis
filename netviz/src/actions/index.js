@@ -305,17 +305,6 @@ function loadLegendPreferencesSuccess(legend_preferences) {
   return {type: types.LOAD_LEGEND_PREFERENCES_SUCCESS, legend_preferences};
 }
 
-// Called to load the Preferences
-function loadLegendPreferences(id) {
-  return function(dispatch) {
-    return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
-      dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
-    }).catch(error => {
-      throw(error);
-    });
-  };
-}
-
 // Updating Preferences was Succesful
 function updateLegendPreferencesSuccess(legend_preferences) {
   return {type: types.UPDATE_LEGEND_PREFERENCES_SUCCESS, legend_preferences}
