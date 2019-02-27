@@ -74,7 +74,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
   }
   return {
     trivial: true,
-    active: true,
+    active: !layerTypesSettings[layerName].hidden,
     width: legendPreferences.layer_width.value,
     height: legendPreferences.layer_height.value,
     representer: {
