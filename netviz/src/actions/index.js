@@ -48,23 +48,12 @@ export function toggleLegend() {
 }
 
 // Loading LayerTypes was Successful
-export function loadLayerTypesSuccess(layerTypes, network, generationMode) {
+function loadLayerTypesSuccess(layerTypes, network, generationMode) {
   return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};
 }
 
-// Called to load the LayerTypes
-export function loadLayerTypes(id, generationMode) {
-  return function(dispatch) {
-    return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-      dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), generationMode));
-    }).catch(error => {
-      throw(error);
-    });
-  };
-}
-
 // Updating LayerTypes was Succesful
-export function updateLayerTypesSuccess(layerTypes, network) {
+function updateLayerTypesSuccess(layerTypes, network) {
   return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network}
 }
 
@@ -92,17 +81,17 @@ export function deleteLayerTypes(layerTypes, network, id) {
 }
 
 // Set the Extreme dimensions of the Layers in the Network
-export function setLayersExtremes(network, preferences, initializeNetworkGraph) {
+function setLayersExtremes(network, preferences, initializeNetworkGraph) {
   return {type: types.SET_LAYERS_EXTREMES, network, preferences, initializeNetworkGraph}
 }
 
 // Loading Preferences was Successful
-export function loadPreferencesSuccess(preferences) {
+function loadPreferencesSuccess(preferences) {
   return {type: types.LOAD_PREFERENCES_SUCCESS, preferences};
 }
 
 // Called to load the Preferences
-export function loadPreferences(id) {
+function loadPreferences(id) {
   return function(dispatch) {
     return PreferencesApi.getPreferences(id).then(preferences => {
       dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
@@ -113,7 +102,7 @@ export function loadPreferences(id) {
 }
 
 // Updating Preferences was Succesful
-export function updatePreferencesSuccess(preferences) {
+function updatePreferencesSuccess(preferences) {
   return {type: types.UPDATE_PREFERENCES_SUCCESS, preferences}
 }
 
@@ -129,50 +118,39 @@ export function updatePreferences(preferences, id) {
 }
 
 // Add an error to the Code.
-export function addError(data) {
+function addError(data) {
   return {type: types.ADD_ERROR, data}
 }
 
 // Removes all error from the Code.
-export function removeError() {
+function removeError() {
   return {type: types.REMOVE_ERROR}
 }
 
 // Initializes the compressed version of the network.
-export function initializeCompressedNetwork(network, groups) {
-  return{type: types.INITIALIZE_COMPRESSED_NETWORK, network, groups}
+function initializeCompressedNetwork(network, groups, layerTypes) {
+  return{type: types.INITIALIZE_COMPRESSED_NETWORK, network, groups, layerTypes}
 }
 
 // Loading Network was Successful
-export function loadNetworkSuccess(network) {
+function loadNetworkSuccess(network) {
   return {type: types.LOAD_NETWORK_SUCCESS, network};
 }
 
 // Helper Function to be called once a Network has been Loaded.
-export function networkLoaded(network, groups, dispatch) {
+function networkLoaded(network, groups, layerTypes, dispatch) {
   if(network.success === true) {
     dispatch(removeError());
     dispatch(loadNetworkSuccess(network.data));
     dispatch(setLayersExtremes(network.data));
-    dispatch(initializeCompressedNetwork(network.data, groups));
+    dispatch(initializeCompressedNetwork(network.data, groups, layerTypes));
   } else {
     dispatch(addError(network.data));
   }
 }
 
-// Called to load the Network
-export function loadNetwork(id, groups) {
-  return function(dispatch) {
-    return NetworkApi.getNetwork(id).then(network => {
-      networkLoaded(network, groups, dispatch);      
-    }).catch(error => {
-      throw(error);
-    })  
-  };  
-}  
-
 // Loading Code was Successful
-export function loadCodeSuccess(code) {
+function loadCodeSuccess(code) {
   return {type: types.LOAD_CODE_SUCCESS, code};
 }
 
@@ -188,7 +166,7 @@ export function loadCode(id) {
 }
 
 // Updating Code was Succesful
-export function updateCodeSuccess(code) {
+function updateCodeSuccess(code) {
   return {type: types.UPDATE_CODE_SUCESS, code}
 }
 
@@ -273,7 +251,7 @@ export function reloadAllState(id, generationMode) {
 }
 
 // Loading Groups was Successful
-export function loadGroupsSuccess(groups) {
+function loadGroupsSuccess(groups) {
   return {type: types.LOAD_GROUPS_SUCCESS, groups};
 }
 
@@ -292,7 +270,7 @@ export function addGroup(groups, network, layerTypes, id) {
 }
 
 // Updating Groups was Successful
-export function updateGroupsSuccess(groups) {
+function updateGroupsSuccess(groups) {
   return {type: types.UPDATE_GROUPS, groups}
 }
 
@@ -323,12 +301,12 @@ export function deleteGroups(groups, layerTypes, network, id) {
 }
 
 // Loading LegendPreferences was Successful
-export function loadLegendPreferencesSuccess(legend_preferences) {
+function loadLegendPreferencesSuccess(legend_preferences) {
   return {type: types.LOAD_LEGEND_PREFERENCES_SUCCESS, legend_preferences};
 }
 
 // Called to load the Preferences
-export function loadLegendPreferences(id) {
+function loadLegendPreferences(id) {
   return function(dispatch) {
     return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
       dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
@@ -339,7 +317,7 @@ export function loadLegendPreferences(id) {
 }
 
 // Updating Preferences was Succesful
-export function updateLegendPreferencesSuccess(legend_preferences) {
+function updateLegendPreferencesSuccess(legend_preferences) {
   return {type: types.UPDATE_LEGEND_PREFERENCES_SUCCESS, legend_preferences}
 }
 
