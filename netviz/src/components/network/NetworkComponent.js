@@ -10,7 +10,7 @@ import Edges from './EdgesComponent';
 
 import * as graphs from '../../graphs';
 import * as selection from '../../selection';
-import * as common from '../../groups/Common';
+import * as common from '../../layers/Common';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {

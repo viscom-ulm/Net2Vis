@@ -1,5 +1,5 @@
 import * as randomstring from 'randomstring';
-import * as common from './Common';
+import * as common from '../layers/Common';
 
 // Gouping a selection of layers
 export function groupLayers(network, selection) { 

@@ -1,4 +1,5 @@
 import * as common from './Common';
+import * as layerCommon from '../layers/Common';
 
 // Deletes a selected Group
 export function deleteGroup(selectedItem, groups) {
@@ -30,7 +31,7 @@ function expandLayer(expandGroup, position, expansionGroup) {
     if (i === input.inputID) { // If it is the input to the group that expands the other
       newLayer.properties.input = expandGroup.layers[position].properties.input; // The input to this layer is the same as the input of the expanded layer
       for (var j in expandGroup.layers[position].properties.input) { // For all of these inputs
-        var currentPreOutput = expandGroup.layers[common.getLayerByID(expandGroup.layers[position].properties.input[j], expandGroup.layers)].properties.output; // Get the outputs
+        var currentPreOutput = expandGroup.layers[layerCommon.getLayerByID(expandGroup.layers[position].properties.input[j], expandGroup.layers)].properties.output; // Get the outputs
         for (var k in currentPreOutput) { // Iterate over the outputs
           if (currentPreOutput[k] === expandGroup.layers[position].id) { // If the output matches the id of the layer to be expanded
             currentPreOutput[k] = newLayer.id; // Set the output to be the new ID
@@ -43,7 +44,7 @@ function expandLayer(expandGroup, position, expansionGroup) {
     } else if (i === output.outputID) { // If it is the input to the group that expands the other
       newLayer.properties.output = expandGroup.layers[position].properties.output; // the putput to this layer is the same as the output of the expanded Layer
       for (var m in expandGroup.layers[position].properties.output) { // Foe all of these outputs
-        var currentPreInput = expandGroup.layers[common.getLayerByID(expandGroup.layers[position].properties.output[m], expandGroup.layers)].properties.input; // Get the Inputs
+        var currentPreInput = expandGroup.layers[layerCommon.getLayerByID(expandGroup.layers[position].properties.output[m], expandGroup.layers)].properties.input; // Get the Inputs
         for (var n in currentPreInput) { // Iterate over the Inputs
           if (currentPreInput[n] === expandGroup.layers[position].id) { // If the input matches the id of the Layer to be expanded
             currentPreInput[n] = newLayer.id; // Set teh input to be the new ID

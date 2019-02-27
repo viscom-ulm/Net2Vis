@@ -1,5 +1,5 @@
 import * as dagre from 'dagre';
-import * as common from '../groups/Common'
+import * as common from '../layers/Common'
 
 // Get a representation for the legend to be drawn
 export function getLegend(layerTypesSettings, groups, legendPreferences) {

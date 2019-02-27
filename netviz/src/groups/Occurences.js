@@ -1,4 +1,5 @@
 import * as common from './Common';
+import * as layerCommon from '../layers/Common';
 
 // Find all occurences of a group in the network
 export function findGroupOccurences(group, network) {
@@ -8,13 +9,13 @@ export function findGroupOccurences(group, network) {
   var nextLayerInfo = findUncheckedConnectedLayer(matchesList); // Get the info for which layer to check for a match next
   while (nextLayerInfo.source !== -1) { // Do as long as there are more layers to check
     for (var i = matchesList.length - 1; i > -1; i--) { // Iterate over all lists in the matches List reversely to not get into conflicts
-      var currentSourceLayer = network.layers[common.getLayerByID(matchesList[i][nextLayerInfo.source].matchID, network.layers)]; // Get the source layer from which we get to the layer to be inspected from the network
+      var currentSourceLayer = network.layers[layerCommon.getLayerByID(matchesList[i][nextLayerInfo.source].matchID, network.layers)]; // Get the source layer from which we get to the layer to be inspected from the network
       var layerID = nextLayerInfo.type === 'out' ? currentSourceLayer.properties.output[nextLayerInfo.connection] : currentSourceLayer.properties.input[nextLayerInfo.connection]; // Get the ID of the current layer to be inspected(depending on in or out connected)
-      var layerNumber = common.getLayerByID(layerID, network.layers); // Map the layerID to the position in the array
+      var layerNumber = layerCommon.getLayerByID(layerID, network.layers); // Map the layerID to the position in the array
       var outputsLayer = network.layers[layerNumber].properties.output; // Get the outputs for this Layer
       var inputsLayer = network.layers[layerNumber].properties.input; // Get the inputs for this Layer
       var groupID = nextLayerInfo.type === 'out' ? group.layers[nextLayerInfo.source].properties.output[nextLayerInfo.connection] : group.layers[nextLayerInfo.source].properties.input[nextLayerInfo.connection]; // Get the ID of the group node to be inspected (depending on in or out connected)
-      var groupNumber = common.getLayerByID(groupID, group.layers) // Get the number of the group node to be inspected 
+      var groupNumber = layerCommon.getLayerByID(groupID, group.layers) // Get the number of the group node to be inspected 
       var outputsGroup = group.layers[groupNumber].properties.output; // Get the outputs for the input Layer of the Group
       var inputsGroup = group.layers[groupNumber].properties.input; // Get the outputs for the input Layer of the Group
       if (checkOutputsMatching(outputsGroup, outputsLayer, network, group) && checkInputsMatching(inputsGroup, inputsLayer, network, group)) { // Outputs and Inputs match
@@ -63,12 +64,12 @@ function findUncheckedConnectedLayer(matchesList) {
     for (var i in list) { // Iterate over the list items (nodes of the group) 
       if (typeof(list[i].matchID) !== 'undefined') { // If current group node already matches
         for (var j in list[i].properties.output) { // Iterate over the outputs
-          if (typeof(list[common.getLayerByID(list[i].properties.output[j], list)].matchID) === 'undefined') { // If group node connected at this output not matched
+          if (typeof(list[layerCommon.getLayerByID(list[i].properties.output[j], list)].matchID) === 'undefined') { // If group node connected at this output not matched
             return {type: 'out', source: i, connection: j}; // Layer to be inspected has been found
           }
         }
         for (var k in list[i].properties.input) { // Iterate over all Inputs
-          if (typeof(list[common.getLayerByID(list[i].properties.input[k], list)].matchID) === 'undefined') { // If group node connected at this input not matched
+          if (typeof(list[layerCommon.getLayerByID(list[i].properties.input[k], list)].matchID) === 'undefined') { // If group node connected at this input not matched
             return {type: 'in', source: i, connection: k}; // Layer to be inspected has been found
           }
         }
@@ -84,7 +85,7 @@ function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
     return true;
   } else if (outputsGroup.length === outputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of outputs
     for (var j in outputsGroup) { // Iterate over all ouptuts of the Group Layer 
-      if (group.layers[common.getLayerByID(outputsGroup[j], group.layers)].name !== network.layers[common.getLayerByID(outputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network output
+      if (group.layers[layerCommon.getLayerByID(outputsGroup[j], group.layers)].name !== network.layers[layerCommon.getLayerByID(outputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network output
         return false; // Network part not equal
       }
     }
@@ -97,8 +98,8 @@ function checkOutputsMatching(outputsGroup, outputsLayer, network, group) {
 // Check if the IDs of the output match the matchesList entry
 function checkOutputMatchIds(outputsLayer, outputsGroup, matchesList) {
   for (var i in outputsGroup) { // For all outputs of the layer
-    if (typeof(matchesList[common.getLayerByID(outputsGroup[i], matchesList)].matchID) !== 'undefined') { // Check if the match was already assigned
-      if (outputsLayer[i] !== matchesList[common.getLayerByID(outputsGroup[i], matchesList)].matchID) { // If the layer output does not match the match
+    if (typeof(matchesList[layerCommon.getLayerByID(outputsGroup[i], matchesList)].matchID) !== 'undefined') { // Check if the match was already assigned
+      if (outputsLayer[i] !== matchesList[layerCommon.getLayerByID(outputsGroup[i], matchesList)].matchID) { // If the layer output does not match the match
         return false; // The IDs do not match
       }
     }
@@ -112,7 +113,7 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
     return true;
   } else if (inputsGroup.length === inputsLayer.length) { // First, check if both Network Layer and Group Layer have the same Number of inputs
     for (var j in inputsGroup) { // Iterate over all inputs of the Group Layer 
-      if (group.layers[common.getLayerByID(inputsGroup[j], group.layers)].name !== network.layers[common.getLayerByID(inputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network input
+      if (group.layers[layerCommon.getLayerByID(inputsGroup[j], group.layers)].name !== network.layers[layerCommon.getLayerByID(inputsLayer[j], network.layers)].name) { // Not the same Layer Name as the Network input
         return false; // Network part not equal
       }
     }
@@ -125,8 +126,8 @@ function checkInputsMatching(inputsGroup, inputsLayer, network, group) {
 // Check if the IDs of the input match the matchesList entry
 function checkInputMatchIds(inputsLayer, inputsGroup, matchesList) {
   for (var i in inputsGroup) { // For all outputs of the layer
-    if (typeof(matchesList[common.getLayerByID(inputsGroup[i], matchesList)].matchID) !== 'undefined') { // Check if the match was already assigned
-      if (inputsLayer[i] !== matchesList[common.getLayerByID(inputsGroup[i], matchesList)].matchID) { // If the layer input does not match the match
+    if (typeof(matchesList[layerCommon.getLayerByID(inputsGroup[i], matchesList)].matchID) !== 'undefined') { // Check if the match was already assigned
+      if (inputsLayer[i] !== matchesList[layerCommon.getLayerByID(inputsGroup[i], matchesList)].matchID) { // If the layer input does not match the match
         return false; // The IDs do not match
       }
     }
