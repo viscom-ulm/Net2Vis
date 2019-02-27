@@ -37,6 +37,17 @@ class LayerPreferences extends React.Component {
     this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
+  // Toggles a Layers visibility
+  toggleLayer = (e) => {
+    var layerTypes = this.props.layer_types_settings;
+    if (this.props.layer_types_settings[this.props.selected_legend_item].hidden === true) { // If the currently selected group is active
+      layerTypes[this.props.selected_legend_item].hidden = false;
+    } else { // Group was inactive
+      layerTypes[this.props.selected_legend_item].hidden = true;
+    }
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+  }
+
   // Color selection mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorSelectionMode(e.target.value);
@@ -59,6 +70,7 @@ class LayerPreferences extends React.Component {
             !this.props.preferences.no_colors.value &&
             <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
           }
+          <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].hidden} type={'switch'} description={'Hide Layer'} action={this.toggleLayer}/>
         </div>
         <div>
           <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings} options={"secondary"}/>
