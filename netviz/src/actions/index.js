@@ -176,8 +176,8 @@ export function updateCode(code, id, groups, generationMode) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
-        networkLoaded(network, groups, dispatch);      
         return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+          networkLoaded(network, groups, JSON.parse(layerTypes), dispatch);      
           dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
         });
       }).catch(error => {
@@ -227,10 +227,10 @@ export function reloadAllState(id, generationMode) {
       return GroupsApi.getGroups(id).then(groups => {
         dispatch(loadGroupsSuccess(JSON.parse(groups)));
         return NetworkApi.getNetwork(id).then(network => { 
-          networkLoaded(network, JSON.parse(groups), dispatch);      
           return PreferencesApi.getPreferences(id).then(preferences => {
             dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
             return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+              networkLoaded(network, JSON.parse(groups), JSON.parse(layerTypes), dispatch);      
               dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
               return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
                 dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
@@ -261,7 +261,7 @@ export function addGroup(groups, network, layerTypes, id) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
       sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
-      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups), layerTypes));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
         dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes)));
       });
@@ -280,7 +280,7 @@ export function updateGroups(groups, layerTypes, network, id) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
       sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
-      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
+      dispatch(initializeCompressedNetwork(network, JSON.parse(groups), layerTypes));
     });
   }
 }
@@ -292,8 +292,8 @@ export function deleteGroups(groups, layerTypes, network, id) {
     return GroupsApi.updateGroups(groups, id).then(groups => {
       sort.sortGroups(groups, layerTypes);
       dispatch(updateGroupsSuccess(JSON.parse(groups)));
-      dispatch(initializeCompressedNetwork(network, JSON.parse(groups)));
       return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+        dispatch(initializeCompressedNetwork(network, JSON.parse(groups), JSON.parse(layerTypes)));
         dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
       });
     });
