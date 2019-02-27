@@ -45,7 +45,7 @@ class LayerPreferences extends React.Component {
     } else { // Group was inactive
       layerTypes[this.props.selected_legend_item].hidden = true;
     }
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+    this.props.actions.updateLayerTypesHideState(layerTypes, this.props.network, this.props.groups, this.props.id);
   }
 
   // Color selection mode Changes
@@ -87,7 +87,8 @@ LayerPreferences.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
   network: PropTypes.object.isRequired,
   color_mode: PropTypes.object.isRequired,
-  preferences: PropTypes.object.isRequired
+  preferences: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -98,7 +99,8 @@ function mapStateToProps(state, ownProps) {
     layer_types_settings: state.layer_types_settings,
     network: state.network,
     color_mode: state.color_mode,
-    preferences: state.preferences
+    preferences: state.preferences,
+    groups: state.groups
   };
 }
 

@@ -68,6 +68,18 @@ export function updateLayerTypes(layerTypes, network, id) {
   }
 }
 
+// Called when the hide state of one of the LayerType changes, sind network compression needs to rerun.
+export function updateLayerTypesHideState(layerTypes, network, groups, id) {
+  return function(dispatch) {
+    return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+      dispatch(initializeCompressedNetwork(network, groups, JSON.parse(layerTypes)));
+    }).catch(error => {
+      throw(error);
+    });
+  }
+}
+
 // Called to delete LayerTypes
 export function deleteLayerTypes(layerTypes, network, id) {
   return function(dispatch) {
