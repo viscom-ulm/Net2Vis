@@ -1,4 +1,4 @@
-import * as common from '../groups/Common';
+import * as common from '../layers/Common';
 
 // Get all paths from a node s to node d in the network
 export function allPaths(s, d, network) {

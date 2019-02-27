@@ -67,7 +67,12 @@ class Legend extends React.Component {
       <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='legendComponent'>
         <Patterns />
         <g id='legend_group' transform={legend_transform}>
-          {legend_representation.map(representation => 
+          {legend_representation.active.map(representation => 
+            <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked} selected={this.props.selected_legend_item}/>
+          )}
+        </g>
+        <g id='hidden_legend_group' transform={legend_transform}>
+          {legend_representation.hidden.map(representation => 
             <LegendItem representation={representation} key={representation.layer.representer.name} action={this.handleLayerClicked} selected={this.props.selected_legend_item}/>
           )}
         </g>
@@ -77,7 +82,13 @@ class Legend extends React.Component {
 
   // After the component was rendered, check if the BBox stayed the same
   componentDidUpdate() {
-    const currentBBox = document.getElementById('legend_group').getBBox(); // Get the main group of the SVG Element
+    var currentBBox = document.getElementById('legend_group').getBBox(); // Get the main group of the SVG Element
+    const currentHiddenBBox = document.getElementById('hidden_legend_group').getBBox(); // Get the hidden group of the SVG Element
+    if (currentHiddenBBox.width !== 0) { // Hidden elements present
+      currentBBox.width = currentHiddenBBox.x - currentBBox.x + currentHiddenBBox.width; // Manipulate the width so it includes both active and hidden elements
+      currentBBox.height = currentBBox.height < currentHiddenBBox.height ? currentHiddenBBox.height : currentBBox.height; // Manipulate the height, so it only reflects the larger value
+      currentBBox.y = currentBBox.y > currentHiddenBBox.y ? currentHiddenBBox.y : currentBBox.y; // Manipulate the y position, so it only reflects the smaller value
+    }
     var changed = false; // Changed placeholder
     if (this.props.legend_bbox.x !== currentBBox.x) { // X changed
       changed = true;

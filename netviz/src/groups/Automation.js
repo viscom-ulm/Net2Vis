@@ -1,4 +1,4 @@
-import * as common from './Common';
+import * as common from '../layers/Common';
 
 // Get the most common repetition currently in the network
 export function getMostCommonRepetition(network) {
