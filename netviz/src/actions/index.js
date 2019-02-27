@@ -90,17 +90,6 @@ function loadPreferencesSuccess(preferences) {
   return {type: types.LOAD_PREFERENCES_SUCCESS, preferences};
 }
 
-// Called to load the Preferences
-function loadPreferences(id) {
-  return function(dispatch) {
-    return PreferencesApi.getPreferences(id).then(preferences => {
-      dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
-    }).catch(error => {
-      throw(error);
-    });
-  };
-}
-
 // Updating Preferences was Succesful
 function updatePreferencesSuccess(preferences) {
   return {type: types.UPDATE_PREFERENCES_SUCCESS, preferences}
