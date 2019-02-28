@@ -24,6 +24,10 @@ class Code extends React.Component {
     this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation);
   };
 
+  componentDidUpdate() {
+    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+  }
+
   // Render the Code into the Code View if Toggled
   render() {
     const code = this.props.code;
@@ -33,6 +37,7 @@ class Code extends React.Component {
     }
     return(// Editor with Syntax highlighting
         <AceEditor
+          ref="aceEditor"
           mode="python"
           theme="chrome"
           wrapEnabled={true}
