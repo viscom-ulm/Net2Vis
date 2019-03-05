@@ -22,7 +22,7 @@ const TooltipComponent = ({properties_object, dimensions, tooltipRef, name}) => 
 
   const properties = buildProperties(properties_object, dimensions);
   return (
-    <Tooltip for={tooltipRef}>
+    <Tooltip triggerRef={tooltipRef}>
       <rect
         x={10}
         y={10}
