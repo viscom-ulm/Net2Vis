@@ -12,13 +12,6 @@ import * as actions from '../../actions';
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
-  // When this Component mounts, check if the Code was already loaded and load it if not
-  componentWillMount() {
-    if(this.props.code === '') {
-      this.props.actions.loadCode(this.props.id);
-    }
-  }
-
   // When the Code changes, Update it on the Backend
   handleOnChange = (newValue) => {
     this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation);

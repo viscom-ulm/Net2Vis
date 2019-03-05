@@ -22,6 +22,7 @@ class Main extends React.Component {
   componentWillMount() {
     const { id } = this.props.match.params;
     this.props.actions.setID(id);
+    this.props.actions.reloadAllState(id, this.props.color_mode.generation);
   }
 
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
