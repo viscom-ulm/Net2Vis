@@ -14,7 +14,7 @@ import * as actions from '../../actions';
 class Code extends React.Component {
   // When the Code changes, Update it on the Backend
   handleOnChange = (newValue) => {
-    this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation);
+    this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation, this.props.preferences);
   };
 
   componentDidUpdate() {
@@ -56,7 +56,8 @@ Code.propTypes = {
   code: PropTypes.string.isRequired,
   error: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
-  color_mode: PropTypes.object.isRequired
+  color_mode: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component 
@@ -67,7 +68,8 @@ function mapStateToProps(state, ownProps) {
       code: state.code,
       error: state.error,
       groups: state.groups,
-      color_mode: state.color_mode
+      color_mode: state.color_mode,
+      preferences: state.preferences
     };
   } else {
     return {
@@ -75,7 +77,8 @@ function mapStateToProps(state, ownProps) {
       code: '',
       error: state.error,
       groups: state.groups,
-      color_mode: state.color_mode
+      color_mode: state.color_mode,
+      preferences: state.preferences
     };
   }
 }
