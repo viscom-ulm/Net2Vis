@@ -26,7 +26,12 @@ function replaceMultiOutLayers(network) {
       };
       network.layers[layer].properties.output = [newID];
       for (var output in outputs) {
-        network.layers[common.getLayerByID(outputs[output], network.layers)].properties.input = [newID];
+        var inputs = network.layers[common.getLayerByID(outputs[output], network.layers)].properties.input;
+        for (var input in inputs) {
+          if (inputs[input] === network.layers[layer].id) {
+            inputs[input] = newID;
+          }
+        }
       }
       network.layers.push(newLayer);
     }
