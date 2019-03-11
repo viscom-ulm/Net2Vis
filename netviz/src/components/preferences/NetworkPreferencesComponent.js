@@ -114,6 +114,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   }
 
+  // Toggle the display of Colors
+  toggleSplits = (e) => {
+    var preferences = this.props.preferences;
+    preferences.add_splitting.value = !preferences.add_splitting.value;
+    this.props.actions.splitChanged(this.props.groups, this.props.color_mode.generation, preferences, this.props.id);
+  }
+
   // Toggle the display state of Input/Output Samples
   toggleSamples = (e) => {
     var preferences = this.props.preferences;
@@ -152,6 +159,7 @@ class NetworkPreferences extends React.Component {
           }
           <InputField value={this.props.preferences.show_dimensions.value} type={this.props.preferences.show_dimensions.type} description={this.props.preferences.show_dimensions.description} action={this.toggleDimensionsLabel}/>
           <InputField value={this.props.preferences.show_features.value} type={this.props.preferences.show_features.type} description={this.props.preferences.show_features.description} action={this.toggleFeaturesLabel}/>
+          <InputField value={this.props.preferences.add_splitting.value} type={this.props.preferences.add_splitting.type} description={this.props.preferences.add_splitting.description} action={this.toggleSplits}/>
           <InputField value={this.props.preferences.show_samples.value} type={this.props.preferences.show_samples.type} description={this.props.preferences.show_samples.description} action={this.toggleSamples}/>
           <InputField value={this.props.preferences.no_colors.value} type={this.props.preferences.no_colors.type} description={this.props.preferences.no_colors.description} action={this.toggleColors}/>
         </div>

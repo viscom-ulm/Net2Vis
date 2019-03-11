@@ -7,3 +7,12 @@ export function getLayerByID(id, layers) {
   }
   return -1; // No Layer with this ID
 }
+
+// Returning the maximum ID in the current network.
+export function maxID(network) {
+  var id = 0; // Initialize the max ID
+  for (var i in network.layers) { // Check all layers
+    id = network.layers[i].id > id ? network.layers[i].id : id; // Set to bigger of current layer id and id
+  }
+  return id;
+}

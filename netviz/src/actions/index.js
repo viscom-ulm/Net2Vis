@@ -6,6 +6,7 @@ import LegendPreferencesApi from '../api/LegendPreferencesApi';
 import GroupsApi from '../api/GroupsApi';
 import * as types from './types';
 import * as sort from '../groups/Sort';
+import * as splitting from '../layers/Splitting';
 
 // Set the ID of the current Network
 export function setID(id) {
@@ -140,13 +141,37 @@ function loadNetworkSuccess(network) {
 
 // Helper Function to be called once a Network has been Loaded.
 function networkLoaded(network, groups, layerTypes, dispatch) {
-  if(network.success === true) {
     dispatch(removeError());
-    dispatch(loadNetworkSuccess(network.data));
-    dispatch(setLayersExtremes(network.data));
-    dispatch(initializeCompressedNetwork(network.data, groups, layerTypes));
-  } else {
-    dispatch(addError(network.data));
+    dispatch(loadNetworkSuccess(network));
+    dispatch(setLayersExtremes(network));
+    dispatch(initializeCompressedNetwork(network, groups, layerTypes));
+}
+
+// Split replacement has been changed.
+export function splitChanged(groups, generationMode, preferences, id) {
+  return function(dispatch) {
+    return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
+      var prefs = JSON.parse(preferences);
+      dispatch(updatePreferencesSuccess(prefs));
+      return NetworkApi.getNetwork(id).then(network => { 
+        if(network.success === true) {
+          var net = network.data;
+          if (prefs.add_splitting.value) {
+            net = splitting.addSplitLayers(net);
+          }
+          return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+            networkLoaded(net, groups, JSON.parse(layerTypes), dispatch);      
+            dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
+          });
+        } else {
+          dispatch(addError(network.data));
+        }
+      }).catch(error => {
+        throw(error);
+      })
+    }).catch(error => {
+      console.warn('Preferences invalid: ' + error);
+    });
   }
 }
 
@@ -172,20 +197,28 @@ function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id, groups, generationMode) {
+export function updateCode(code, id, groups, generationMode, preferences) {
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
-        return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-          networkLoaded(network, groups, JSON.parse(layerTypes), dispatch);      
-          dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
-        });
+        if(network.success === true) {
+          var net = network.data;
+          if (preferences.add_splitting.value) {
+            net = splitting.addSplitLayers(net);
+          }
+          return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+            networkLoaded(net, groups, JSON.parse(layerTypes), dispatch);      
+            dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
+          });
+        } else {
+          dispatch(addError(network.data));
+        }
       }).catch(error => {
         throw(error);
       })
     }).catch(error => {
-      console.warn('Current Network not executable.')
+      console.warn('Current Network not executable.', error);
     });
   }
 }
@@ -228,16 +261,25 @@ export function reloadAllState(id, generationMode) {
       return GroupsApi.getGroups(id).then(groups => {
         dispatch(loadGroupsSuccess(JSON.parse(groups)));
         return NetworkApi.getNetwork(id).then(network => { 
-          return PreferencesApi.getPreferences(id).then(preferences => {
-            dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
-            return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
-              networkLoaded(network, JSON.parse(groups), JSON.parse(layerTypes), dispatch);      
-              dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), network.data, generationMode));
-              return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
-                dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
+          if(network.success === true) {
+            var net = network.data;
+            return PreferencesApi.getPreferences(id).then(preferences => {
+              var prefs = JSON.parse(preferences);
+              if (prefs.add_splitting.value) {
+                net = splitting.addSplitLayers(net);
+              }
+              dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
+              return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+                networkLoaded(net, JSON.parse(groups), JSON.parse(layerTypes), dispatch);      
+                dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
+                return LegendPreferencesApi.getLegendPreferences(id).then(legend_preferences => {
+                  dispatch(loadLegendPreferencesSuccess(JSON.parse(legend_preferences)));
+                });
               });
             });
-          });
+          } else {
+            dispatch(addError(network.data));
+          }
         }).catch(error => {
           throw(error);
         });
