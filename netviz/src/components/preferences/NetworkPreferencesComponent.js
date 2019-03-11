@@ -118,7 +118,7 @@ class NetworkPreferences extends React.Component {
   toggleSplits = (e) => {
     var preferences = this.props.preferences;
     preferences.add_splitting.value = !preferences.add_splitting.value;
-    this.props.actions.updatePreferences(preferences, this.props.id);
+    this.props.actions.splitChanged(this.props.groups, this.props.color_mode.generation, preferences, this.props.id);
   }
 
   // Toggle the display state of Input/Output Samples

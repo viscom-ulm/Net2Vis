@@ -147,6 +147,34 @@ function networkLoaded(network, groups, layerTypes, dispatch) {
     dispatch(initializeCompressedNetwork(network, groups, layerTypes));
 }
 
+// Split replacement has been changed.
+export function splitChanged(groups, generationMode, preferences, id) {
+  return function(dispatch) {
+    return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
+      var prefs = JSON.parse(preferences);
+      dispatch(updatePreferencesSuccess(prefs));
+      return NetworkApi.getNetwork(id).then(network => { 
+        if(network.success === true) {
+          var net = network.data;
+          if (prefs.add_splitting.value) {
+            net = splitting.addSplitLayers(net);
+          }
+          return LayerTypesApi.getLayerTypes(id).then(layerTypes => {
+            networkLoaded(net, groups, JSON.parse(layerTypes), dispatch);      
+            dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
+          });
+        } else {
+          dispatch(addError(network.data));
+        }
+      }).catch(error => {
+        throw(error);
+      })
+    }).catch(error => {
+      console.warn('Preferences invalid: ' + error);
+    });
+  }
+}
+
 // Loading Code was Successful
 function loadCodeSuccess(code) {
   return {type: types.LOAD_CODE_SUCCESS, code};
