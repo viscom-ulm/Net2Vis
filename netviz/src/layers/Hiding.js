@@ -12,17 +12,36 @@ export function hideLayers(network, layerTypes) {
 }
 
 function hideLayersByType(key, network) {
-  for (var layer in network.layers) {
+  var layer = 0;
+  while (layer < network.layers.length) {
     if (key === network.layers[layer].name) {
       var inputs = network.layers[layer].properties.input;
       var outputs = network.layers[layer].properties.output;
       for (var input in inputs) {
-        network.layers[common.getLayerByID(inputs[input], network.layers)].properties.output = outputs;
+        var outOfIn = network.layers[common.getLayerByID(inputs[input], network.layers)].properties.output;
+        for (var outIn in outOfIn) {
+          if (outOfIn[outIn] === network.layers[layer].id) {
+            outOfIn.splice(outIn, 1);
+          }
+        }
+        for (var newOut in outputs) {
+          outOfIn.push(outputs[newOut]);
+        }
       }
       for (var output in outputs) {
-        network.layers[common.getLayerByID(outputs[output], network.layers)].properties.input = inputs;
+        var inOfOut = network.layers[common.getLayerByID(outputs[output], network.layers)].properties.input;
+        for (var inOut in inOfOut) {
+          if (inOfOut[inOut] === network.layers[layer].id) {
+            inOfOut.splice(inOut, 1);
+          }
+        }
+        for (var newIn in inputs) {
+          inOfOut.push(inputs[newIn]);
+        }
       }
       network.layers.splice(layer, 1);
+    } else {
+      layer = layer + 1;
     }
   }
 }
