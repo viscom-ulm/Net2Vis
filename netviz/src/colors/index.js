@@ -7,6 +7,12 @@ export function getColorPalette() {
 }
 
 // Get the used color Palette
+export function getBlindColorPalette() {
+  var palette = ['#2196F3', '#8BC34A', '#F44336', '#795548', '#FFEB3B', '#9C27B0', '#9E9E9E', '#009688', '#FF9800', '#3F51B5', '#4CAF50', '#03A9F4', '#E91E63', '#00BCD4', '#FFC107', '#673AB7', '#607D8B'];
+  return palette;
+}
+
+// Get the used color Palette
 export function getTextures() {
   var textures = ["url(#muster1)", "url(#muster2)", "url(#muster3)", "url(#muster4)", "url(#muster5)", "url(#muster6)", "url(#muster7)", "url(#muster8)", "url(#muster9)", "url(#muster10)", "url(#muster11)", "url(#muster12)"];
   return textures;
@@ -25,12 +31,21 @@ export function generateNewColor(layerTypes, mode) {
     return generatePaletteColor(layerTypes);
   } else if (mode === 'Interpolation') {
     return generateInterpolatedColor(layerTypes);
+  } else if (mode === 'Color Blind') {
+    return generateBlindPaletteColor(layerTypes);
   }
 }
 
 // Generate a new color using the color palette
 function generatePaletteColor(layerTypes) {
   var palette = getColorPalette();
+  var index = Object.keys(layerTypes).length % palette.length;
+  return palette[index];
+}
+
+// Generate a new color using the color palette
+function generateBlindPaletteColor(layerTypes) {
+  var palette = getBlindColorPalette();
   var index = Object.keys(layerTypes).length % palette.length;
   return palette[index];
 }

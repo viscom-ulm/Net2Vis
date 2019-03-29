@@ -137,11 +137,11 @@ class NetworkPreferences extends React.Component {
 
   // Color generation mode Changes
   handleColorModeChange = (e) => {
-    this.props.actions.setColorGenerationMode(e.target.value);
+    this.props.actions.setColorGenerationMode(e.target.value, this.props.layer_types_settings, this.props.network, this.props.id);
   }
 
   render() {
-    var options = ['Interpolation', 'Palette']
+    var options = ['Interpolation', 'Palette', 'Color Blind']
     return(
       <div className='preferencesWrapper'>
         <div>
