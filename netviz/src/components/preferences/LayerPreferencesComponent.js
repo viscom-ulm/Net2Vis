@@ -15,14 +15,14 @@ class LayerPreferences extends React.Component {
   handleColorChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].color = e.hex;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id, this.props.color_mode.generation);
   }
 
   // Called when the Name of the Layer Alias changes
   handleAliasChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].alias = e.currentTarget.value;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id, this.props.color_mode.generation);
   }
 
   // Deletes the Settings for a Layer
@@ -34,7 +34,7 @@ class LayerPreferences extends React.Component {
         delete currLegend[i]; // Remove it
       }
     }
-    this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
+    this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id, this.props.color_mode.generation); // The Layertypes are done, this is called to update them
   }
 
   // Toggles a Layers visibility
@@ -45,7 +45,7 @@ class LayerPreferences extends React.Component {
     } else { // Group was inactive
       layerTypes[this.props.selected_legend_item].hidden = true;
     }
-    this.props.actions.updateLayerTypesHideState(layerTypes, this.props.network, this.props.groups, this.props.id);
+    this.props.actions.updateLayerTypesHideState(layerTypes, this.props.network, this.props.groups, this.props.id, this.props.color_mode.generation);
   }
 
   // Color selection mode Changes

@@ -7,6 +7,7 @@ import GroupsApi from '../api/GroupsApi';
 import * as types from './types';
 import * as sort from '../groups/Sort';
 import * as splitting from '../layers/Splitting';
+import * as colors from '../colors'
 
 // Set the ID of the current Network
 export function setID(id) {
@@ -54,15 +55,15 @@ function loadLayerTypesSuccess(layerTypes, network, generationMode) {
 }
 
 // Updating LayerTypes was Succesful
-function updateLayerTypesSuccess(layerTypes, network) {
-  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network}
+function updateLayerTypesSuccess(layerTypes, network, generationMode) {
+  return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};
 }
 
 // Called to update the LayerTypes
-export function updateLayerTypes(layerTypes, network, id) {
+export function updateLayerTypes(layerTypes, network, id, generationMode) {
   return function(dispatch) {
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network, generationMode));
     }).catch(error => {
       throw(error);
     });
@@ -70,10 +71,10 @@ export function updateLayerTypes(layerTypes, network, id) {
 }
 
 // Called when the hide state of one of the LayerType changes, sind network compression needs to rerun.
-export function updateLayerTypesHideState(layerTypes, network, groups, id) {
+export function updateLayerTypesHideState(layerTypes, network, groups, id, generationMode) {
   return function(dispatch) {
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network, generationMode));
       dispatch(initializeCompressedNetwork(network, groups, JSON.parse(layerTypes)));
     }).catch(error => {
       throw(error);
@@ -82,11 +83,11 @@ export function updateLayerTypesHideState(layerTypes, network, groups, id) {
 }
 
 // Called to delete LayerTypes
-export function deleteLayerTypes(layerTypes, network, id) {
+export function deleteLayerTypes(layerTypes, network, id, generationMode) {
   return function(dispatch) {
     dispatch(setPreferenceMode('legend'));
     return LayerTypesApi.updateLayerTypes(layerTypes, id).then(layerTypes => {
-      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network));
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network, generationMode));
     }).catch(error => {
       throw(error);
     });
@@ -370,7 +371,27 @@ export function setColorSelectionMode(mode) {
 }
 
 // Set the color mode for the Generation
-export function setColorGenerationMode(mode) {
+export function setColorGenerationMode(mode, layerTypes, network, id) {
+  console.log(id)
+  var layTypes = {};
+  for (var i in layerTypes) {
+    var layType = {
+      color: colors.generateNewColor(layTypes, mode),
+      alias: layerTypes[i].alias,
+      texture: layerTypes[i].texture,
+      hidden: layerTypes[i].hidden
+    }
+    layTypes[i] = layType;
+  }
+  return function(dispatch) {
+    return LayerTypesApi.updateLayerTypes(layTypes, id).then(layerTypes => {
+      dispatch(updateLayerTypesSuccess(JSON.parse(layerTypes), network, mode));
+      dispatch(setColorGenerationModeSuccess(mode));
+    })
+  }
+}
+
+function setColorGenerationModeSuccess(mode) {
   return {type: types.SET_GENERATION_COLOR_MODE, mode};
 }
 
