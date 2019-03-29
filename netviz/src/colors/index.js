@@ -8,7 +8,7 @@ export function getColorPalette() {
 
 // Get the used color Palette
 export function getBlindColorPalette() {
-  var palette = ['#2196F3', '#8BC34A', '#F44336', '#795548', '#FFEB3B', '#9C27B0', '#9E9E9E', '#009688', '#FF9800', '#3F51B5', '#4CAF50', '#03A9F4', '#E91E63', '#00BCD4', '#FFC107', '#673AB7', '#607D8B'];
+  var palette = ['#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7'];
   return palette;
 }
 
