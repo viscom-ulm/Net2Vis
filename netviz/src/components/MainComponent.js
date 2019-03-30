@@ -23,6 +23,9 @@ class Main extends React.Component {
 
   componentWillMount() {
     const { id } = this.props.match.params;
+    if (id === undefined) {
+      id = 'demo';
+    }
     this.props.actions.setID(id);
     this.props.actions.reloadAllState(id, this.props.color_mode.generation);
   }
