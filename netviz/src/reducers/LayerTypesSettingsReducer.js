@@ -14,7 +14,8 @@ export default function layerTypesSettignsReducer(state = initialState.layer_typ
           lTypes[action.network.layers[i].name] = { // Add the layer type
             color: colors.generateNewColor(lTypes, action.generationMode), // Set the color
             alias:  action.network.layers[i].name, // Set the name
-            texture: colors.generateNewTexture(lTypes) // Set the fallback texture
+            texture: colors.generateNewTexture(lTypes), // Set the fallback texture
+            hidden: false
           }
         }
       }

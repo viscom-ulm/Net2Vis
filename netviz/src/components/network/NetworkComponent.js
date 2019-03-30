@@ -10,17 +10,10 @@ import Edges from './EdgesComponent';
 
 import * as graphs from '../../graphs';
 import * as selection from '../../selection';
-import * as common from '../../groups/Common';
+import * as common from '../../layers/Common';
 
 // Network Component providing all the Network Visualization
 class Network extends React.Component {
-  // When this Component mounts, load the Network from the Backend
-  componentWillMount() {
-    if (!('layers' in this.props.compressed_network)) {
-      this.props.actions.reloadAllState(this.props.id, this.props.color_mode.generation);
-    }
-  }
-
   // When the shift key is held when clicking a layer, a complex selection is triggered 
   complexSelectionTriggered = (layer, selected) => {
     var paths = selection.allPaths(this.props.compressed_network.layers[common.getLayerByID(selected[0], this.props.compressed_network.layers)], layer.layer, this.props.compressed_network); // Get all Paths from the start node to the end node

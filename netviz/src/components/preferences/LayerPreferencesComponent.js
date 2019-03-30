@@ -37,6 +37,17 @@ class LayerPreferences extends React.Component {
     this.props.actions.deleteLayerTypes(currLegend, this.props.network, this.props.id); // The Layertypes are done, this is called to update them
   }
 
+  // Toggles a Layers visibility
+  toggleLayer = (e) => {
+    var layerTypes = this.props.layer_types_settings;
+    if (this.props.layer_types_settings[this.props.selected_legend_item].hidden === true) { // If the currently selected group is active
+      layerTypes[this.props.selected_legend_item].hidden = false;
+    } else { // Group was inactive
+      layerTypes[this.props.selected_legend_item].hidden = true;
+    }
+    this.props.actions.updateLayerTypesHideState(layerTypes, this.props.network, this.props.groups, this.props.id);
+  }
+
   // Color selection mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorSelectionMode(e.target.value);
@@ -59,6 +70,7 @@ class LayerPreferences extends React.Component {
             !this.props.preferences.no_colors.value &&
             <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].color} type={'color'} description={'Layer Color'} options={this.props.color_mode.selection} action={this.handleColorChange}/>
           }
+          <InputField value={this.props.layer_types_settings[this.props.selected_legend_item].hidden} type={'switch'} description={'Hide Layer'} action={this.toggleLayer}/>
         </div>
         <div>
           <InputField value={'Delete'} type={'button'} description={'Reset Layer Type'} action={this.deleteLayerSettings} options={"secondary"}/>
@@ -75,7 +87,8 @@ LayerPreferences.propTypes = {
   layer_types_settings: PropTypes.object.isRequired,
   network: PropTypes.object.isRequired,
   color_mode: PropTypes.object.isRequired,
-  preferences: PropTypes.object.isRequired
+  preferences: PropTypes.object.isRequired,
+  groups: PropTypes.array.isRequired
 };
 
 // Map the State to the Properties of this Component
@@ -86,7 +99,8 @@ function mapStateToProps(state, ownProps) {
     layer_types_settings: state.layer_types_settings,
     network: state.network,
     color_mode: state.color_mode,
-    preferences: state.preferences
+    preferences: state.preferences,
+    groups: state.groups
   };
 }
 

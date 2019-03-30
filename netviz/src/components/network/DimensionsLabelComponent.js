@@ -17,7 +17,7 @@ const DimensionsLabelComponent = ({dimensions, x, edge, layer_max_height}) => {
   const transform = `translate(${x}, ${5+y_pos+(layer_max_height/2.0)})`; // Manipulate the position of the graph
   return (
     <g transform={transform}>
-      <text textAnchor='start' y='3' transform={`rotate(90)`}>{dimTxt}</text>
+      <text textAnchor='start' y='3' transform={`rotate(90)`} fontSize='12'>{dimTxt}</text>
     </g>
   );
 };

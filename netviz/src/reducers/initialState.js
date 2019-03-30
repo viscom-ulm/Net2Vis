@@ -29,6 +29,7 @@ export default {
         features_mapping: {value: 'none', type: 'choice', description: 'Visual mapping of the Features'},
         show_dimensions: {value: true, type: 'switch', description: 'Dimensions Label'},
         show_features: {value: true, type: 'switch', description: 'Features Label'},
+        add_splitting: {value: false, type: 'switch', description: 'Replace Split Layers'},
         show_samples: {value: true, type: 'switch', description: 'Input/Output Samples'},
         no_colors: {value: false, type: 'switch', description: 'Disable Colors'},
         stroke_width: {value: 4, type:'number', description: 'Stroke Width'}

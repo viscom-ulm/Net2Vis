@@ -1,4 +1,5 @@
 import * as common from './Common';
+import * as layerCommon from '../layers/Common'
 
 // Replaces multiple Layers by a more abstract one.
 export function concatenateLayers(occurence, network, group) {
@@ -93,7 +94,7 @@ function changeOutputIfNeccessary(occurence, layer, newID, newLayer) {
 function getNewInputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the Occurence List
     if (occurence[i].properties.input.length === 0) { // No Inputs for a Layer
-      var id = common.getLayerByID(occurence[i].matchID, network.layers);
+      var id = layerCommon.getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.in; // Return the input dimensions for this layer from the network
       }
@@ -105,7 +106,7 @@ function getNewInputDimensions(occurence, network) {
 function getNewOutputDimensions(occurence, network) {
   for (var i in occurence) { // Iterate over the occurence List
     if (occurence[i].properties.output.length === 0) { // Not Outputs for a Layer
-      var id = common.getLayerByID(occurence[i].matchID, network.layers);
+      var id = layerCommon.getLayerByID(occurence[i].matchID, network.layers);
       if (id >= 0) { // Layer has ID that occurence item matches
         return network.layers[id].properties.dimensions.out; // Return the input dimensions for this layer from the network
       }

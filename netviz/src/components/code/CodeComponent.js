@@ -12,17 +12,14 @@ import * as actions from '../../actions';
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
-  // When this Component mounts, check if the Code was already loaded and load it if not
-  componentWillMount() {
-    if(this.props.code === '') {
-      this.props.actions.loadCode(this.props.id);
-    }
-  }
-
   // When the Code changes, Update it on the Backend
   handleOnChange = (newValue) => {
-    this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation);
+    this.props.actions.updateCode(newValue, this.props.id, this.props.groups, this.props.color_mode.generation, this.props.preferences);
   };
+
+  componentDidUpdate() {
+    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+  }
 
   // Render the Code into the Code View if Toggled
   render() {
@@ -33,6 +30,7 @@ class Code extends React.Component {
     }
     return(// Editor with Syntax highlighting
         <AceEditor
+          ref="aceEditor"
           mode="python"
           theme="chrome"
           wrapEnabled={true}
@@ -58,7 +56,8 @@ Code.propTypes = {
   code: PropTypes.string.isRequired,
   error: PropTypes.object.isRequired,
   groups: PropTypes.array.isRequired,
-  color_mode: PropTypes.object.isRequired
+  color_mode: PropTypes.object.isRequired,
+  preferences: PropTypes.object.isRequired
 };
 
 // Map the State to the Properties of this Component 
@@ -69,7 +68,8 @@ function mapStateToProps(state, ownProps) {
       code: state.code,
       error: state.error,
       groups: state.groups,
-      color_mode: state.color_mode
+      color_mode: state.color_mode,
+      preferences: state.preferences
     };
   } else {
     return {
@@ -77,7 +77,8 @@ function mapStateToProps(state, ownProps) {
       code: '',
       error: state.error,
       groups: state.groups,
-      color_mode: state.color_mode
+      color_mode: state.color_mode,
+      preferences: state.preferences
     };
   }
 }
