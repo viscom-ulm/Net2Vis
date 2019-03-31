@@ -37,7 +37,7 @@ For starting up the server, the following steps are needed:
 4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
-1. Go into the frontend folder: `cd netviz`
+1. Go into the frontend folder: `cd net2vis`
 2. Install the javascript dependencies using: `npm install`
 3. Start the frontend application with: `npm start`
 
