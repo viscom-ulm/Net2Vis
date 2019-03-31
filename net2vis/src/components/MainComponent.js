@@ -10,6 +10,7 @@ import Preferences from './preferences/PreferencesComponent';
 import Code from './code/CodeComponent'
 import { Grid, Paper } from '@material-ui/core';
 import Patterns from './patterns/PatternComponent';
+import AlertSnack from './AlertSnack';
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
@@ -105,6 +106,7 @@ class Main extends React.Component {
             <Preferences />
           </Grid>
         }
+        <AlertSnack />
       </Grid>
     );
   }

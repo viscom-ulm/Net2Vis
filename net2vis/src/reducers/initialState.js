@@ -63,5 +63,9 @@ export default {
         generation: 'Palette'
     },
     network_bbox: {},
-    legend_bbox: {}
+    legend_bbox: {},
+    alert_snack: {
+        open: false,
+        message: ''
+    }
 }

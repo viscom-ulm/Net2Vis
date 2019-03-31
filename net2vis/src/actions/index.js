@@ -143,6 +143,7 @@ function loadNetworkSuccess(network) {
 // Helper Function to be called once a Network has been Loaded.
 function networkLoaded(network, groups, layerTypes, dispatch) {
     dispatch(removeError());
+    dispatch(updateAlertSnack({open: false, message: ''}))
     dispatch(loadNetworkSuccess(network));
     dispatch(setLayersExtremes(network));
     dispatch(initializeCompressedNetwork(network, groups, layerTypes));
@@ -165,6 +166,7 @@ export function splitChanged(groups, generationMode, preferences, id) {
             dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
           });
         } else {
+          dispatch(updateAlertSnack({open: true, message: 'Code not executeable.'}))
           dispatch(addError(network.data));
         }
       }).catch(error => {
@@ -213,6 +215,7 @@ export function updateCode(code, id, groups, generationMode, preferences) {
             dispatch(loadLayerTypesSuccess(JSON.parse(layerTypes), net, generationMode));
           });
         } else {
+          dispatch(updateAlertSnack({open: true, message: 'Code not executeable.'}))
           dispatch(addError(network.data));
         }
       }).catch(error => {
@@ -279,6 +282,7 @@ export function reloadAllState(id, generationMode) {
               });
             });
           } else {
+            dispatch(updateAlertSnack({open: true, message: 'Code not executeable.'}))
             dispatch(addError(network.data));
           }
         }).catch(error => {
@@ -403,4 +407,8 @@ export function setNetworkBbox(bbox) {
 // Set the Legend Bbox
 export function setLegendBbox(bbox) {
   return {type: types.SET_LEGEND_BBOX, bbox};
+}
+
+export function updateAlertSnack(alertSnack) {
+  return {type: types.UPDATE_ALERT_SNACK_SUCCESS, alertSnack}
 }

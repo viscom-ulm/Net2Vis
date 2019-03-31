@@ -19,8 +19,10 @@ class Network extends React.Component {
     var paths = selection.allPaths(this.props.compressed_network.layers[common.getLayerByID(selected[0], this.props.compressed_network.layers)], layer.layer, this.props.compressed_network); // Get all Paths from the start node to the end node
     for (var i in paths) { // For all Paths
       if (paths[i][paths[i].length - 1].id !== layer.layer.id) { // If one did not reach the end Node
+        this.props.actions.updateAlertSnack({open: true, message: 'Selection not possible. Layers cannot be sequentialized.'});
         return; // Do not change the selection
       } else if (!selection.checkMultiInput(paths)) {
+        this.props.actions.updateAlertSnack({open: true, message: 'Selection not possible. Layers cannot be sequentialized.'});
         return;
       }
     }
