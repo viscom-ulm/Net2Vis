@@ -27,7 +27,7 @@ The best of it: Once the application runs, you just have to paste your Keras cod
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
 
 ## Installation
-Starting with Net2Vis is pretty easy (assuming python3, npm, and tensorflow/keras are installed).
+Starting with Net2Vis is pretty easy (assuming python3, npm, and keras are installed).
 1. Clone this Repo
 
 For starting up the server, the following steps are needed:
