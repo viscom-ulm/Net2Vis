@@ -142,6 +142,11 @@ class NetworkPreferences extends React.Component {
 
   render() {
     var options = ['Interpolation', 'Palette', 'Color Blind']
+    // Check the state of the Buttons
+    var ungroupActive = this.props.groups.length > 0 ? true : false;
+    var groupActive = this.props.selection.length > 1 ? true : false;
+    var repetition = auto.getMostCommonRepetition(this.props.compressed_network);
+    var autoGroupActive = repetition !== undefined ? true : false;
     return(
       <div className='preferencesWrapper'>
         <div>
@@ -164,9 +169,9 @@ class NetworkPreferences extends React.Component {
           <InputField value={this.props.preferences.no_colors.value} type={this.props.preferences.no_colors.type} description={this.props.preferences.no_colors.description} action={this.toggleColors}/>
         </div>
         <div>
-          <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers}/>
-          <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers}/>
-          <InputField value={'AutoUngroup'} type={'button'} description={'Automatically Remove Group'} action={this.autoUngroupLayers} options={'secondary'}/>
+          <InputField value={'Group'} type={'button'} description={'Group'} action={this.groupLayers} active={groupActive}/>
+          <InputField value={'Autogroup'} type={'button'} description={'Automatically Group'} action={this.autoGroupLayers} active={autoGroupActive}/>
+          <InputField value={'AutoUngroup'} type={'button'} description={'Automatically Remove Group'} action={this.autoUngroupLayers} options={'secondary'} active={ungroupActive}/>
         </div>
       </div>
     )

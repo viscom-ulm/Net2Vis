@@ -7,7 +7,7 @@ import * as colors from '../../colors'
 import { TextField, Button, FormControlLabel, FormControl, Switch, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
-const InputField = ({value, type, description, action, options}) => {
+const InputField = ({value, type, description, action, options, active=true}) => {
   if(type === 'number') {
     return (
       <div className='preferenceItem'>
@@ -39,13 +39,13 @@ const InputField = ({value, type, description, action, options}) => {
     if (options === 'secondary') {
       return (
         <div className='preferenceItem'>
-          <Button onClick={(e) => action(e)} variant="contained" color="secondary" className='inputElement'>{description}</Button>
+          <Button onClick={(e) => action(e)} variant="contained" color="secondary" className='inputElement' disabled={!active}>{description}</Button>
         </div>
       );
     }
     return (
       <div className='preferenceItem'>
-        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement'>{description}</Button>
+        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement' disabled={!active}>{description}</Button>
       </div>
     );
   } else if (type === 'switch') {
