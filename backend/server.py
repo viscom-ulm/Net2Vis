@@ -53,6 +53,8 @@ def replace_references(net):
 
 # Check if the desired model already exists.
 def check_exists(id):
+  if(not os.path.exists('models')):
+    os.mkdir('models')
   if(not os.path.exists(os.path.join('models', id))):
     os.mkdir(os.path.join('models', id))
     os.mkdir(os.path.join('models', id, 'visualizations'))

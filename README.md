@@ -27,14 +27,16 @@ The best of it: Once the application runs, you just have to paste your Keras cod
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
 
 ## Installation
-Starting with Net2Vis is pretty easy (assuming python3, npm, and keras are installed).
+Starting with Net2Vis is pretty easy (assuming python3, and npm).
 1. Clone this Repo
+2. For the Backend to work, we need Cairo installed on your machine. This is used for PDF conversion.
 
-For starting up the server, the following steps are needed:
+For starting up the backend, the following steps are needed:
 1. Go into the backend folder: `cd backend`
 2. Install Flask for the server functionality using: `pip3 install flask`
-3. Install Cairosvg for conversion of svg images into pdfs with: `pip3 install cairosvg`
-4. To start the server, issue: `python3 server.py`
+3. Install Keras for the neural network compilation: `pip3 install tensorflow`
+4. Install Cairosvg for conversion of svg images into pdfs with: `pip3 install cairosvg`
+5. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
 1. Go into the frontend folder: `cd net2vis`
