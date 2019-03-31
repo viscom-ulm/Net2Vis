@@ -22,7 +22,7 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
-    const { id } = this.props.match.params;
+    var { id } = this.props.match.params;
     if (id === undefined) {
       id = 'demo';
     }
