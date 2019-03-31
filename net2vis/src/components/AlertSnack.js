@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
 import CloseIcon from '@material-ui/icons/Close';
-import { Button, IconButton, Snackbar } from '@material-ui/core';
+import { IconButton, Snackbar } from '@material-ui/core';
 
 class AlertSnack extends React.Component {
   handleClose = (event, reason) => {
@@ -21,18 +21,16 @@ class AlertSnack extends React.Component {
           horizontal: 'left',
         }}
         open={this.props.alertSnack.open}
+        autoHideDuration={6000}
         onClose={this.handleClose}
         ContentProps={{
           'aria-describedby': 'message-id',
         }}
         message={<span id="message-id">{this.props.alertSnack.message}</span>}
         action={[
-          <Button key="undo" color="secondary" size="small" onClick={this.handleClose}>
-            Close
-          </Button>,
           <IconButton key="close" aria-label="Close" color="inherit" onClick={this.handleClose} >
             <CloseIcon />
-          </IconButton>,
+          </IconButton>
         ]}
       />
     );
