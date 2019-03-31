@@ -14,13 +14,18 @@ import Patterns from './patterns/PatternComponent';
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
   componentWillReceiveProps(newProps) {
-    const { id } = newProps.match.params;
-    this.props.actions.setID(id);
-    this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+    if (this.props.color_mode.generation === newProps.color_mode.generation) {
+      const { id } = newProps.match.params;
+      this.props.actions.setID(id);
+      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+    }
   }
 
   componentWillMount() {
-    const { id } = this.props.match.params;
+    var { id } = this.props.match.params;
+    if (id === undefined) {
+      id = 'demo';
+    }
     this.props.actions.setID(id);
     this.props.actions.reloadAllState(id, this.props.color_mode.generation);
   }

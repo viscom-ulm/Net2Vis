@@ -18,14 +18,14 @@ class GroupPreferences extends React.Component {
   handleColorChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].color = e.hex;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id, this.props.color_mode.generation);
   }
 
   // Called when the Name of the Layer Alias changes
   handleAliasChange = (e) => {
     var layerTypes = this.props.layer_types_settings;
     layerTypes[this.props.selected_legend_item].alias = e.currentTarget.value;
-    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id);
+    this.props.actions.updateLayerTypes(layerTypes, this.props.network, this.props.id, this.props.color_mode.generation);
   }
 
   // Toggles a Group and others that build on it

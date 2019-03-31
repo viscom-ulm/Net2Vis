@@ -27,7 +27,7 @@ The best of it: Once the application runs, you just have to paste your Keras cod
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
 
 ## Installation
-Starting with Net2Vis is pretty easy (assuming python3, npm, and tensorflow/keras are installed).
+Starting with Net2Vis is pretty easy (assuming python3, npm, and keras are installed).
 1. Clone this Repo
 
 For starting up the server, the following steps are needed:
@@ -37,7 +37,7 @@ For starting up the server, the following steps are needed:
 4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
-1. Go into the frontend folder: `cd netviz`
+1. Go into the frontend folder: `cd net2vis`
 2. Install the javascript dependencies using: `npm install`
 3. Start the frontend application with: `npm start`
 

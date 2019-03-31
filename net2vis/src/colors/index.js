@@ -7,6 +7,12 @@ export function getColorPalette() {
 }
 
 // Get the used color Palette
+export function getBlindColorPalette() {
+  var palette = ['#000000', '#E69F00', '#56B4E9', '#009E73', '#F0E442', '#0072B2', '#D55E00', '#CC79A7'];
+  return palette;
+}
+
+// Get the used color Palette
 export function getTextures() {
   var textures = ["url(#muster1)", "url(#muster2)", "url(#muster3)", "url(#muster4)", "url(#muster5)", "url(#muster6)", "url(#muster7)", "url(#muster8)", "url(#muster9)", "url(#muster10)", "url(#muster11)", "url(#muster12)"];
   return textures;
@@ -25,12 +31,21 @@ export function generateNewColor(layerTypes, mode) {
     return generatePaletteColor(layerTypes);
   } else if (mode === 'Interpolation') {
     return generateInterpolatedColor(layerTypes);
+  } else if (mode === 'Color Blind') {
+    return generateBlindPaletteColor(layerTypes);
   }
 }
 
 // Generate a new color using the color palette
 function generatePaletteColor(layerTypes) {
   var palette = getColorPalette();
+  var index = Object.keys(layerTypes).length % palette.length;
+  return palette[index];
+}
+
+// Generate a new color using the color palette
+function generateBlindPaletteColor(layerTypes) {
+  var palette = getBlindColorPalette();
   var index = Object.keys(layerTypes).length % palette.length;
   return palette[index];
 }
