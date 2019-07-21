@@ -62,7 +62,6 @@ class Layer extends React.Component {
   render() {
     // Get the Properties to use them in the Rendering
     const set = this.props.settings ? this.props.settings : {color: 'white', texture: 'white'}; // Need initial Value if not already set, will be set back immediately and thus not visible
-    const fill = this.props.preferences.no_colors.value ? set.texture : set.color;
     const name = set.alias ? set.alias : this.props.layer.layer.name;
     const dimensions = this.props.layer.layer.properties.dimensions; // Get the Dimensions of the current Layer
     const extreme_dimensions = {max_size: this.props.preferences.layer_display_max_height.value, min_size: this.props.preferences.layer_display_min_height.value}; // Get the Extremes of the Display Size for the Glyphs
@@ -70,10 +69,6 @@ class Layer extends React.Component {
     const pathData = paths.calculateGlyphPath(extreme_dimensions, layer_height, this.props.layer, this.props.edges); // Calculate the Path of the Layer
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
-    var stroke = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(set.color); // Set the default stroke color to black for no colors or to a darkened version of the layer color.
-    if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
-      stroke = "red"; // Set stroke color to red
-    }
     const features = dimensions.out.length > 1 ? dimensions.out[dimensions.out.length-1] : dimensions.out[0];
     const dimensionsLabelX = this.props.layer.x + (this.props.layer.width / 2.0) + (this.props.preferences.layers_spacing_horizontal.value) + (this.props.preferences.stroke_width.value);
     var inputSample = undefined; // Placeholder for label if this is an input of the Net
@@ -96,12 +91,33 @@ class Layer extends React.Component {
         }
       }
     }
+    var isGroup = false;
+    var borderModifier = 1.0;
+    for (var group in this.props.groups) {
+      if (this.props.groups[group].name === this.props.layer.layer.name) {
+        isGroup = true;
+        borderModifier = 2.0
+      }
+    }
+    // Default colors for non-colorblind and no group
+    var fill = set.color;
+    var stroke = colors.darkenColor(set.color);
+    if (this.props.preferences.no_colors.value) { // Colorblind
+      fill = set.texture;
+      stroke = 'grey';
+    } else if (isGroup) { // Non-colorblind and group
+      fill = colors.darkenColor(set.color);
+      stroke = set.color;
+    }
+    if (this.props.selection.includes(this.props.layer.layer.id)) { // Check if layer is selected
+      stroke = "red"; // Set stroke color to red
+    }
 
     // Return a Shape with the calculated parameters and add the Property Tooltip
     return (
       <g>
         <g transform={`translate(${this.props.layer.x - (this.props.layer.width/2.0)}, ${this.props.layer.y})`}>
-          <path d={pathData} style={{fill:fill, stroke: stroke, strokeWidth: this.props.preferences.stroke_width.value, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
+          <path d={pathData} style={{fill:fill, stroke: stroke, strokeWidth: borderModifier * this.props.preferences.stroke_width.value, strokeLinejoin: 'round'}} ref={tooltipRef} onClick={this.handleLayerClicked}/>
           <TooltipComponent properties_object={properties_object} dimensions={dimensions} tooltipRef={tooltipRef} name={name}/>
           {
             this.props.preferences.show_features.value &&
@@ -128,7 +144,8 @@ Layer.propTypes = {
   selection: PropTypes.array.isRequired,
   layer: PropTypes.object.isRequired,
   settings: PropTypes.object,
-  edges: PropTypes.array.isRequired
+  edges: PropTypes.array.isRequired,
+  groups: PropTypes.array.isRequired
 }
 
 // Map the State of the Application to the Props of this Class
@@ -136,7 +153,8 @@ function mapStateToProps(state, ownProps) {
   return {
     preferences: state.preferences,
     layer_extreme_dimensions: state.layer_extreme_dimensions,
-    selection: state.selection
+    selection: state.selection,
+    groups: state.groups
   };
 }
 
