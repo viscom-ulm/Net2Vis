@@ -39,6 +39,12 @@ class LegendItem extends React.Component {
       graph.edges().forEach(function(e) {
         edges.push({v: e.v, w: e.w, points: graph.edge(e)});
       });
+      style.strokeWidth = this.props.legend_preferences.stroke_width.value * 2;
+      const fill = style.fill;
+      style.fill = style.stroke;
+      if (this.props.selected !== this.props.representation.layer.representer.name) {
+        style.stroke = fill;
+      }
       var displacement = nodes[legend.getInputNode(nodes)].y - (this.props.legend_preferences.layer_height.value / 2.0); // Calculate the displacement if an inputnode to a legenditem is not standardly placed in the legend 
       return (
         <g>
