@@ -33,6 +33,7 @@ class Network extends React.Component {
   // Render the individual Network Layers
   render() {
     const graph = graphs.buildGraphFromNetwork(this.props.compressed_network, this.props.layer_extreme_dimensions, this.props.preferences);
+    console.log(this.props.compressed_network)
     var nodes = [];
     graph.nodes().forEach(function(e) {
       nodes.push(graph.node(e));
@@ -97,7 +98,7 @@ Network.propTypes = {
   layer_extreme_dimensions: PropTypes.object.isRequired,
   compressed_network: PropTypes.object.isRequired,
   color_mode: PropTypes.object.isRequired,
-  network_bbox: PropTypes.object.isRequired
+  network_bbox: PropTypes.object.isRequired,
 };
 
 // Map the State of the Application to the Props of this Class
@@ -110,7 +111,7 @@ function mapStateToProps(state, ownProps) {
     layer_extreme_dimensions: state.layer_extreme_dimensions,
     compressed_network: state.compressed_network,
     color_mode: state.color_mode,
-    network_bbox: state.network_bbox
+    network_bbox: state.network_bbox,
   };
 }
 
