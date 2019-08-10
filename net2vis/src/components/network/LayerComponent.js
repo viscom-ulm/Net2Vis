@@ -96,7 +96,7 @@ class Layer extends React.Component {
     for (var group in this.props.groups) {
       if (this.props.groups[group].name === this.props.layer.layer.name) {
         isGroup = true;
-        borderModifier = 2.0
+        borderModifier = 3.0
       }
     }
     // Default colors for non-colorblind and no group

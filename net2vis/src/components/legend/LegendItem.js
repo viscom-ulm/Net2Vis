@@ -39,7 +39,7 @@ class LegendItem extends React.Component {
       graph.edges().forEach(function(e) {
         edges.push({v: e.v, w: e.w, points: graph.edge(e)});
       });
-      style.strokeWidth = this.props.legend_preferences.stroke_width.value * 2;
+      style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
       const fill = style.fill;
       style.fill = style.stroke;
       if (this.props.selected !== this.props.representation.layer.representer.name) {
