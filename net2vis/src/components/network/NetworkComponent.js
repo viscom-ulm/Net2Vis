@@ -33,7 +33,6 @@ class Network extends React.Component {
   // Render the individual Network Layers
   render() {
     const graph = graphs.buildGraphFromNetwork(this.props.compressed_network, this.props.layer_extreme_dimensions, this.props.preferences);
-    console.log(this.props.compressed_network)
     var nodes = [];
     graph.nodes().forEach(function(e) {
       nodes.push(graph.node(e));
