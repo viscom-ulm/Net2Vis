@@ -66,7 +66,7 @@ class Main extends React.Component {
   // Scroll Listener, handling SVG zoom Actions
   handleScroll = (e) => {
     const delta = e.deltaY / Math.abs(e.deltaY);
-    this.props.actions.zoomGroup(delta);
+    this.props.actions.zoomGroup(-delta);
   }
 
   // Render the Main Content and call other Elements
