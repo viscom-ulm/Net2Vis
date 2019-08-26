@@ -14,21 +14,22 @@ import AlertSnack from './AlertSnack';
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
-  componentWillReceiveProps(newProps) {
-    if (this.props.color_mode.generation === newProps.color_mode.generation) {
-      const { id } = newProps.match.params;
-      this.props.actions.setID(id);
-      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
-    }
-  }
-
-  componentWillMount() {
-    var { id } = this.props.match.params;
+  constructor(props) {
+    super(props);
+    var { id } = props.match.params;
     if (id === undefined) {
       id = 'demo';
     }
     this.props.actions.setID(id);
     this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.color_mode.generation === prevProps.color_mode.generation) {
+      const { id } = this.props.match.params;
+      this.props.actions.setID(id);
+      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+    }
   }
 
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
@@ -65,7 +66,7 @@ class Main extends React.Component {
   // Scroll Listener, handling SVG zoom Actions
   handleScroll = (e) => {
     const delta = e.deltaY / Math.abs(e.deltaY);
-    this.props.actions.zoomGroup(delta);
+    this.props.actions.zoomGroup(-delta);
   }
 
   // Render the Main Content and call other Elements

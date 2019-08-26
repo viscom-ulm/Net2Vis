@@ -10,8 +10,8 @@ class AppRouter extends React.Component {
       <div className='content'>
         <Router>
           <div className='full'>
-            <Route exact={true} path="/:id" component={Main} />
-            <Route exact={true} path="" component={Main} />
+            <Route exact path="/:id" component={Main} />
+            <Route exact path="/" component={Main} />
           </div>
         </Router>>
       </div>
