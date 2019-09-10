@@ -32,6 +32,17 @@ class ComplexLegendItem extends React.Component {
       strokeLinejoin: 'round',
       strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
+    for (var group in this.props.groups) {
+      if (this.props.groups[group].name === this.props.layer.layer.name) {
+        style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
+        const fill = style.fill;
+        style.fill = stroke_color;
+        if (this.props.active) {
+          style.stroke = fill;
+        }
+      }
+    }
+
     return(
       <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>
         {current_edges.map((edge, index) =>
@@ -47,6 +58,7 @@ class ComplexLegendItem extends React.Component {
 
 // PropTypes of this Class
 ComplexLegendItem.propTypes = {
+  groups: PropTypes.array.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   legend_preferences: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired
@@ -55,6 +67,7 @@ ComplexLegendItem.propTypes = {
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
+    groups: state.groups,
     layer_types_settings: state.layer_types_settings,
     legend_preferences: state.legend_preferences,
     preferences: state.preferences
