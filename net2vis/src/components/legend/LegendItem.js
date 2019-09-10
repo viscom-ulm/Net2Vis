@@ -41,8 +41,8 @@ class LegendItem extends React.Component {
       });
       style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
       const fill = style.fill;
-      style.fill = style.stroke;
-      if (this.props.selected !== this.props.representation.layer.representer.name) {
+      style.fill = stroke_color;
+      if (this.props.selected !== this.props.representation.layer.representer.name && this.props.representation.layer.active) {
         style.stroke = fill;
       }
       var displacement = nodes[legend.getInputNode(nodes)].y - (this.props.legend_preferences.layer_height.value / 2.0); // Calculate the displacement if an inputnode to a legenditem is not standardly placed in the legend 
@@ -64,7 +64,6 @@ class LegendItem extends React.Component {
 
 // PropTypes of this Class
 LegendItem.propTypes = {
-  groups: PropTypes.array.isRequired,
   legend_preferences: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired
 }
@@ -72,7 +71,6 @@ LegendItem.propTypes = {
 // Map the State of the Application to the Props of this Class
 function mapStateToProps(state, ownProps) {
   return {
-    groups: state.groups,
     legend_preferences: state.legend_preferences,
     preferences: state.preferences
   };
