@@ -34,7 +34,8 @@ Starting with Net2Vis is pretty easy (assuming python3, and npm).
 For starting up the backend, the following steps are needed:
 1. Go into the backend folder: `cd backend`
 2. Install backend dependencies by running `pip3 install -r requirements.txt`
-3. To start the server, issue: `python3 server.py`
+3. Install cario binding for python for your distribution (e.g. `python-cairosvg` on Debian).
+4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
 1. Go into the frontend folder: `cd net2vis`
