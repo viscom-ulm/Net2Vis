@@ -19,7 +19,7 @@ Handcrafting such visualizations also creates abiguities and misinterpretations.
 
 With Net2Vis, these problems are gone.
 It is designed to provide an abstract network visualization while still providing general information about individual layers.
-We reflect the number of features as well as the spatial reolution of the tensor in our glyph design.
+We reflect the number of features as well as the spatial resolution of the tensor in our glyph design.
 Layer-Types can be identified through colors.
 Since these networks can get fairly complex, we added the possibility to group layers and thus compact the network through replacing common layer sequences.
 
