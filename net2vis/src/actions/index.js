@@ -376,7 +376,6 @@ export function setColorSelectionMode(mode) {
 
 // Set the color mode for the Generation
 export function setColorGenerationMode(mode, layerTypes, network, id) {
-  console.log(id)
   var layTypes = {};
   for (var i in layerTypes) {
     var layType = {

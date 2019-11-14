@@ -14,21 +14,22 @@ import AlertSnack from './AlertSnack';
 
 // Main component of the Application that displays all content dependant on the Controls State
 class Main extends React.Component {
-  componentWillReceiveProps(newProps) {
-    if (this.props.color_mode.generation === newProps.color_mode.generation) {
-      const { id } = newProps.match.params;
-      this.props.actions.setID(id);
-      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
-    }
-  }
-
-  componentWillMount() {
-    var { id } = this.props.match.params;
+  constructor(props) {
+    super(props);
+    var { id } = props.match.params;
     if (id === undefined) {
       id = 'demo';
     }
     this.props.actions.setID(id);
     this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.color_mode.generation === prevProps.color_mode.generation) {
+      const { id } = this.props.match.params;
+      this.props.actions.setID(id);
+      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+    }
   }
 
   // MouseDown Listener for SVG, recording the Position and registering MouseMove Listener
@@ -65,13 +66,13 @@ class Main extends React.Component {
   // Scroll Listener, handling SVG zoom Actions
   handleScroll = (e) => {
     const delta = e.deltaY / Math.abs(e.deltaY);
-    this.props.actions.zoomGroup(delta);
+    this.props.actions.zoomGroup(-delta);
   }
 
   // Render the Main Content and call other Elements
   render() {
     return (
-      <Grid container direction='row' spacing={8} className='mainGrid'>
+      <Grid container direction='row' spacing={1} className='mainGrid'>
         {
           this.props.code_toggle &&
           <Grid item className='codeGrid'>
@@ -81,7 +82,7 @@ class Main extends React.Component {
           </Grid>
         }
         <Grid item xs>
-          <Grid container direction='column' spacing={8} className='mainGrid'>
+          <Grid container direction='column' spacing={1} className='mainGrid'>
             <Grid item className='svgGrid'>
               <Paper className='full'>
                 <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
