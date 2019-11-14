@@ -203,4 +203,5 @@ def process_vis(id):
     attachment_filename='visualizations.zip',
     as_attachment=True) # Send the Zip back to the frontend
 
-app.run(debug=True)
+if __name__ == '__main__':
+  app.run(debug=True)
