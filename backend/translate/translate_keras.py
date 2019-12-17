@@ -8,7 +8,7 @@ import traceback
 def translate_keras(filename):
     graph = Graph()
     with open(filename, 'r') as myfile:
-        keras_code=myfile.read()
+        keras_code = myfile.read()
         try:
             exec(keras_code, globals())
             model = get_model()
