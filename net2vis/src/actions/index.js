@@ -200,7 +200,11 @@ function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id, groups, generationMode, preferences) {
+export function updateCode(code) {
+  return {type: types.UPDATE_CODE_SUCESS, code}
+}
+
+export function updateCodeBackend(code, id, groups, generationMode, preferences) {
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));

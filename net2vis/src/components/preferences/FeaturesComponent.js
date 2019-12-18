@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 
-import InputField from './InputField'
+import InputField from '../input/InputField'
 import * as actions from '../../actions';
 
 class Features extends React.Component {

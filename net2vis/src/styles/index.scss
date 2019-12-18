@@ -91,6 +91,16 @@ header {
     height: calc(100% - 8px);
 }
 
+#codeDiv {
+    height: calc(100% - 48px);
+}
+
+.codeItem {
+    padding-bottom: 8px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
 // Different Areas
 #ColorPicker {
     padding: 10px;
