@@ -26,10 +26,6 @@ def translate_keras(filename):
     try:
       return graph_from_external_file(keras_code, general_code)
     except Exception as err:
-      print('Exception')
-      print(err)
-      _, _, trace_back = sys.exc_info()
-      line = traceback.extract_tb(trace_back)[-1][1]
       return {'error_class': '', 'line_number': 1,
               'detail': str(err)}
 
