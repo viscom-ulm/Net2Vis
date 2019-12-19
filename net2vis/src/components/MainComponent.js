@@ -35,7 +35,9 @@ class Main extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.color_mode.generation === prevProps.color_mode.generation) {
+    // Only reload if the state changes somewhere else
+    if (this.props.color_mode.generation === prevProps.color_mode.generation && this.props.code_toggle === prevProps.code_toggle && this.props.preferences_toggle === prevProps.preferences_toggle) {
+      console.log('test')
       const { id } = this.props.match.params;
       this.props.actions.setID(id);
       this.props.actions.reloadAllState(id, this.props.color_mode.generation);
