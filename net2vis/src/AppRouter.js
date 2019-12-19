@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Main from './components/MainComponent';
 
@@ -13,7 +13,7 @@ class AppRouter extends React.Component {
             <Route exact path="/:id" component={Main} />
             <Route exact path="/" component={Main} />
           </div>
-        </Router>>
+        </Router>
       </div>
     );
   }    
