@@ -29,11 +29,15 @@ You still can tweak your visualizations and create abstractions before downloadi
 ## Installation
 Starting with Net2Vis is pretty easy (assuming python3, and npm).
 1. Clone this Repo
-2. For the Backend to work, we need Cairo installed on your machine. This is used for PDF conversion.
+2. For the Backend to work, we need Cairo and Docker installed on your machine. This is used for PDF conversion and running models pasted into the browser (more) secure.
+
+For docker, the docker daemon needs to run and the image: `tensorflow/tensorflow:latest-py3` pulled.
+This way, we can run the pasted code within separate containers.
 
 For starting up the backend, the following steps are needed:
 1. Go into the backend folder: `cd backend`
 2. Install backend dependencies by running `pip3 install -r requirements.txt`
+3. Install the docker container by running `docker build --force-rm -t tf_plus_keras .`
 3. Install cario binding for python for your distribution (e.g. `python-cairosvg` on Debian).
 4. To start the server, issue: `python3 server.py`
 

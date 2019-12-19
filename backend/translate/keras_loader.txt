@@ -1,0 +1,4 @@
+import model
+
+keras_model = model.get_model()
+print(keras_model.to_json())

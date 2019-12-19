@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 
 import Typography from '@material-ui/core/Typography';
 
-import InputField from './InputField'
+import InputField from '../input/InputField'
 import Features from './FeaturesComponent';
 
 import * as grouping from '../../groups/Grouping';

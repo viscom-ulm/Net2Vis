@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 
 import Typography from '@material-ui/core/Typography';
 
-import InputField from './InputField'
+import InputField from '../input/InputField'
 
 import * as removal from '../../groups/Removal';
 import * as activation from '../../groups/Activation';

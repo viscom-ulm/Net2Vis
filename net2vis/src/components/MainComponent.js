@@ -1,4 +1,5 @@
 import React from 'react';
+import  { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -17,15 +18,26 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
     var { id } = props.match.params;
-    if (id === undefined) {
-      id = 'demo';
+    if (id !== undefined) {
+      this.props.actions.setID(id);
+      this.props.actions.reloadAllState(id, this.props.color_mode.generation);
     }
-    this.props.actions.setID(id);
-    this.props.actions.reloadAllState(id, this.props.color_mode.generation);
+  }
+
+  makeId(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.color_mode.generation === prevProps.color_mode.generation) {
+    // Only reload if the state changes somewhere else
+    if (this.props.color_mode.generation === prevProps.color_mode.generation && this.props.code_toggle === prevProps.code_toggle && this.props.preferences_toggle === prevProps.preferences_toggle) {
+      console.log('test')
       const { id } = this.props.match.params;
       this.props.actions.setID(id);
       this.props.actions.reloadAllState(id, this.props.color_mode.generation);
@@ -71,45 +83,51 @@ class Main extends React.Component {
 
   // Render the Main Content and call other Elements
   render() {
-    return (
-      <Grid container direction='row' spacing={1} className='mainGrid'>
-        {
-          this.props.code_toggle &&
-          <Grid item className='codeGrid'>
-            <Paper className='codePaper'>
-              <Code />
-            </Paper>
-          </Grid>
-        }
-        <Grid item xs>
-          <Grid container direction='column' spacing={1} className='mainGrid'>
-            <Grid item className='svgGrid'>
-              <Paper className='full'>
-                <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
-                  <Patterns />
-                  <Network />
-                </svg>
+    var { id } = this.props.match.params;
+    if (id === undefined) {
+      id = this.makeId(50);
+      return <Redirect to={'/' + id}  />
+    } else {
+      return (
+        <Grid container direction='row' spacing={1} className='mainGrid'>
+          {
+            this.props.code_toggle &&
+            <Grid item className='codeGrid'>
+              <Paper className='codePaper'>
+                <Code />
               </Paper>
             </Grid>
-            {
-              this.props.legend_toggle &&
-              <Grid item className='legendGrid'>
+          }
+          <Grid item xs>
+            <Grid container direction='column' spacing={1} className='mainGrid'>
+              <Grid item className='svgGrid'>
                 <Paper className='full'>
-                  <Legend />
+                  <svg width="100%" height="100%" onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} onWheel={this.handleScroll} id='networkComponent'>
+                    <Patterns />
+                    <Network />
+                  </svg>
                 </Paper>
               </Grid>
-            }
+              {
+                this.props.legend_toggle &&
+                <Grid item className='legendGrid'>
+                  <Paper className='full'>
+                    <Legend />
+                  </Paper>
+                </Grid>
+              }
+            </Grid>
           </Grid>
+          {
+            this.props.preferences_toggle &&
+            <Grid item className='preferencesGrid'>
+              <Preferences />
+            </Grid>
+          }
+          <AlertSnack />
         </Grid>
-        {
-          this.props.preferences_toggle &&
-          <Grid item className='preferencesGrid'>
-            <Preferences />
-          </Grid>
-        }
-        <AlertSnack />
-      </Grid>
-    );
+      );
+    }
   }
 }
 
