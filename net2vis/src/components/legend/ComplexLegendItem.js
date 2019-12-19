@@ -38,17 +38,6 @@ class ComplexLegendItem extends React.Component {
     }
     const pathData = paths.calculateGlyphPath(extreme_dimensions, [extreme_dimensions.max_size,extreme_dimensions.max_size], pathableLayer, this.props.edges); // Calculate the Path of the Layer
     const current_edges = paths.getOutgoingEdges(pathableLayer, this.props.edges); // Get relevant Edges going out from the current Layer
-    //const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(color);
-//    for (var group in this.props.groups) {
-//      if (this.props.groups[group].name === this.props.layer.layer.name) {
-//        style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
-//        const fill = style.fill;
-//        style.fill = stroke_color;
-//        if (this.props.active) {
-//          style.stroke = fill;
-//        }
-//      }
-//    }
 
     return(
       <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>
