@@ -9,8 +9,21 @@ import * as colors from '../../colors';
 
 class ComplexLegendItem extends React.Component {
   render() {
-    var settings = this.props.layer_types_settings[this.props.layer.layer.name];
-    var color = this.props.preferences.no_colors.value ? settings.texture : settings.color;
+    var set = this.props.layer_types_settings[this.props.layer.layer.name];
+    const noColors = this.props.preferences.no_colors.value;
+    let isGroup = false;
+    const selected = this.props.selected === this.props.layer.layer.name;
+    for (var group in this.props.groups) {
+      if (this.props.groups[group].name === this.props.layer.layer.name) {
+        isGroup = true;
+      }
+    }
+    const style = {
+      fill: colors.getFillColor(set, noColors, isGroup),
+      stroke: colors.getStrokeColor(set, noColors, isGroup, selected),
+      strokeLinejoin: 'round',
+      strokeWidth: isGroup ? this.props.legend_preferences.stroke_width.value * 3 : this.props.legend_preferences.stroke_width.value
+    };  
     const extreme_dimensions = {max_size: this.props.legend_preferences.layer_height.value, min_size: this.props.legend_preferences.layer_height.value}; // Get the Extremes of the Display Size for the Glyphs
     const pathableLayer = {
       layer: {
@@ -25,23 +38,17 @@ class ComplexLegendItem extends React.Component {
     }
     const pathData = paths.calculateGlyphPath(extreme_dimensions, [extreme_dimensions.max_size,extreme_dimensions.max_size], pathableLayer, this.props.edges); // Calculate the Path of the Layer
     const current_edges = paths.getOutgoingEdges(pathableLayer, this.props.edges); // Get relevant Edges going out from the current Layer
-    const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(color);
-    const style = {
-      fill: color,
-      stroke: this.props.active ? stroke_color : 'lightgrey',
-      strokeLinejoin: 'round',
-      strokeWidth: this.props.legend_preferences.stroke_width.value
-    };  
-    for (var group in this.props.groups) {
-      if (this.props.groups[group].name === this.props.layer.layer.name) {
-        style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
-        const fill = style.fill;
-        style.fill = stroke_color;
-        if (this.props.active) {
-          style.stroke = fill;
-        }
-      }
-    }
+    //const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(color);
+//    for (var group in this.props.groups) {
+//      if (this.props.groups[group].name === this.props.layer.layer.name) {
+//        style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
+//        const fill = style.fill;
+//        style.fill = stroke_color;
+//        if (this.props.active) {
+//          style.stroke = fill;
+//        }
+//      }
+//    }
 
     return(
       <g transform={`translate(${this.props.legend_preferences.complex_spacing.value + this.props.legend_preferences.layer_width.value + this.props.position}, 0)`}>
@@ -61,7 +68,8 @@ ComplexLegendItem.propTypes = {
   groups: PropTypes.array.isRequired,
   layer_types_settings: PropTypes.object.isRequired,
   legend_preferences: PropTypes.object.isRequired,
-  preferences: PropTypes.object.isRequired
+  preferences: PropTypes.object.isRequired,
+  selected: PropTypes.string.isRequired
 }
 
 // Map the State of the Application to the Props of this Class

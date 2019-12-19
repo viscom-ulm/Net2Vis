@@ -101,3 +101,25 @@ export function darkenColor(color) {
   darkenedColor.darken(); // Darken the color
   return darkenedColor.toHexString(); // Return it as Hex
 }
+
+export function getFillColor(set, noColors, isGroup) {
+  if (noColors) {
+    return set.texture;
+  } else if (isGroup) {
+    return this.darkenColor(set.color);
+  } else {
+    return set.color;
+  }
+}
+
+export function getStrokeColor(set, noColors, isGroup, selected) {
+  if (selected) {
+    return 'red';
+  } else if (noColors) {
+    return 'grey';
+  } else if (isGroup) {
+    return set.color;
+  } else {
+    return this.darkenColor(set.color);
+  }
+}
