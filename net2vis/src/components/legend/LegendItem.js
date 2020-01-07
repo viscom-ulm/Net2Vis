@@ -9,16 +9,17 @@ import ComplexLegendItem from './ComplexLegendItem';
 
 class LegendItem extends React.Component {
   render() {
-    const stroke_color = this.props.preferences.no_colors.value ? 'grey' : colors.darkenColor(this.props.representation.layer.representer.setting.color);
+    // Set the properties of the item to be drawn
+    const set = this.props.representation.layer.representer.setting;
+    const noColors = this.props.preferences.no_colors.value;
+    const isGroup = !this.props.representation.layer.trivial;
+    const selected = this.props.selected === this.props.representation.layer.representer.name;
     const style = {
-      fill: this.props.preferences.no_colors.value ? this.props.representation.layer.representer.setting.texture : this.props.representation.layer.representer.setting.color,
-      stroke: this.props.representation.layer.active ? stroke_color : 'lightgrey',
+      fill: colors.getFillColor(set, noColors, isGroup),
+      stroke: this.props.representation.layer.active ? colors.getStrokeColor(set, noColors, isGroup, selected) : 'lightgrey',
       strokeLinejoin: 'round',
       strokeWidth: this.props.legend_preferences.stroke_width.value
     };  
-    if (this.props.selected === this.props.representation.layer.representer.name) {
-      style.stroke = 'red'
-    }
     const textStyle = {
       fill: this.props.representation.layer.active ? 'black' : 'lightgrey'
     };
@@ -40,11 +41,6 @@ class LegendItem extends React.Component {
         edges.push({v: e.v, w: e.w, points: graph.edge(e)});
       });
       style.strokeWidth = this.props.legend_preferences.stroke_width.value * 3;
-      const fill = style.fill;
-      style.fill = stroke_color;
-      if (this.props.selected !== this.props.representation.layer.representer.name && this.props.representation.layer.active) {
-        style.stroke = fill;
-      }
       var displacement = nodes[legend.getInputNode(nodes)].y - (this.props.legend_preferences.layer_height.value / 2.0); // Calculate the displacement if an inputnode to a legenditem is not standardly placed in the legend 
       return (
         <g>
@@ -53,7 +49,7 @@ class LegendItem extends React.Component {
           <g transform={`translate(0, ${-(displacement + (this.props.legend_preferences.layer_height.value / 2.0))})`}>
             <text textAnchor='middle' x={this.props.representation.position + (this.props.representation.layer.width / 2.0)} y={this.props.representation.layer.height + (this.props.legend_preferences.layer_height.value / 2.0) + 5 + 12} style={textStyle}>{this.props.representation.layer.representer.setting.alias}</text>
             {nodes.map((layer, i) => 
-              <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} active={this.props.representation.layer.active} height={graph.graph().height} key={i} action={this.props.action}/>
+              <ComplexLegendItem layer={layer} edges={edges} position={this.props.representation.position} active={this.props.representation.layer.active} height={graph.graph().height} selected={this.props.selected} key={i} action={this.props.action}/>
             )}
           </g>
         </g>
@@ -65,7 +61,8 @@ class LegendItem extends React.Component {
 // PropTypes of this Class
 LegendItem.propTypes = {
   legend_preferences: PropTypes.object.isRequired,
-  preferences: PropTypes.object.isRequired
+  preferences: PropTypes.object.isRequired,
+  selected: PropTypes.string.isRequired,
 }
 
 // Map the State of the Application to the Props of this Class

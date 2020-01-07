@@ -19,7 +19,7 @@ Handcrafting such visualizations also creates abiguities and misinterpretations.
 
 With Net2Vis, these problems are gone.
 It is designed to provide an abstract network visualization while still providing general information about individual layers.
-We reflect the number of features as well as the spatial reolution of the tensor in our glyph design.
+We reflect the number of features as well as the spatial resolution of the tensor in our glyph design.
 Layer-Types can be identified through colors.
 Since these networks can get fairly complex, we added the possibility to group layers and thus compact the network through replacing common layer sequences.
 
@@ -29,14 +29,17 @@ You still can tweak your visualizations and create abstractions before downloadi
 ## Installation
 Starting with Net2Vis is pretty easy (assuming python3, and npm).
 1. Clone this Repo
-2. For the Backend to work, we need Cairo installed on your machine. This is used for PDF conversion.
+2. For the Backend to work, we need Cairo and Docker installed on your machine. This is used for PDF conversion and running models pasted into the browser (more) secure.
+
+For docker, the docker daemon needs to run and the image: `tensorflow/tensorflow:latest-py3` pulled.
+This way, we can run the pasted code within separate containers.
 
 For starting up the backend, the following steps are needed:
 1. Go into the backend folder: `cd backend`
-2. Install Flask for the server functionality using: `pip3 install flask`
-3. Install Keras for the neural network compilation: `pip3 install tensorflow`
-4. Install Cairosvg for conversion of svg images into pdfs with: `pip3 install cairosvg`
-5. To start the server, issue: `python3 server.py`
+2. Install backend dependencies by running `pip3 install -r requirements.txt`
+3. Install the docker container by running `docker build --force-rm -t tf_plus_keras .`
+3. Install cario binding for python for your distribution (e.g. `python-cairosvg` on Debian).
+4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
 1. Go into the frontend folder: `cd net2vis`

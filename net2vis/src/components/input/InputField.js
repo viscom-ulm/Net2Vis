@@ -48,6 +48,12 @@ const InputField = ({value, type, description, action, options, active=true}) =>
         <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement' disabled={!active}>{description}</Button>
       </div>
     );
+  } else if (type === 'codeButton') {
+    return (
+      <div className='codeItem'>
+        <Button onClick={(e) => action(e)} variant="contained" color="primary" className='inputElement' disabled={!active}>{description}</Button>
+      </div>
+    );
   } else if (type === 'switch') {
     return (
       <div className='preferenceItem'>

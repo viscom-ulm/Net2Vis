@@ -151,11 +151,14 @@ function networkLoaded(network, groups, layerTypes, dispatch) {
 
 // Split replacement has been changed.
 export function splitChanged(groups, generationMode, preferences, id) {
+  const loader = document.getElementById('loader');
+  loader.style.display = 'flex';
   return function(dispatch) {
     return PreferencesApi.updatePreferences(preferences, id).then(preferences => {
       var prefs = JSON.parse(preferences);
       dispatch(updatePreferencesSuccess(prefs));
       return NetworkApi.getNetwork(id).then(network => { 
+        loader.style.display = 'none';
         if(network.success === true) {
           var net = network.data;
           if (prefs.add_splitting.value) {
@@ -200,11 +203,18 @@ function updateCodeSuccess(code) {
 }
 
 // Called to update the Code
-export function updateCode(code, id, groups, generationMode, preferences) {
+export function updateCode(code) {
+  return {type: types.UPDATE_CODE_SUCESS, code}
+}
+
+export function updateCodeBackend(code, id, groups, generationMode, preferences) {
+  const loader = document.getElementById('loader');
+  loader.style.display = 'flex';
   return function(dispatch) {
     return CodeApi.updateCode(code, id).then(code => {
       dispatch(updateCodeSuccess(code));
       return NetworkApi.getNetwork(id).then(network => { 
+        loader.style.display = 'none';
         if(network.success === true) {
           var net = network.data;
           if (preferences.add_splitting.value) {
@@ -259,12 +269,15 @@ export function setSelectedLegendItem(name) {
 
 // Check that all components are reloaded from the Server in the correct order.
 export function reloadAllState(id, generationMode) {
+  const loader = document.getElementById('loader');
+  loader.style.display = 'flex';
   return function(dispatch) {
     return CodeApi.getCode(id).then(code => {
       dispatch(loadCodeSuccess(code));
       return GroupsApi.getGroups(id).then(groups => {
         dispatch(loadGroupsSuccess(JSON.parse(groups)));
         return NetworkApi.getNetwork(id).then(network => { 
+          loader.style.display = 'none';
           if(network.success === true) {
             var net = network.data;
             return PreferencesApi.getPreferences(id).then(preferences => {

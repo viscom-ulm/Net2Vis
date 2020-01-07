@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 
 import Typography from '@material-ui/core/Typography';
 
-import InputField from './InputField'
+import InputField from '../input/InputField'
 
 // Component for displaying the Preferences of the Visualization
 class LayerPreferences extends React.Component {
