@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import AceEditor from 'react-ace'
 import InputField from '../input/InputField'
-import 'brace/mode/python';
-import 'brace/snippets/python';
-import 'brace/ext/language_tools';
-import 'brace/theme/chrome';
+import "ace-builds/src-noconflict/mode-python";
+import "ace-builds/src-noconflict/snippets/python";
+import "ace-builds/src-min-noconflict/ext-language_tools";
+import "ace-builds/src-min-noconflict/theme-chrome";
 
 import * as actions from '../../actions';
 
