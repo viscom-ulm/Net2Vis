@@ -31,7 +31,7 @@ Starting with Net2Vis is pretty easy (assuming python3, and npm).
 1. Clone this Repo
 2. For the Backend to work, we need Cairo and Docker installed on your machine. This is used for PDF conversion and running models pasted into the browser (more) secure.
 
-For docker, the docker daemon needs to run and the image: `tensorflow/tensorflow:latest-py3` pulled.
+For docker, the docker daemon needs to run.
 This way, we can run the pasted code within separate containers.
 
 For starting up the backend, the following steps are needed:
