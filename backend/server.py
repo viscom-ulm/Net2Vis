@@ -93,8 +93,7 @@ def save_and_convert_svgs(base_path, json_content):
 def get_network(id):
   check_exists(id)
   graph = translate_keras(os.path.join('models', id, 'model_current.py'))
-  if(isinstance(graph, Graph)):
-    graph.calculate_layer_dimensions()
+  if isinstance(graph, Graph):
     net = {'layers': make_jsonifyable(graph)}
     result = jsonify({'success': True, 'data': net})
     return  result, ok_status, json_type

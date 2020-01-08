@@ -1,5 +1,6 @@
 absl-py==0.9.0
 astor==0.8.1
+astroid==2.3.3
 cachetools==4.0.0
 cairocffi==1.1.0
 CairoSVG==2.4.2
@@ -19,12 +20,15 @@ google-pasta==0.1.8
 grpcio==1.26.0
 h5py==2.10.0
 idna==2.8
+isort==4.3.21
 itsdangerous==1.1.0
 Jinja2==2.10.3
 Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.0
+lazy-object-proxy==1.4.3
 Markdown==3.1.1
 MarkupSafe==1.1.1
+mccabe==0.6.1
 numpy==1.18.1
 oauthlib==3.1.0
 opt-einsum==3.1.0
@@ -33,6 +37,7 @@ protobuf==3.11.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.7
 pycparser==2.19
+pylint==2.4.4
 python-dateutil==2.8.1
 requests==2.22.0
 requests-oauthlib==1.3.0
@@ -44,6 +49,7 @@ tensorflow==2.0.0
 tensorflow-estimator==2.1.0
 termcolor==1.1.0
 tinycss2==1.0.2
+typed-ast==1.4.0
 urllib3==1.25.7
 uWSGI==2.0.18
 webencodings==0.5.1

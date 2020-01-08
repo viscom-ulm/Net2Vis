@@ -106,7 +106,7 @@ export function getFillColor(set, noColors, isGroup) {
   if (noColors) {
     return set.texture;
   } else if (isGroup) {
-    return this.darkenColor(set.color);
+    return darkenColor(set.color);
   } else {
     return set.color;
   }
@@ -120,6 +120,6 @@ export function getStrokeColor(set, noColors, isGroup, selected) {
   } else if (isGroup) {
     return set.color;
   } else {
-    return this.darkenColor(set.color);
+    return darkenColor(set.color);
   }
 }
