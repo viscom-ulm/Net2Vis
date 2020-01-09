@@ -1,3 +1,4 @@
+"""Translates the model code to be rendered by the frontend."""
 import argparse
 from translate.translate_keras import translate_keras
 
