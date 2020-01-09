@@ -7,7 +7,9 @@
 
 :white_check_mark: Unified Design
 
-Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a>, <a href="https://www.uni-ulm.de/in/mi/institut/mitarbeiter/c-onzenoodt/" target="_blank">Christian van Onzenoodt</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
+Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/">Alex Bäuerle</a>, <a href="https://www.uni-ulm.de/in/mi/institut/mitarbeiter/c-onzenoodt/">Christian van Onzenoodt</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/">Timo Ropinski</a>.
+
+Accessible <a href="http://viscom.net2vis.uni-ulm.de">online</a>.
 
 ## What is this?
 Net2Vis automatically generates abstract visualizations for convolutional neural networks from Keras code.
@@ -28,7 +30,7 @@ You still can tweak your visualizations and create abstractions before downloadi
 
 ## How can I use this?
 
-Either, go to our <a href="http://viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
+Either, go to our <a href="http://viscom.net2vis.uni-ulm.de">Website</a>, or install Net2Vis locally.
 Our website includes no setup, but might be slower and limited in network size depending on what you are working on.
 Installing this locally allows you to modify the functionality and might be better performing than the online version.
 
