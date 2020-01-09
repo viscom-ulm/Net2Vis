@@ -9,6 +9,8 @@
 
 Created by <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/a-baeuerle/" target="_blank">Alex Bäuerle</a>, <a href="https://www.uni-ulm.de/in/mi/institut/mitarbeiter/c-onzenoodt/" target="_blank">Christian van Onzenoodt</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
 
+Accessible <a href="http://viscom.net2vis.uni-ulm.de" target="_blank">online</a>.
+
 ## What is this?
 Net2Vis automatically generates abstract visualizations for convolutional neural networks from Keras code.
 
@@ -25,6 +27,12 @@ Since these networks can get fairly complex, we added the possibility to group l
 
 The best of it: Once the application runs, you just have to paste your Keras code into your browser and the visualization is automatically generated based on that.
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
+
+## How can I use this?
+
+Either, go to our <a href="http://viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
+Our website includes no setup, but might be slower and limited in network size depending on what you are working on.
+Installing this locally allows you to modify the functionality and might be better performing than the online version.
 
 ## Installation
 Starting with Net2Vis is pretty easy (assuming python3, and npm).
