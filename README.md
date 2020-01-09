@@ -28,7 +28,7 @@ You still can tweak your visualizations and create abstractions before downloadi
 
 ## How can I use this?
 
-Either, go to our <a href="viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
+Either, go to our <a href="http://www.viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
 Our website includes no setup, but might be slower and limited in network size depending on what you are working on.
 Installing this locally allows you to modify the functionality and might be better performing than the online version.
 
