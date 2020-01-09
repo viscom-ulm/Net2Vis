@@ -49,6 +49,11 @@ export function toggleLegend() {
   return {type: types.TOGGLE_LEGEND};
 }
 
+// Toggle the Download Alert View
+export function toggleAlert() {
+  return {type: types.TOGGLE_ALERT};
+}
+
 // Loading LayerTypes was Successful
 function loadLayerTypesSuccess(layerTypes, network, generationMode) {
   return {type: types.LOAD_LAYER_TYPES_SUCCESS, layerTypes, network, generationMode};
