@@ -1,11 +1,9 @@
 """Translates Keras code so it can be used within the application."""
-import sys
 import json
-import traceback
 import epicbox
 from tensorflow import keras
-from graph import Graph
-import layer
+from translate.graph import Graph
+import translate.layer as layer
 
 
 def translate_keras(filename):

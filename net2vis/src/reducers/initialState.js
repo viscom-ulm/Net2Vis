@@ -16,7 +16,8 @@ export default {
     display: {
         code_toggle: true,
         preferences_toggle: true,
-        legend_toggle: true 
+        legend_toggle: true,
+        alert_toggle: false
     },
     layer_types_settings: {},
     preferences: {

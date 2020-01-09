@@ -8,6 +8,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import GetApp from '@material-ui/icons/GetApp';
+import BugReport from '@material-ui/icons/BugReport';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ToggleButton from './ToggleButton';
 import * as actions from '../../actions';
@@ -47,6 +54,7 @@ class Controls extends React.Component {
     }
 
     DownloadApi.sendVisualization(this.props.id, graph_downloadable, legend_downloadable);
+    this.props.actions.toggleAlert();
   }
 
   render() {
@@ -63,9 +71,30 @@ class Controls extends React.Component {
               <ToggleButton name="Preferences" state={display.preferences_toggle} action={this.props.actions.togglePreferences}/>
             </div>
             <div>
-              <IconButton color='inherit' aria-label='Download' onClick={this.downloadSVG}>
+                <IconButton color='inherit' aria-label='Report Bug' onClick={()=> window.open("https://github.com/viscom-ulm/Net2Vis/issues", "_blank")}>
+                  <BugReport/>
+                </IconButton>
+              <IconButton color='inherit' aria-label='Download' onClick={this.props.actions.toggleAlert}>
                 <GetApp/>
               </IconButton>
+              <Dialog
+                open={display.alert_toggle}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description">
+                <DialogTitle id="alert-dialog-title">
+                  Thank you for using Net2Vis!
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    This is a research project. When using these visualizations, please cite us. You can find the publication on <a href="https://arxiv.org/abs/1902.04394">ArXiv</a>.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.downloadSVG} color="primary" autoFocus>
+                    Sure
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
           </div>
         </Toolbar>
