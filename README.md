@@ -26,6 +26,12 @@ Since these networks can get fairly complex, we added the possibility to group l
 The best of it: Once the application runs, you just have to paste your Keras code into your browser and the visualization is automatically generated based on that.
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
 
+## How can I use this?
+
+Either, go to our <a href="viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
+Our website includes no setup, but might be slower and limited in network size depending on what you are working on.
+Installing this locally allows you to modify the functionality and might be better performing than the online version.
+
 ## Installation
 Starting with Net2Vis is pretty easy (assuming python3, and npm).
 1. Clone this Repo
