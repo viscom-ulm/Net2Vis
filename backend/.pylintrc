@@ -63,7 +63,6 @@ confidence=
 disable=
     # disabled by me,
     locally-disabled,
-    fixme,
     # disabled by default,
     import-star-module-level,
     old-octal-literal,
