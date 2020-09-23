@@ -1,5 +1,5 @@
-import initialState from './initialState';
-import * as types from '../actions/types';
+import initialState from "./initialState";
+import * as types from "../actions/types";
 
 export default function networkReducer(state = initialState.network, action) {
   switch (action.type) {

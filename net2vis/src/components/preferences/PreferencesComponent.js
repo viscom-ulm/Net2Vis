@@ -1,11 +1,11 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
+import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-import NetworkPreferences from './NetworkPreferencesComponent';
-import GroupPreferences from './GroupPreferencesComponent';
-import LayerPreferences from './LayerPreferencesComponent';
-import LegendPreferences from './LegendPreferencesComponent';
+import NetworkPreferences from "./NetworkPreferencesComponent";
+import GroupPreferences from "./GroupPreferencesComponent";
+import LayerPreferences from "./LayerPreferencesComponent";
+import LegendPreferences from "./LegendPreferencesComponent";
 
 // Component for displaying the Preferences of the Visualization
 class Preferences extends React.Component {
@@ -17,31 +17,23 @@ class Preferences extends React.Component {
       }
     }
     return null;
-  }
+  };
 
   // Render the Preferences of the Visualization
   render() {
-    if(this.props.preferences_toggle) {
+    if (this.props.preferences_toggle) {
       switch (this.props.preferences_mode) {
-        case 'network':
-          return(
-            <NetworkPreferences/>
-          );
-        case 'color':
+        case "network":
+          return <NetworkPreferences />;
+        case "color":
           var group = this.isInGroups(this.props.selected_legend_item);
           if (group !== null) {
-            return(
-              <GroupPreferences group={group}/>
-            );
+            return <GroupPreferences group={group} />;
           } else {
-            return(
-              <LayerPreferences/>
-            );
+            return <LayerPreferences />;
           }
-        case 'legend':
-          return(
-            <LegendPreferences/>
-          );
+        case "legend":
+          return <LegendPreferences />;
         default:
           return null;
       }
