@@ -1,5 +1,5 @@
-import initialState from './initialState';
-import * as types from '../actions/types';
+import initialState from "./initialState";
+import * as types from "../actions/types";
 
 export default function errorReducer(state = initialState.error, action) {
   switch (action.type) {

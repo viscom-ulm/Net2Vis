@@ -1,5 +1,5 @@
-import initialState from './initialState';
-import * as types from '../actions/types';
+import initialState from "./initialState";
+import * as types from "../actions/types";
 
 export default function groupsReducer(state = initialState.groups, action) {
   switch (action.type) {
