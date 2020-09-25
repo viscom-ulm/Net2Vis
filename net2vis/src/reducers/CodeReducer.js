@@ -1,5 +1,5 @@
-import initialState from './initialState';
-import * as types from '../actions/types';
+import initialState from "./initialState";
+import * as types from "../actions/types";
 
 export default function codeReducer(state = initialState.code, action) {
   switch (action.type) {
