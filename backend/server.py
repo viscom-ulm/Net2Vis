@@ -289,7 +289,7 @@ def update_groups(identifier):
   Returns:
       object -- a http response signaling if the change was successful
   """
-  check_exists(id)
+  check_exists(identifier)
   content = request.data
   file = open(os.path.join('models', identifier, 'groups.json'), 'w')
   file.write(content.decode("utf-8"))
