@@ -187,6 +187,7 @@ function getLayer(groups, layerName, layerTypesSettings, legendPreferences) {
   return {
     trivial: true,
     active: !layerTypesSettings[layerName].hidden,
+    dense: layerTypesSettings[layerName].dense,
     width: legendPreferences.layer_width.value,
     height: legendPreferences.layer_height.value,
     representer: {

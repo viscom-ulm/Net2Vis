@@ -160,12 +160,12 @@ export function getFillColor(set, noColors, isGroup) {
   }
 }
 
-export function getStrokeColor(set, noColors, isGroup, selected) {
+export function getStrokeColor(set, noColors, isGroup, selected, isDense) {
   if (selected) {
     return "red";
   } else if (noColors) {
     return "grey";
-  } else if (isGroup) {
+  } else if (isGroup || isDense) {
     return set.color;
   } else {
     return darkenColor(set.color);

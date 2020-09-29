@@ -15,10 +15,14 @@ class LegendItem extends React.Component {
     const isGroup = !this.props.representation.layer.trivial;
     const selected =
       this.props.selected === this.props.representation.layer.representer.name;
+    console.log(this.props.representation.layer.dense);
+    const strokeColor = this.props.representation.layer.dense
+      ? colors.getFillColor(set, noColors, isGroup)
+      : colors.getStrokeColor(set, noColors, isGroup, selected);
     const style = {
       fill: colors.getFillColor(set, noColors, isGroup),
       stroke: this.props.representation.layer.active
-        ? colors.getStrokeColor(set, noColors, isGroup, selected)
+        ? strokeColor
         : "lightgrey",
       strokeLinejoin: "round",
       strokeWidth: this.props.legend_preferences.stroke_width.value,

@@ -164,7 +164,8 @@ class Layer extends React.Component {
       set,
       this.props.preferences.no_colors.value,
       isGroup,
-      this.props.selection.includes(this.props.layer.layer.id)
+      this.props.selection.includes(this.props.layer.layer.id),
+      dimensions.out.length === 1
     );
 
     // Return a Shape with the calculated parameters and add the Property Tooltip
