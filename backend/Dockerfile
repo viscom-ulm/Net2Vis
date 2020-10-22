@@ -1,3 +1,3 @@
-from tensorflow/tensorflow:latest-py3
+from tensorflow/tensorflow:latest
 
 RUN pip install keras
