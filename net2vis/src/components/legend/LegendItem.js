@@ -15,7 +15,6 @@ class LegendItem extends React.Component {
     const isGroup = !this.props.representation.layer.trivial;
     const selected =
       this.props.selected === this.props.representation.layer.representer.name;
-    console.log(this.props.representation.layer.dense);
     const strokeColor = this.props.representation.layer.dense
       ? colors.getFillColor(set, noColors, isGroup)
       : colors.getStrokeColor(set, noColors, isGroup, selected);

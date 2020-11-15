@@ -7,6 +7,7 @@ import * as actions from "../../actions";
 
 import TooltipComponent from "./TooltipComponent";
 import FeaturesLabelComponent from "./FeaturesLabelComponent";
+import NameLabelComponent from "./NameLabelComponent";
 import SampleComponent from "./SampleComponent";
 
 import * as paths from "../../paths";
@@ -202,6 +203,17 @@ class Layer extends React.Component {
               extreme_dimensions={extreme_dimensions}
               layer={this.props.layer}
               edges={this.props.edges}
+            />
+          )}
+          {this.props.preferences.show_name.value && (
+            <NameLabelComponent
+              name={name}
+              x={this.props.layer.width / 2.0}
+              layer_height={layer_height}
+              extreme_dimensions={extreme_dimensions}
+              layer={this.props.layer}
+              edges={this.props.edges}
+              features_above={this.props.preferences.show_features.value}
             />
           )}
         </g>
