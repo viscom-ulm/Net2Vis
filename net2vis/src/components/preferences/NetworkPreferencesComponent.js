@@ -143,6 +143,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   };
 
+  // Toggle the display state of the Name Labels
+  toggleNameLabel = (e) => {
+    var preferences = this.props.preferences;
+    preferences.show_name.value = !preferences.show_name.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  };
+
   // Toggle the display of Colors
   toggleSplits = (e) => {
     var preferences = this.props.preferences;
@@ -247,6 +254,12 @@ class NetworkPreferences extends React.Component {
             type={this.props.preferences.show_features.type}
             description={this.props.preferences.show_features.description}
             action={this.toggleFeaturesLabel}
+          />
+          <InputField
+            value={this.props.preferences.show_name.value}
+            type={this.props.preferences.show_name.type}
+            description={this.props.preferences.show_name.description}
+            action={this.toggleNameLabel}
           />
           <InputField
             value={this.props.preferences.add_splitting.value}

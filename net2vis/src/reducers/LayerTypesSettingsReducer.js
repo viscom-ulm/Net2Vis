@@ -12,16 +12,17 @@ export default function layerTypesSettignsReducer(
         return action.layerTypes;
       }
       var lTypes = action.layerTypes; // Get the layer types
-      for (var i in action.network.layers) {
+      for (const layer of action.network.layers) {
         // For all layers
-        if (lTypes[action.network.layers[i].name] === undefined) {
+        if (lTypes[layer.name] === undefined) {
           // If the layer is not yet in layertypes
-          lTypes[action.network.layers[i].name] = {
+          lTypes[layer.name] = {
             // Add the layer type
             color: colors.generateNewColor(lTypes, action.generationMode), // Set the color
-            alias: action.network.layers[i].name, // Set the name
+            alias: layer.name, // Set the name
             texture: colors.generateNewTexture(lTypes), // Set the fallback texture
             hidden: false,
+            dense: layer.properties.dimensions.out.length === 1,
           };
         }
       }
