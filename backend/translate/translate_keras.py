@@ -55,8 +55,11 @@ def graph_from_external_file(keras_code, general_code):
         layers_extracted[0]['config']['batch_input_shape'][1:])
     previous_node = ''
     for index, json_layer in enumerate(layers_extracted):
-        previous_node = add_layer_type(json_layer, model_keras.layers[index], graph,
-                                       previous_node)
+        if len(layers_extracted) > len(model_keras.layers):
+            index = index - 1
+        if index >= 0:
+            previous_node = add_layer_type(json_layer, model_keras.layers[index], graph,
+                                           previous_node)
     graph.resolve_input_names()
     return graph
 

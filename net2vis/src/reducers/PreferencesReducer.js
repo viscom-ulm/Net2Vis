@@ -9,7 +9,15 @@ export default function preferencesReducer(
     case types.UPDATE_PREFERENCES_SUCCESS:
       return action.preferences;
     case types.LOAD_PREFERENCES_SUCCESS:
-      return action.preferences;
+      let prefs = action.preferences;
+      if (prefs.show_name === undefined) {
+        prefs.show_name = {
+          value: false,
+          type: "switch",
+          description: "Name Label",
+        };
+      }
+      return prefs;
     default:
       return state;
   }

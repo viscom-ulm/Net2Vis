@@ -66,6 +66,11 @@ export default {
       type: "switch",
       description: "Features Label",
     },
+    show_name: {
+      value: false,
+      type: "switch",
+      description: "Name Label",
+    },
     add_splitting: {
       value: false,
       type: "switch",
