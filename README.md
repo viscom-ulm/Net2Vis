@@ -1,4 +1,5 @@
 ![Net2Vis Teaser](net2vis_teaser.png)
+![Net2Vis Teaser_Legend](net2vis_teaser_legend.png)
 # Net2Vis
 
 :white_check_mark: Automatic Network Visualization
