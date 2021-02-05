@@ -18,7 +18,7 @@ Net2Vis automatically generates abstract visualizations for convolutional neural
 ## How does this help me?
 When looking at publications that use neural networks for their techniques, it is still apparent how they differ.
 Most of them are handcrafted and thus lack a unified visual grammar.
-Handcrafting such visualizations also creates abiguities and misinterpretations.
+Handcrafting such visualizations also creates ambiguities and misinterpretations.
 
 With Net2Vis, these problems are gone.
 It is designed to provide an abstract network visualization while still providing general information about individual layers.
