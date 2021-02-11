@@ -36,7 +36,7 @@ Our website includes no setup, but might be slower and limited in network size d
 Installing this locally allows you to modify the functionality and might be better performing than the online version.
 
 ## Installation
-Starting with Net2Vis is pretty easy (assuming python3, and npm).
+Starting with Net2Vis is pretty easy (assuming python3, tested to run on python 3.6-3.8, and npm).
 1. Clone this Repo
 2. For the Backend to work, we need Cairo and Docker installed on your machine. This is used for PDF conversion and running models pasted into the browser (more) secure.
 
@@ -47,7 +47,6 @@ For starting up the backend, the following steps are needed:
 1. Go into the backend folder: `cd backend`
 2. Install backend dependencies by running `pip3 install -r requirements.txt`
 3. Install the docker container by running `docker build --force-rm -t tf_plus_keras .`
-3. Install cario binding for python for your distribution (e.g. `python-cairosvg` on Debian).
 4. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
