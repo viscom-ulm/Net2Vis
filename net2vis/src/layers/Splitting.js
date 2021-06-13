@@ -1,4 +1,4 @@
-import * as common from "./Common";
+import * as common from './Common';
 
 export function addSplitLayers(network) {
   var net = network;
@@ -13,7 +13,7 @@ function replaceMultiOutLayers(network) {
       var newID = common.maxID(network) + 1;
       var newLayer = {
         id: newID,
-        name: "Split",
+        name: 'Split',
         properties: {
           dimensions: {
             in: network.layers[layer].properties.dimensions.out,

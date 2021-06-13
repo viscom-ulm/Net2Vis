@@ -51,8 +51,6 @@ def graph_from_external_file(keras_code, general_code):
     model_keras = keras.models.model_from_json(result["stdout"])
     layers_extracted = model_json['config']['layers']
     graph = Graph()
-    graph.set_input_shape(
-        layers_extracted[0]['config']['batch_input_shape'][1:])
     previous_node = ''
     for index, json_layer in enumerate(layers_extracted):
         if len(layers_extracted) > len(model_keras.layers):

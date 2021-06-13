@@ -11,8 +11,6 @@ class Graph:
   """Representing a Network Graph."""
   def __init__(self):
     self.layers = []
-    self.root = Node()
-    self.input_shape = []
 
 
   def add_layer(self, layer):
@@ -23,13 +21,6 @@ class Graph:
     """
     self.layers.append(layer)
 
-  def set_input_shape(self, input_shape):
-    """Set the input shape of the model.
-
-    Arguments:
-        input_shape {list} -- the input shape of the model
-    """
-    self.input_shape = input_shape
 
   # Return the Graph representation.
   def __repr__(self):

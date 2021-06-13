@@ -43,8 +43,9 @@ class Layer:
     Arguments:
         nodes {list} -- all nodes that are inputs to the layer
     """
-    for node in nodes[0]:
-      self.input_names.append(node[0])
+    if (len(nodes) > 0):
+      for node in nodes[0]:
+        self.input_names.append(node[0])
 
   # String Representation of the Layer.
   def __repr__(self):
