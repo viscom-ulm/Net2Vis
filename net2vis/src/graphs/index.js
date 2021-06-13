@@ -1,4 +1,4 @@
-import * as dagre from "dagre";
+import * as dagre from 'dagre';
 
 // Build the network graph upon the Network representation
 export function buildGraphFromNetwork(
@@ -8,8 +8,8 @@ export function buildGraphFromNetwork(
 ) {
   var graph = new dagre.graphlib.Graph(); // Initialize the dagre Graph
   graph.setGraph({
-    ranker: "network-simplex",
-    rankdir: "LR",
+    ranker: 'network-simplex',
+    rankdir: 'LR',
     ranksep:
       preferences.layers_spacing_horizontal.value +
       preferences.stroke_width.value,
