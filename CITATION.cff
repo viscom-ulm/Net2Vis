@@ -1,0 +1,26 @@
+# YAML 1.2
+---
+abstract: "To convey neural network architectures in publications, appropriate visualizations are of great importance. While most current deep learning papers contain such visualizations, these are usually handcrafted just before publication, which results in a lack of a common visual grammar, significant time investment, errors, and ambiguities. Current automatic network visualization tools focus on debugging the network itself and are not ideal for generating publication visualizations. Therefore, we present an approach to automate this process by translating network architectures specified in Keras into visualizations that can directly be embedded into any publication. To do so, we propose a visual grammar for convolutional neural networks (CNNs), which has been derived from an analysis of such figures extracted from all ICCV and CVPR papers published between 2013 and 2019. The proposed grammar incorporates visual encoding, network layout, layer aggregation, and legend generation. We have further realized our approach in an online system available to the community, which we have evaluated through expert feedback, and a quantitative study. It not only reduces the time needed to generate network visualizations for publications, but also enables a unified and unambiguous visualization design."
+authors: 
+  -
+    affiliation: "Ulm University"
+    family-names: "Bäuerle"
+    given-names: Alex
+    orcid: "https://orcid.org/0000-0003-3886-8799"
+  -
+    affiliation: "Ulm University"
+    family-names: Onzenoodt
+    given-names: Christian
+    name-particle: van
+    orcid: "https://orcid.org/0000-0002-5951-6795"
+  -
+    affiliation: "Ulm University"
+    family-names: Ropinski
+    given-names: Timo
+    orcid: "https://orcid.org/0000-0002-7857-5512"
+cff-version: "1.1.0"
+date-released: 2021-02-08
+doi: "10.1109/TVCG.2021.3057483"
+message: "If you use this software, please cite it using these metadata."
+title: "Net2Vis – A Visual Grammar for Automatically Generating Publication-Tailored CNN Architecture Visualizations"
+...
