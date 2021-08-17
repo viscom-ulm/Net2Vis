@@ -5,6 +5,8 @@ from tensorflow import keras
 from translate.graph import Graph
 import translate.layer as layer
 
+keras_ext = '.h5'
+
 
 def translate_keras(filename):
     """Translate a keras model defined in a file into the neural network graph.
@@ -19,13 +21,16 @@ def translate_keras(filename):
         epicbox.Profile('python', 'tf_plus_keras:latest')])
     general_reader = open('translate/keras_loader.txt', 'rb')
     general_code = general_reader.read()
-    with open(filename, 'rb') as myfile:
-        keras_code = myfile.read()
-        try:
-            return graph_from_external_file(keras_code, general_code)
-        except Exception as err:
-            return {'error_class': '', 'line_number': 1,
-                    'detail': str(err)}
+    if keras_ext in filename:
+        return graph_from_model_file(filename)
+    else:
+        with open(filename, 'rb') as myfile:
+            keras_code = myfile.read()
+            try:
+                return graph_from_external_file(keras_code, general_code)
+            except Exception as err:
+                return {'error_class': '', 'line_number': 1,
+                        'detail': str(err)}
 
 
 def graph_from_external_file(keras_code, general_code):
@@ -61,6 +66,20 @@ def graph_from_external_file(keras_code, general_code):
     graph.resolve_input_names()
     return graph
 
+def graph_from_model_file(keras_model_file):
+    model_keras = keras.models.load_model(keras_model_file)
+    model_json = model_keras.to_json()
+    layers_extracted = model_json['config']['layers']
+    graph = Graph()
+    previous_node = ''
+    for index, json_layer in enumerate(layers_extracted):
+        if len(layers_extracted) > len(model_keras.layers):
+            index = index - 1
+        if index >= 0:
+            previous_node = add_layer_type(json_layer, model_keras.layers[index], graph,
+                                           previous_node)
+    graph.resolve_input_names()
+    return graph
 
 def add_layer_type(layer_json, model_layer, graph, previous_node):
     """Add a Layer. Layers are identified by name and equipped using the spec.
