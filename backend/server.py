@@ -5,7 +5,7 @@ import zipfile
 from datetime import datetime
 from shutil import copyfile
 import cairosvg
-from flask import Flask, send_file, request, jsonify, abort
+from flask import Flask, send_file, request, jsonify
 from translate.translate_keras import translate_keras
 from translate.graph import Graph
 
