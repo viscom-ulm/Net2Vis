@@ -10,7 +10,10 @@ from translate.translate_keras import translate_keras
 from translate.graph import Graph
 
 app = Flask(__name__)
+app.config['UPLOAD_EXTENSIONS'] = ['.h5']
+app.config['UPLOAD_PATH'] = 'uploads'
 ok_status = 200
+error_status = 400
 json_type = {'ContentType': 'application/json'}
 text_type = {'ContentType': 'text/plain'}
 
@@ -60,6 +63,20 @@ def replace_references(net):
           outp.append(i)
     layer.output = outp
 
+def check_uploads_path_exists(identifier):
+  if not os.path.exists(app.config['UPLOAD_PATH']):
+    os.mkdir(app.config['UPLOAD_PATH'])
+  if not os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier)):
+    os.mkdir(os.path.join(app.config['UPLOAD_PATH'], identifier))
+    os.mkdir(os.path.join(app.config['UPLOAD_PATH'], identifier, 'visualizations'))
+    copyfile(os.path.join('default', 'layer_types_current.json'),
+             os.path.join(app.config['UPLOAD_PATH'], identifier, 'layer_types_current.json'))
+    copyfile(os.path.join('default', 'preferences.json'),
+             os.path.join(app.config['UPLOAD_PATH'], identifier, 'preferences.json'))
+    copyfile(os.path.join('default', 'groups.json'),
+             os.path.join(app.config['UPLOAD_PATH'], identifier, 'groups.json'))
+    copyfile(os.path.join('default', 'legend_preferences.json'),
+             os.path.join(app.config['UPLOAD_PATH'], identifier, 'legend_preferences.json'))
 
 def check_exists(identifier):
   """Check if the desired model already exists.
@@ -149,7 +166,12 @@ def get_network(identifier):
       object -- a http response containing the network as json
   """
   check_exists(identifier)
-  graph = translate_keras(os.path.join('models', identifier,
+  check_uploads_path_exists(identifier)
+  if 'model.h5' in ls(os.path.join(app.config['UPLOAD_PATH'], identifier)):
+    graph = translate_keras(os.path.join(app.config['UPLOAD_PATH'], identifier,
+                                       'model.h5'))
+  else:
+    graph = translate_keras(os.path.join('models', identifier,
                                        'model_current.py'))
   if isinstance(graph, Graph):
     net = {'layers': make_jsonifyable(graph)}
@@ -191,6 +213,26 @@ def update_code(identifier):
   file = open(os.path.join('models', identifier, 'model_current.py'), 'w')
   file.write(content.decode("utf-8"))
   return content, ok_status, text_type
+
+@app.route('/api/upload_model/<identifier>', methods=['POST'])
+def upload_model(identifier):
+  """Update the Code.
+
+  Arguments:
+      identifier {String} -- the identifier for the requested network
+
+  Returns:
+      object -- a http response signaling the change worked
+  """
+  check_uploads_path_exists(identifier)
+  uploaded_file = request.files['model']
+  filename = uploaded_file.filename
+  file_ext = os.path.splitext(filename)[1]
+  if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+    return "", error_status, text_type
+  file_path = os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.h5')
+  uploaded_file.save(file_path)
+  return "", ok_status, text_type
 
 
 @app.route('/api/get_layer_types/<identifier>')
