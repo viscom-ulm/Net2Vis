@@ -24,69 +24,64 @@ const InputField = ({
   options,
   active = true,
 }) => {
-  if (type === "number") {
-    return (
-      <div className="preferenceItem">
-        <TextField
-          id="standard-number"
-          type="number"
-          label={description}
-          value={value}
-          onChange={(e) => action(e)}
-          margin="normal"
-          className="inputElement"
-          inputProps={{ min: "0", max: "1000", step: "10" }}
-        />
-      </div>
-    );
-  } else if (type === "color") {
-    if (options === "Palette") {
-      var palette = colors.getColorPalette();
+  switch (type) {
+    case "number":
       return (
         <div className="preferenceItem">
-          <TwitterPicker
-            width={280}
-            triangle={"hide"}
-            colors={palette}
-            color={value}
+          <TextField
+            id="standard-number"
+            type="number"
+            label={description}
+            value={value}
             onChange={(e) => action(e)}
+            margin="normal"
+            className="inputElement"
+            inputProps={{ min: "0", max: "1000", step: "10" }}
           />
         </div>
       );
-    } else if (options === "Picker") {
+    case "color":
       return (
         <div className="preferenceItem">
-          <SketchPicker
-            width={260}
-            disableAlpha={true}
-            presetColors={[]}
-            color={value}
+          {options === "Palette" ? (
+            <TwitterPicker
+              width={280}
+              triangle={"hide"}
+              colors={colors.getColorPalette()}
+              color={value}
+              onChange={(e) => action(e)}
+            />
+          ) : (
+            <SketchPicker
+              width={260}
+              disableAlpha={true}
+              presetColors={[]}
+              color={value}
+              onChange={(e) => action(e)}
+            />
+          )}
+        </div>
+      );
+    case "text":
+      return (
+        <div className="preferenceItem">
+          <TextField
+            id="standard-name"
+            label={description}
+            value={value}
             onChange={(e) => action(e)}
+            margin="normal"
+            className="inputElement"
           />
         </div>
       );
-    }
-  } else if (type === "text") {
-    return (
-      <div className="preferenceItem">
-        <TextField
-          id="standard-name"
-          label={description}
-          value={value}
-          onChange={(e) => action(e)}
-          margin="normal"
-          className="inputElement"
-        />
-      </div>
-    );
-  } else if (type === "button") {
-    if (options === "secondary") {
+    case "button":
       return (
         <div className="preferenceItem">
           <Button
             onClick={(e) => action(e)}
             variant="contained"
-            color="secondary"
+            color={options === "secondary" ? "secondary" : "primary"}
             className="inputElement"
             disabled={!active}
           >
@@ -94,65 +89,53 @@ const InputField = ({
           </Button>
         </div>
       );
-    }
-    return (
-      <div className="preferenceItem">
-        <Button
-          onClick={(e) => action(e)}
-          variant="contained"
-          color="primary"
-          className="inputElement"
-          disabled={!active}
-        >
-          {description}
-        </Button>
-      </div>
-    );
-  } else if (type === "codeButton") {
-    return (
-      <div className="codeItem">
-        <Button
-          onClick={(e) => action(e)}
-          variant="contained"
-          color="primary"
-          className="inputElement"
-          disabled={!active}
-        >
-          {description}
-        </Button>
-      </div>
-    );
-  } else if (type === "switch") {
-    return (
-      <div className="preferenceItem">
-        <FormControlLabel
-          control={
-            <Switch
-              checked={value}
-              onChange={(e) => action(e)}
-              value="checkedB"
-              color="primary"
-            />
-          }
-          label={description}
-        />
-      </div>
-    );
-  } else if (type === "select") {
-    return (
-      <div className="preferenceItem">
-        <FormControl className="inputElement">
-          <InputLabel shrink>{description}</InputLabel>
-          <Select onChange={(e) => action(e)} value={value}>
-            {options.map((option, index) => (
-              <MenuItem value={option} key={index}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-    );
+    case "codeButton":
+      return (
+        <div className="codeItem">
+          <Button
+            onClick={(e) => action(e)}
+            variant="contained"
+            color={options === "secondary" ? "secondary" : "primary"}
+            className="inputElement"
+            disabled={!active}
+          >
+            {description}
+          </Button>
+        </div>
+      );
+    case "switch":
+      return (
+        <div className="preferenceItem">
+          <FormControlLabel
+            control={
+              <Switch
+                checked={value}
+                onChange={(e) => action(e)}
+                value="checkedB"
+                color="primary"
+              />
+            }
+            label={description}
+          />
+        </div>
+      );
+    case "select":
+      return (
+        <div className="preferenceItem">
+          <FormControl className="inputElement">
+            <InputLabel shrink>{description}</InputLabel>
+            <Select onChange={(e) => action(e)} value={value}>
+              {options.map((option, index) => (
+                <MenuItem value={option} key={index}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      );
+    default:
+      return <div></div>;
   }
 };
 

@@ -22,7 +22,11 @@ def translate_keras(filename):
     general_reader = open('translate/keras_loader.txt', 'rb')
     general_code = general_reader.read()
     if keras_ext in filename:
-        return graph_from_model_file(filename)
+        try:
+            return graph_from_model_file(filename)
+        except Exception as err:
+            return {'error_class': '', 'line_number': 1,
+                    'detail': "Model could not be loaded correctly. Error: " + str(err)}
     else:
         with open(filename, 'rb') as myfile:
             keras_code = myfile.read()
@@ -66,9 +70,10 @@ def graph_from_external_file(keras_code, general_code):
     graph.resolve_input_names()
     return graph
 
+
 def graph_from_model_file(keras_model_file):
     model_keras = keras.models.load_model(keras_model_file)
-    model_json = model_keras.to_json()
+    model_json = json.loads(model_keras.to_json())
     layers_extracted = model_json['config']['layers']
     graph = Graph()
     previous_node = ''
@@ -80,6 +85,7 @@ def graph_from_model_file(keras_model_file):
                                            previous_node)
     graph.resolve_input_names()
     return graph
+
 
 def add_layer_type(layer_json, model_layer, graph, previous_node):
     """Add a Layer. Layers are identified by name and equipped using the spec.

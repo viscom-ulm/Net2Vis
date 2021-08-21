@@ -4,6 +4,12 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import AceEditor from "react-ace";
 import InputField from "../input/InputField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
+import Dropzone from "react-dropzone";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/python";
 import "ace-builds/src-min-noconflict/ext-language_tools";
@@ -28,8 +34,27 @@ class Code extends React.Component {
     );
   };
 
+  updateStoredModel = () => {
+    this.props.actions.uploadModel(
+      this.props.id,
+      this.props.groups,
+      this.props.color_mode.generation,
+      this.props.preferences
+    );
+  };
+
   componentDidUpdate() {
     this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+  }
+
+  uploadFile(file) {
+    this.props.actions.updateModelBackend(
+      file,
+      this.props.id,
+      this.props.groups,
+      this.props.color_mode.generation,
+      this.props.preferences
+    );
   }
 
   // Render the Code into the Code View if Toggled
@@ -46,6 +71,7 @@ class Code extends React.Component {
         },
       ];
     }
+    const display = this.props.display;
     return (
       // Editor with Syntax highlighting
       <div className="preferencesWrapper">
@@ -68,15 +94,67 @@ class Code extends React.Component {
             scrollMargin={[10, 0, 0, 0]}
           />
         </div>
-        <div>
+        {this.props.code === "No code loaded since model file is present." ? (
           <InputField
-            value={"Update"}
+            value={"Delete Model"}
             type={"codeButton"}
-            description={"Update"}
-            action={this.updateStoredCode}
+            description={"Delete Model"}
+            options={"secondary"}
+            action={() => this.props.actions.deleteModel(this.props.id)}
             active={true}
           />
-        </div>
+        ) : (
+          <div className="updateButtonContainer">
+            <InputField
+              value={"Upload Model"}
+              type={"codeButton"}
+              description={"Upload Model"}
+              action={this.props.actions.toggleUpload}
+              active={true}
+            />
+            <InputField
+              value={"Update"}
+              type={"codeButton"}
+              description={"Update"}
+              action={this.updateStoredCode}
+              active={true}
+            />
+          </div>
+        )}
+        <Dialog
+          open={display.upload_toggle}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Upload h5 Model</DialogTitle>
+          <DialogContent>
+            <div className="dropzoneContainer">
+              <Dropzone
+                onDrop={(acceptedFiles) => this.uploadFile(acceptedFiles[0])}
+                acceptedFiles=".h5"
+                maxFiles={1}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <p>Drag a model file here, or click to select a file.</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={this.props.actions.toggleUpload}
+              color="secondary"
+              autoFocus
+            >
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -90,6 +168,7 @@ Code.propTypes = {
   groups: PropTypes.array.isRequired,
   color_mode: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
+  display: PropTypes.object.isRequired,
 };
 
 // Map the State to the Properties of this Component
@@ -103,6 +182,7 @@ function mapStateToProps(state, ownProps) {
       groups: state.groups,
       color_mode: state.color_mode,
       preferences: state.preferences,
+      display: state.display,
     };
   } else {
     return {
@@ -112,6 +192,7 @@ function mapStateToProps(state, ownProps) {
       groups: state.groups,
       color_mode: state.color_mode,
       preferences: state.preferences,
+      display: state.display,
     };
   }
 }

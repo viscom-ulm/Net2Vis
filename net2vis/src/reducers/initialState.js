@@ -18,6 +18,7 @@ export default {
     preferences_toggle: true,
     legend_toggle: true,
     alert_toggle: false,
+    upload_toggle: false,
   },
   layer_types_settings: {},
   preferences: {

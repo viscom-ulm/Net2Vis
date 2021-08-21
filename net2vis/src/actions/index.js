@@ -4,6 +4,7 @@ import LayerTypesApi from "../api/LayerTypesApi";
 import PreferencesApi from "../api/PreferencesApi";
 import LegendPreferencesApi from "../api/LegendPreferencesApi";
 import GroupsApi from "../api/GroupsApi";
+import ModelApi from "../api/ModelApi";
 import * as types from "./types";
 import * as sort from "../groups/Sort";
 import * as splitting from "../layers/Splitting";
@@ -52,6 +53,11 @@ export function toggleLegend() {
 // Toggle the Download Alert View
 export function toggleAlert() {
   return { type: types.TOGGLE_ALERT };
+}
+
+// Toggle the Upload Alert View
+export function toggleUpload() {
+  return { type: types.TOGGLE_UPLOAD };
 }
 
 // Loading LayerTypes was Successful
@@ -273,6 +279,19 @@ export function loadCode(id) {
   };
 }
 
+// Called to delte the model file
+export function deleteModel(id) {
+  return function (dispatch) {
+    return ModelApi.deleteModel(id)
+      .then((code) => {
+        dispatch(loadCodeSuccess(code));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
+
 // Updating Code was Succesful
 function updateCodeSuccess(code) {
   return { type: types.UPDATE_CODE_SUCESS, code };
@@ -294,6 +313,58 @@ export function updateCodeBackend(
   loader.style.display = "flex";
   return function (dispatch) {
     return CodeApi.updateCode(code, id)
+      .then((code) => {
+        dispatch(updateCodeSuccess(code));
+        return NetworkApi.getNetwork(id)
+          .then((network) => {
+            loader.style.display = "none";
+            if (network.success === true) {
+              var net = network.data;
+              if (preferences.add_splitting.value) {
+                net = splitting.addSplitLayers(net);
+              }
+              return LayerTypesApi.getLayerTypes(id).then((layerTypes) => {
+                networkLoaded(net, groups, JSON.parse(layerTypes), dispatch);
+                dispatch(
+                  loadLayerTypesSuccess(
+                    JSON.parse(layerTypes),
+                    net,
+                    generationMode
+                  )
+                );
+              });
+            } else {
+              dispatch(
+                updateAlertSnack({
+                  open: true,
+                  message: "Code not executeable.",
+                })
+              );
+              dispatch(addError(network.data));
+            }
+          })
+          .catch((error) => {
+            throw error;
+          });
+      })
+      .catch((error) => {
+        console.warn("Current Network not executable.", error);
+      });
+  };
+}
+
+export function updateModelBackend(
+  file,
+  id,
+  groups,
+  generationMode,
+  preferences
+) {
+  const loader = document.getElementById("loader");
+  loader.style.display = "flex";
+  return function (dispatch) {
+    dispatch(toggleUpload());
+    return ModelApi.updateModel(file, id)
       .then((code) => {
         dispatch(updateCodeSuccess(code));
         return NetworkApi.getNetwork(id)
