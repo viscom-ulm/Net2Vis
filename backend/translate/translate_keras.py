@@ -17,10 +17,6 @@ def translate_keras(filename):
     Returns:
         object -- the result of this translation, can be an error
     """
-    epicbox.configure(profiles=[
-        epicbox.Profile('python', 'tf_plus_keras:latest')])
-    general_reader = open('translate/keras_loader.txt', 'rb')
-    general_code = general_reader.read()
     if keras_ext in filename:
         try:
             return graph_from_model_file(filename)
@@ -28,6 +24,10 @@ def translate_keras(filename):
             return {'error_class': '', 'line_number': 1,
                     'detail': "Model could not be loaded correctly. Error: " + str(err)}
     else:
+        epicbox.configure(profiles=[
+            epicbox.Profile('python', 'tf_plus_keras:latest')])
+        general_reader = open('translate/keras_loader.txt', 'rb')
+        general_code = general_reader.read()
         with open(filename, 'rb') as myfile:
             keras_code = myfile.read()
             try:
