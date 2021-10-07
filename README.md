@@ -52,8 +52,9 @@ For starting up the backend, the following steps are needed:
 
 1. Go into the backend folder: `cd backend`
 2. Install backend dependencies by running `pip3 install -r requirements.txt`
-3. Install the docker container by running `docker build --force-rm -t tf_plus_keras .`
-4. To start the server, issue: `python3 server.py`
+3. Install the docker container for tf/keras by running `docker build --force-rm -t tf_plus_keras tf_keras`
+4. Install the docker container for torch by running `docker build --force-rm -t torch torch`
+5. To start the server, issue: `python3 server.py`
 
 The frontend is a react application that can be started as follows:
 

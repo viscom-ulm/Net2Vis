@@ -3,7 +3,7 @@ export function calculateGlyphPath(
   extreme_dimensions,
   layer_height,
   layer,
-  edges
+  edges,
 ) {
   const y_diff = [
     (extreme_dimensions.max_size - layer_height[0]) / 2,

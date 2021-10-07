@@ -7,7 +7,9 @@ from shutil import copyfile
 import cairosvg
 from flask import Flask, send_file, request, jsonify
 from translate.translate_keras import translate_keras
+from translate.translate_torch import translate_torch
 from translate.graph import Graph
+import filecmp
 
 app = Flask(__name__)
 app.config['UPLOAD_EXTENSIONS'] = ['.h5']
@@ -169,8 +171,14 @@ def get_network(identifier):
         graph = translate_keras(os.path.join(
             app.config['UPLOAD_PATH'], identifier, 'model.h5'))
     else:
-        graph = translate_keras(os.path.join(
-            app.config['UPLOAD_PATH'], identifier, 'model_current.py'))
+        with open(os.path.join(app.config['UPLOAD_PATH'], identifier, 'preferences.json'), 'r') as myfile:
+            preferences = json.loads(myfile.read())
+            if ('mode' in preferences.keys() and preferences['mode'] == 'PyTorch'):
+                graph = translate_torch(os.path.join(
+                    app.config['UPLOAD_PATH'], identifier, 'model_current.py'))
+            else:
+                graph = translate_keras(os.path.join(
+                    app.config['UPLOAD_PATH'], identifier, 'model_current.py'))
     if isinstance(graph, Graph):
         net = {'layers': make_jsonifyable(graph)}
         result = jsonify({'success': True, 'data': net})
@@ -249,7 +257,6 @@ def delete_model(identifier):
     check_upload_path_exists(identifier)
     model_path = os.path.join(
         app.config['UPLOAD_PATH'], identifier, 'model.h5')
-    print(model_path)
     if (os.path.exists(model_path)):
         print('test2')
         os.remove(model_path)
@@ -324,6 +331,35 @@ def update_preferences(identifier):
         app.config['UPLOAD_PATH'], identifier, 'preferences.json'), 'w')
     file.write(content.decode("utf-8"))
     return content, ok_status, text_type
+
+
+@app.route('/api/update_preferences_mode/<identifier>', methods=['POST'])
+def update_preferences_mode(identifier):
+    """Update the Preferences with a mode change.
+
+    Arguments:
+        identifier {String} -- the identifier for the requested network
+
+    Returns:
+        object -- a http response signaling if the change was successful
+    """
+    check_upload_path_exists(identifier)
+    decoded_content = request.data.decode("utf-8")
+    base_path = os.path.join(app.config['UPLOAD_PATH'])
+    file = open(os.path.join(base_path, identifier, 'preferences.json'), 'w')
+    file.write(decoded_content)
+    old_model_path = os.path.join(base_path, identifier, 'model_current.py')
+    if (json.loads(decoded_content)["mode"] == "PyTorch"):
+        default_path = os.path.join('default', 'model_current.py')
+        if (filecmp.cmp(old_model_path, default_path)):
+            copyfile(os.path.join('default', 'model_current_torch.py'),
+                     os.path.join(base_path, identifier, 'model_current.py'))
+    else:
+        default_path = os.path.join('default', 'model_current_torch.py')
+        if (filecmp.cmp(old_model_path, default_path)):
+            copyfile(os.path.join('default', 'model_current.py'),
+                     os.path.join(base_path, identifier, 'model_current.py'))
+    return request.data, ok_status, text_type
 
 
 @app.route('/api/get_groups/<identifier>')

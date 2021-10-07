@@ -1,0 +1,12 @@
+import model
+import torch.nn as nn
+import torch.onnx
+from google.protobuf.json_format import MessageToJson
+import onnx
+import json
+
+torch_model, dummy_data = model.get_model()
+torch.onnx.export(torch_model, dummy_data, "test.onnx")
+onnx_model = onnx.load('test.onnx')
+s = MessageToJson(onnx_model)
+print(s)

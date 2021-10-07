@@ -22,6 +22,7 @@ export default {
   },
   layer_types_settings: {},
   preferences: {
+    mode: "Tensorflow/Keras",
     layer_display_min_height: {
       value: 30,
       type: "number",
@@ -81,6 +82,11 @@ export default {
       value: true,
       type: "switch",
       description: "Input/Output Samples",
+    },
+    channels_first: {
+      value: false,
+      type: "switch",
+      description: "Channels First",
     },
     no_colors: { value: false, type: "switch", description: "Disable Colors" },
     stroke_width: { value: 4, type: "number", description: "Stroke Width" },

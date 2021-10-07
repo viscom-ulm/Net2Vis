@@ -23,6 +23,11 @@ import * as actions from "../../actions";
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
+  constructor(props) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
+
   handleOnChange = (newValue) => {
     this.props.actions.updateCode(newValue);
   };
@@ -48,7 +53,7 @@ class Code extends React.Component {
   };
 
   componentDidUpdate() {
-    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+    this.editorRef.current.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
   }
 
   uploadFile(file) {
@@ -60,6 +65,20 @@ class Code extends React.Component {
       this.props.preferences
     );
   }
+
+  updateMode = (e) => {
+    var preferences = this.props.preferences;
+    preferences.mode = e.target.value;
+    preferences.channels_first = {
+      ...preferences.channels_first,
+      value: e.target.value === "PyTorch" ? true : false,
+    };
+    this.props.actions.updatePreferencesMode(
+      preferences,
+      this.props.color_mode.generation,
+      this.props.id
+    );
+  };
 
   // Render the Code into the Code View if Toggled
   render() {
@@ -79,9 +98,20 @@ class Code extends React.Component {
     return (
       // Editor with Syntax highlighting
       <div className="preferencesWrapper">
+        <InputField
+          value={
+            this.props.preferences.mode !== undefined
+              ? this.props.preferences.mode
+              : "Tensorflow/Keras"
+          }
+          type={"barselect"}
+          description={"Network Type"}
+          options={["Tensorflow/Keras", "PyTorch"]}
+          action={this.updateMode}
+        />
         <div id="codeDiv">
           <AceEditor
-            ref="aceEditor"
+            ref={this.editorRef}
             mode="python"
             theme="chrome"
             wrapEnabled={true}

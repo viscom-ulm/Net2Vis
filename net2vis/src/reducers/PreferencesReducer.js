@@ -17,6 +17,16 @@ export default function preferencesReducer(
           description: "Name Label",
         };
       }
+      if (prefs.channels_first === undefined) {
+        prefs.channels_first = {
+          value: false,
+          type: "switch",
+          description: "Channels First",
+        };
+      }
+      if (prefs.mode === undefined) {
+        prefs.mode = "Tensorflow/Keras";
+      }
       return prefs;
     default:
       return state;

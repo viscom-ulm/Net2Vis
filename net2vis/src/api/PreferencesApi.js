@@ -34,6 +34,24 @@ class PreferencesApi {
         return error;
       });
   }
+
+  // Update the Preferences Mode on the Backend
+  static updatePreferencesMode(preferences, id) {
+    const request = new Request("/api/update_preferences_mode/" + id, {
+      // Prepare the Request
+      method: "POST",
+      body: JSON.stringify(preferences),
+    });
+
+    return fetch(request)
+      .then((response) => {
+        // Return the Result of the Request
+        return response.text();
+      })
+      .catch((error) => {
+        return error;
+      });
+  }
 }
 
 export default PreferencesApi;
