@@ -17,10 +17,6 @@ def translate_keras(filename):
     Returns:
         object -- the result of this translation, can be an error
     """
-    epicbox.configure(profiles=[
-        epicbox.Profile('python', 'tf_plus_keras:latest')])
-    general_reader = open('translate/keras_loader.txt', 'rb')
-    general_code = general_reader.read()
     if keras_ext in filename:
         try:
             return graph_from_model_file(filename)
@@ -28,6 +24,10 @@ def translate_keras(filename):
             return {'error_class': '', 'line_number': 1,
                     'detail': "Model could not be loaded correctly. Error: " + str(err)}
     else:
+        epicbox.configure(profiles=[
+            epicbox.Profile('python', 'tf_plus_keras:latest')])
+        general_reader = open('translate/keras_loader.txt', 'rb')
+        general_code = general_reader.read()
         with open(filename, 'rb') as myfile:
             keras_code = myfile.read()
             try:
@@ -99,8 +99,8 @@ def add_layer_type(layer_json, model_layer, graph, previous_node):
     Returns:
         String -- name of the new layer
     """
-    new_layer = layer.Layer(layer_json['class_name'],
-                            layer_json['config']['name'], model_layer)
+    new_layer = layer.Layer.from_keras(layer_json['class_name'],
+                                       layer_json['config']['name'], model_layer)
     new_layer.add_specs(layer_json['config'])
     return add_to_graph(new_layer, layer_json, graph, previous_node)
 
@@ -118,9 +118,9 @@ def add_to_graph(new_layer, model_layer, graph, previous_node):
         String -- name of the new layer
     """
     try:
-        new_layer.add_input_names(model_layer['inbound_nodes'])
+        new_layer.add_input_names_from_node(model_layer['inbound_nodes'])
     except Exception:
         if previous_node != '':
-            new_layer.add_input_names([[[previous_node, 0, 0, {}]]])
+            new_layer.add_input_names_from_node([[[previous_node, 0, 0, {}]]])
     graph.add_layer(new_layer)
     return new_layer.name

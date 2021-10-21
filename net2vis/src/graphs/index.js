@@ -25,9 +25,13 @@ export function buildGraphFromNetwork(
       layer.properties.dimensions.in.length > 1 &&
       layer.properties.dimensions.out.length > 1
     ) {
+      const channel_dim = preferences.channels_first.value
+        ? 0
+        : layer.properties.dimensions.out.length - 1;
+      const spatial_dim = preferences.channels_first.value ? 1 : 0;
       const max_layer_dim = Math.max(
-        layer.properties.dimensions.in[0],
-        layer.properties.dimensions.out[0]
+        layer.properties.dimensions.in[spatial_dim],
+        layer.properties.dimensions.out[spatial_dim]
       ); // Get the maximum dimension of the layer (in vs out)
       var lay_diff =
         layer_extreme_dimensions.max_size - layer_extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Layer
@@ -49,12 +53,7 @@ export function buildGraphFromNetwork(
       const fdim_diff =
         preferences.layer_display_max_width.value -
         preferences.layer_display_min_width.value; // Get the differnece between Max and Min width for the Glyph Dimensions
-      const f_perc =
-        (layer.properties.dimensions.out[
-          layer.properties.dimensions.out.length - 1
-        ] -
-          layer_extreme_dimensions.min_features) /
-        feat_diff; // Calculate the interpolation factor
+      const f_perc = (layer.properties.dimensions.out[channel_dim] - layer_extreme_dimensions.min_features) / feat_diff; // Calculate the interpolation factor
       const width =
         f_perc * fdim_diff + preferences.layer_display_min_width.value; // Calculate the width of the glyph
       graph.setNode(layer.id, { width: width, height: height, layer: layer }); // Add a Node to the Graph

@@ -3,13 +3,17 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import AceEditor from "react-ace";
-import InputField from "../input/InputField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
 import Dropzone from "react-dropzone";
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+
+import InputField from "../input/InputField";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/python";
 import "ace-builds/src-min-noconflict/ext-language_tools";
@@ -19,6 +23,11 @@ import * as actions from "../../actions";
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
+  constructor(props) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
+
   handleOnChange = (newValue) => {
     this.props.actions.updateCode(newValue);
   };
@@ -44,7 +53,7 @@ class Code extends React.Component {
   };
 
   componentDidUpdate() {
-    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+    this.editorRef.current.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
   }
 
   uploadFile(file) {
@@ -77,7 +86,7 @@ class Code extends React.Component {
       <div className="preferencesWrapper">
         <div id="codeDiv">
           <AceEditor
-            ref="aceEditor"
+            ref={this.editorRef}
             mode="python"
             theme="chrome"
             wrapEnabled={true}
@@ -126,12 +135,14 @@ class Code extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Upload h5 Model</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Upload h5 or onnx Model</DialogTitle>
           <DialogContent>
             <div className="dropzoneContainer">
               <Dropzone
-                onDrop={(acceptedFiles) => this.uploadFile(acceptedFiles[0])}
-                acceptedFiles=".h5"
+                onDrop={(acceptedFiles) => {
+                  this.uploadFile(acceptedFiles[0])
+                }}
+                acceptedFiles=".h5,.onnx"
                 maxFiles={1}
               >
                 {({ getRootProps, getInputProps }) => (

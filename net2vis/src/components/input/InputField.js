@@ -13,7 +13,8 @@ import {
   Select,
   MenuItem,
   InputLabel,
-} from "@material-ui/core";
+  Box,
+} from "@mui/material";
 
 // ToggleButton Control Element appearance dependant on State of the Button. Action that is provided gets called on click.
 const InputField = ({
@@ -89,6 +90,20 @@ const InputField = ({
           </Button>
         </div>
       );
+    case "paddedButton":
+      return (
+        <div className="paddedButton">
+          <Button
+            onClick={(e) => action(e)}
+            variant="contained"
+            color={options === "secondary" ? "secondary" : "primary"}
+            className="inputElement"
+            disabled={!active}
+          >
+            {description}
+          </Button>
+        </div>
+      );
     case "codeButton":
       return (
         <div className="codeItem">
@@ -121,10 +136,15 @@ const InputField = ({
       );
     case "select":
       return (
-        <div className="preferenceItem">
+        <div className="preferenceItem formselect">
           <FormControl className="inputElement">
-            <InputLabel shrink>{description}</InputLabel>
-            <Select onChange={(e) => action(e)} value={value}>
+            <InputLabel id="select-label">{description}</InputLabel>
+            <Select
+              onChange={(e) => action(e)}
+              value={value}
+              labelId="select-label"
+              label={description}
+            >
               {options.map((option, index) => (
                 <MenuItem value={option} key={index}>
                   {option}
@@ -132,6 +152,22 @@ const InputField = ({
               ))}
             </Select>
           </FormControl>
+        </div>
+      );
+    case "barselect":
+      return (
+        <div className="menuselect">
+          <Box>
+            <FormControl className="inputElement">
+              <Select onChange={(e) => action(e)} value={value}>
+                {options.map((option, index) => (
+                  <MenuItem value={option} key={index}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </div>
       );
     default:

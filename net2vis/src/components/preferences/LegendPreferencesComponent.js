@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 
 import * as actions from "../../actions";
 
-import Typography from "@material-ui/core/Typography";
+import { Typography } from "@mui/material";
 
 import InputField from "../input/InputField";
 
@@ -139,82 +139,93 @@ class LegendPreferences extends React.Component {
   render() {
     return (
       <div className="preferencesWrapper">
-        <div>
+        <div className="innerPreferencesWrapper">
           <Typography variant="h6" color="inherit">
             Legend
           </Typography>
-          <InputField
-            value={this.props.legend_preferences.element_spacing.value}
-            type={this.props.legend_preferences.element_spacing.type}
-            description={
-              this.props.legend_preferences.element_spacing.description
-            }
-            action={this.handleLegendElementSpacingChange}
-          />
-          <InputField
-            value={this.props.legend_preferences.layer_width.value}
-            type={this.props.legend_preferences.layer_width.type}
-            description={this.props.legend_preferences.layer_width.description}
-            action={this.handleLegendLayerWidthChange}
-          />
-          <InputField
-            value={this.props.legend_preferences.layer_height.value}
-            type={this.props.legend_preferences.layer_height.type}
-            description={this.props.legend_preferences.layer_height.description}
-            action={this.handleLegendLayerHeightChange}
-          />
-          <InputField
-            value={
-              this.props.legend_preferences.layers_spacing_horizontal.value
-            }
-            type={this.props.legend_preferences.layers_spacing_horizontal.type}
-            description={
-              this.props.legend_preferences.layers_spacing_horizontal
-                .description
-            }
-            action={this.handleLegendLayersSpacingHorizontalChange}
-          />
-          <InputField
-            value={this.props.legend_preferences.layers_spacing_vertical.value}
-            type={this.props.legend_preferences.layers_spacing_vertical.type}
-            description={
-              this.props.legend_preferences.layers_spacing_vertical.description
-            }
-            action={this.handleLegendLayersSpacingVerticalChange}
-          />
-          <InputField
-            value={this.props.legend_preferences.complex_spacing.value}
-            type={this.props.legend_preferences.complex_spacing.type}
-            description={
-              this.props.legend_preferences.complex_spacing.description
-            }
-            action={this.handleLegendComplexSpacingChange}
-          />
-          <InputField
-            value={this.props.legend_preferences.reverse_order.value}
-            type={this.props.legend_preferences.reverse_order.type}
-            description={
-              this.props.legend_preferences.reverse_order.description
-            }
-            action={this.toggleReverseOrder}
-          />
+          <div className="innerPreferencesWrapper">
+            <InputField
+              value={this.props.legend_preferences.element_spacing.value}
+              type={this.props.legend_preferences.element_spacing.type}
+              description={
+                this.props.legend_preferences.element_spacing.description
+              }
+              action={this.handleLegendElementSpacingChange}
+            />
+            <InputField
+              value={this.props.legend_preferences.layer_width.value}
+              type={this.props.legend_preferences.layer_width.type}
+              description={
+                this.props.legend_preferences.layer_width.description
+              }
+              action={this.handleLegendLayerWidthChange}
+            />
+            <InputField
+              value={this.props.legend_preferences.layer_height.value}
+              type={this.props.legend_preferences.layer_height.type}
+              description={
+                this.props.legend_preferences.layer_height.description
+              }
+              action={this.handleLegendLayerHeightChange}
+            />
+            <InputField
+              value={
+                this.props.legend_preferences.layers_spacing_horizontal.value
+              }
+              type={
+                this.props.legend_preferences.layers_spacing_horizontal.type
+              }
+              description={
+                this.props.legend_preferences.layers_spacing_horizontal
+                  .description
+              }
+              action={this.handleLegendLayersSpacingHorizontalChange}
+            />
+            <InputField
+              value={
+                this.props.legend_preferences.layers_spacing_vertical.value
+              }
+              type={this.props.legend_preferences.layers_spacing_vertical.type}
+              description={
+                this.props.legend_preferences.layers_spacing_vertical
+                  .description
+              }
+              action={this.handleLegendLayersSpacingVerticalChange}
+            />
+            <InputField
+              value={this.props.legend_preferences.complex_spacing.value}
+              type={this.props.legend_preferences.complex_spacing.type}
+              description={
+                this.props.legend_preferences.complex_spacing.description
+              }
+              action={this.handleLegendComplexSpacingChange}
+            />
+            <InputField
+              value={this.props.legend_preferences.reverse_order.value}
+              type={this.props.legend_preferences.reverse_order.type}
+              description={
+                this.props.legend_preferences.reverse_order.description
+              }
+              action={this.toggleReverseOrder}
+            />
+          </div>
         </div>
         <div>
           <InputField
             value={"Group"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Group"}
             action={this.groupLayers}
           />
           <InputField
             value={"Autogroup"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Automatically Group"}
             action={this.autoGroupLayers}
           />
           <InputField
             value={"AutoUngroup"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Automatically Remove Group"}
             action={this.autoUngroupLayers}
             options={"secondary"}

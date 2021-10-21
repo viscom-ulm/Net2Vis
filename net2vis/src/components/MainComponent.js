@@ -4,12 +4,13 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+import { Grid, Paper } from "@mui/material";
+
 import * as actions from "../actions";
 import Network from "./network/NetworkComponent";
 import Legend from "./legend/LegendComponent";
 import Preferences from "./preferences/PreferencesComponent";
 import Code from "./code/CodeComponent";
-import { Grid, Paper } from "@material-ui/core";
 import Patterns from "./patterns/PatternComponent";
 import AlertSnack from "./AlertSnack";
 

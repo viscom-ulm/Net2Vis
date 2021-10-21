@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 
 import * as actions from "../../actions";
 
-import Typography from "@material-ui/core/Typography";
+import { Typography } from "@mui/material";
 
 import InputField from "../input/InputField";
 
@@ -89,51 +89,54 @@ class GroupPreferences extends React.Component {
     var options = ["Palette", "Picker"];
     return (
       <div className="preferencesWrapper">
-        <div>
+        <div className="innerPreferencesWrapper">
           <Typography variant="h6" color="inherit">
             Group
           </Typography>
-          <InputField
-            value={
-              this.props.layer_types_settings[this.props.selected_legend_item]
-                .alias
-            }
-            type={"text"}
-            description={"Layer Alias"}
-            action={this.handleAliasChange}
-          />
-          {!this.props.preferences.no_colors.value && (
-            <InputField
-              value={this.props.color_mode.selection}
-              type={"select"}
-              description={"Group Color"}
-              options={options}
-              action={this.handleColorModeChange}
-            />
-          )}
-          {!this.props.preferences.no_colors.value && (
+          <div className="innerPreferencesWrapper">
             <InputField
               value={
                 this.props.layer_types_settings[this.props.selected_legend_item]
-                  .color
+                  .alias
               }
-              type={"color"}
-              description={"Group Color"}
-              options={this.props.color_mode.selection}
-              action={this.handleColorChange}
+              type={"text"}
+              description={"Layer Alias"}
+              action={this.handleAliasChange}
             />
-          )}
-          <InputField
-            value={this.props.group.active}
-            type={"switch"}
-            description={"Group Active"}
-            action={this.toggleGroup}
-          />
+            {!this.props.preferences.no_colors.value && (
+              <InputField
+                value={this.props.color_mode.selection}
+                type={"select"}
+                description={"Group Color"}
+                options={options}
+                action={this.handleColorModeChange}
+              />
+            )}
+            {!this.props.preferences.no_colors.value && (
+              <InputField
+                value={
+                  this.props.layer_types_settings[
+                    this.props.selected_legend_item
+                  ].color
+                }
+                type={"color"}
+                description={"Group Color"}
+                options={this.props.color_mode.selection}
+                action={this.handleColorChange}
+              />
+            )}
+            <InputField
+              value={this.props.group.active}
+              type={"switch"}
+              description={"Group Active"}
+              action={this.toggleGroup}
+            />
+          </div>
         </div>
         <div>
           <InputField
             value={"Delete"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Ungroup"}
             action={this.deleteGroup}
             options={"secondary"}

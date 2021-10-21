@@ -75,6 +75,7 @@ class Edges extends React.Component {
                   layer_max_height={
                     this.props.preferences.layer_display_max_height.value
                   }
+                  channels_first={this.props.preferences.channels_first.value}
                 />
               )}
           </g>
@@ -89,6 +90,7 @@ class Edges extends React.Component {
               layer_max_height={
                 this.props.preferences.layer_display_max_height.value
               }
+              channels_first={this.props.preferences.channels_first.value}
             />
           )}
         {this.props.preferences.show_dimensions.value &&
@@ -101,6 +103,7 @@ class Edges extends React.Component {
               layer_max_height={
                 this.props.preferences.layer_display_max_height.value
               }
+              channels_first={this.props.preferences.channels_first.value}
             />
           )}
       </g>

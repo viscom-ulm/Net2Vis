@@ -6,15 +6,14 @@ import thunk from "redux-thunk";
 import AppRouter from "./AppRouter";
 import Controls from "./components/controls/ControlsComponent";
 import combinedReducers from "./reducers";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { blue, red } from "@material-ui/core/colors";
+import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
+import { blue, red } from "@mui/material/colors";
 
 // Create the Store using all the Reducers and applying the Middleware
 const store = createStore(combinedReducers, applyMiddleware(thunk));
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: blue,
     secondary: red,
@@ -28,7 +27,7 @@ const theme = createMuiTheme({
 // The App provides the Store to the following components.
 // Controls as well as Routed Content are rendered.
 const App = () => (
-  <MuiThemeProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <Provider store={store}>
       <div className="full">
         <CssBaseline />
@@ -38,7 +37,7 @@ const App = () => (
         <AppRouter />
       </div>
     </Provider>
-  </MuiThemeProvider>
+  </ThemeProvider>
 );
 
 export default App;
