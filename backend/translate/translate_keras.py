@@ -99,8 +99,8 @@ def add_layer_type(layer_json, model_layer, graph, previous_node):
     Returns:
         String -- name of the new layer
     """
-    new_layer = layer.Layer(layer_json['class_name'],
-                            layer_json['config']['name'], model_layer)
+    new_layer = layer.Layer.from_keras(layer_json['class_name'],
+                                       layer_json['config']['name'], model_layer)
     new_layer.add_specs(layer_json['config'])
     return add_to_graph(new_layer, layer_json, graph, previous_node)
 
@@ -118,9 +118,9 @@ def add_to_graph(new_layer, model_layer, graph, previous_node):
         String -- name of the new layer
     """
     try:
-        new_layer.add_input_names(model_layer['inbound_nodes'])
+        new_layer.add_input_names_from_node(model_layer['inbound_nodes'])
     except Exception:
         if previous_node != '':
-            new_layer.add_input_names([[[previous_node, 0, 0, {}]]])
+            new_layer.add_input_names_from_node([[[previous_node, 0, 0, {}]]])
     graph.add_layer(new_layer)
     return new_layer.name

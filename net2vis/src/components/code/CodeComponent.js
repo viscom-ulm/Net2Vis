@@ -23,6 +23,11 @@ import * as actions from "../../actions";
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
+  constructor(props) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
+
   handleOnChange = (newValue) => {
     this.props.actions.updateCode(newValue);
   };
@@ -48,7 +53,7 @@ class Code extends React.Component {
   };
 
   componentDidUpdate() {
-    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+    this.editorRef.current.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
   }
 
   uploadFile(file) {
@@ -81,7 +86,7 @@ class Code extends React.Component {
       <div className="preferencesWrapper">
         <div id="codeDiv">
           <AceEditor
-            ref="aceEditor"
+            ref={this.editorRef}
             mode="python"
             theme="chrome"
             wrapEnabled={true}
@@ -130,12 +135,14 @@ class Code extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Upload h5 Model</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Upload h5 or onnx Model</DialogTitle>
           <DialogContent>
             <div className="dropzoneContainer">
               <Dropzone
-                onDrop={(acceptedFiles) => this.uploadFile(acceptedFiles[0])}
-                acceptedFiles=".h5"
+                onDrop={(acceptedFiles) => {
+                  this.uploadFile(acceptedFiles[0])
+                }}
+                acceptedFiles=".h5,.onnx"
                 maxFiles={1}
               >
                 {({ getRootProps, getInputProps }) => (

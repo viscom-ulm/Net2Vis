@@ -7,10 +7,11 @@ from shutil import copyfile
 import cairosvg
 from flask import Flask, send_file, request, jsonify
 from translate.translate_keras import translate_keras
+from translate.translate_onnx import translate_onnx
 from translate.graph import Graph
 
 app = Flask(__name__)
-app.config['UPLOAD_EXTENSIONS'] = ['.h5']
+app.config['UPLOAD_EXTENSIONS'] = ['.h5', '.onnx']
 app.config['UPLOAD_PATH'] = 'models'
 ok_status = 200
 error_status = 400
@@ -168,6 +169,9 @@ def get_network(identifier):
     if os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.h5')):
         graph = translate_keras(os.path.join(
             app.config['UPLOAD_PATH'], identifier, 'model.h5'))
+    elif os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.onnx')):
+        graph = translate_onnx(os.path.join(
+            app.config['UPLOAD_PATH'], identifier, 'model.onnx'))
     else:
         graph = translate_keras(os.path.join(
             app.config['UPLOAD_PATH'], identifier, 'model_current.py'))
@@ -190,7 +194,7 @@ def get_code(identifier):
         object -- a http response containing the code for the network
     """
     check_upload_path_exists(identifier)
-    if not (os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.h5'))):
+    if not (os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.h5')) or os.path.exists(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.onnx'))):
         with open(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model_current.py'), 'r') as myfile:
             keras_code = myfile.read()
             return keras_code, ok_status, text_type
@@ -231,7 +235,8 @@ def upload_model(identifier):
     file_ext = os.path.splitext(filename)[1]
     if file_ext not in app.config['UPLOAD_EXTENSIONS']:
         return "", error_status, text_type
-    file_path = os.path.join(app.config['UPLOAD_PATH'], identifier, 'model.h5')
+    file_path = os.path.join(
+        app.config['UPLOAD_PATH'], identifier, f'model{file_ext}')
     uploaded_file.save(file_path)
     return "No code loaded since model file is present.", ok_status, text_type
 
@@ -247,12 +252,14 @@ def delete_model(identifier):
         object -- a http response signaling the change worked
     """
     check_upload_path_exists(identifier)
-    model_path = os.path.join(
+    keras_model_path = os.path.join(
         app.config['UPLOAD_PATH'], identifier, 'model.h5')
-    print(model_path)
-    if (os.path.exists(model_path)):
-        print('test2')
-        os.remove(model_path)
+    onnx_model_path = os.path.join(
+        app.config['UPLOAD_PATH'], identifier, 'model.onnx')
+    if (os.path.exists(keras_model_path)):
+        os.remove(keras_model_path)
+    if (os.path.exists(onnx_model_path)):
+        os.remove(onnx_model_path)
     with open(os.path.join(app.config['UPLOAD_PATH'], identifier, 'model_current.py'), 'r') as myfile:
         keras_code = myfile.read()
         return keras_code, ok_status, text_type

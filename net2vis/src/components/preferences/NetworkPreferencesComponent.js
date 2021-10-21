@@ -176,6 +176,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   };
 
+  // Toggle the channel order
+  toggleChannelsFirst = (e) => {
+    var preferences = this.props.preferences;
+    preferences.channels_first.value = !preferences.channels_first.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  };
+
   // Color generation mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorGenerationMode(
@@ -279,6 +286,12 @@ class NetworkPreferences extends React.Component {
               type={this.props.preferences.no_colors.type}
               description={this.props.preferences.no_colors.description}
               action={this.toggleColors}
+            />
+            <InputField
+              value={this.props.preferences.channels_first.value}
+              type={this.props.preferences.channels_first.type}
+              description={this.props.preferences.channels_first.description}
+              action={this.toggleChannelsFirst}
             />
           </div>
         </div>
