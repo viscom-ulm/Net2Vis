@@ -18,6 +18,7 @@ export default {
     preferences_toggle: true,
     legend_toggle: true,
     alert_toggle: false,
+    upload_toggle: false,
   },
   layer_types_settings: {},
   preferences: {
@@ -80,6 +81,11 @@ export default {
       value: true,
       type: "switch",
       description: "Input/Output Samples",
+    },
+    channels_first: {
+      value: false,
+      type: "switch",
+      description: "Channels First",
     },
     no_colors: { value: false, type: "switch", description: "Disable Colors" },
     stroke_width: { value: 4, type: "number", description: "Stroke Width" },

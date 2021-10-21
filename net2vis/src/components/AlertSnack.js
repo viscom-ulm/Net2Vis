@@ -5,8 +5,8 @@ import { bindActionCreators } from "redux";
 
 import * as actions from "../actions";
 
-import CloseIcon from "@material-ui/icons/Close";
-import { IconButton, Snackbar } from "@material-ui/core";
+import { Close } from "@mui/icons-material";
+import { IconButton, Snackbar } from "@mui/material";
 
 class AlertSnack extends React.Component {
   handleClose = (event, reason) => {
@@ -34,7 +34,7 @@ class AlertSnack extends React.Component {
             color="inherit"
             onClick={this.handleClose}
           >
-            <CloseIcon />
+            <Close />
           </IconButton>,
         ]}
       />

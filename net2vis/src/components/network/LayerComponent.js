@@ -37,17 +37,18 @@ class Layer extends React.Component {
   };
 
   // Calculate the height values of the layer (begin and end) based on the spatial resolution
-  calculateLayerHeight = (extreme_dimensions, dimensions) => {
+  calculateLayerHeight = (extreme_dimensions, dimensions, channels_first) => {
     var height = [extreme_dimensions.max_size, extreme_dimensions.max_size]; // Initialize the height placeholder
     if (dimensions.out.length > 1) {
       // Calculate the dimensions of the Layer for a multidimensional Tensor
+      const spatial_index = channels_first ? 1 : 0;
       const extreme_layer = this.props.layer_extreme_dimensions; // Get the Extremes of the Dimensions of all Layers
       const lay_diff = extreme_layer.max_size - extreme_layer.min_size; // Get the difference between Max and Min for the Extremes of the Layer
       const dim_diff =
         extreme_dimensions.max_size - extreme_dimensions.min_size; // Get the difference between Max and Min for the Extremes of the Glyph Dimensions
       const perc = [
-        (dimensions.in[0] - extreme_layer.min_size) / lay_diff,
-        (dimensions.out[0] - extreme_layer.min_size) / lay_diff,
+        (dimensions.in[spatial_index] - extreme_layer.min_size) / lay_diff,
+        (dimensions.out[spatial_index] - extreme_layer.min_size) / lay_diff,
       ]; // Calculate the linear interpolation factor for boths sides of the Glyph
       if (perc[0] < 1.0 || perc[1] < 1.0) {
         // Only change the height, if they are smaller than max
@@ -104,7 +105,8 @@ class Layer extends React.Component {
     }; // Get the Extremes of the Display Size for the Glyphs
     const layer_height = this.calculateLayerHeight(
       extreme_dimensions,
-      dimensions
+      dimensions,
+      this.props.preferences.channels_first.value
     ); // Calculate the height of the Layer
     const pathData = paths.calculateGlyphPath(
       extreme_dimensions,
@@ -114,10 +116,9 @@ class Layer extends React.Component {
     ); // Calculate the Path of the Layer
     const tooltipRef = React.createRef(); // Reference for the Tooltip
     const properties_object = this.props.layer.layer.properties.properties; // Get the layer Properties
-    const features =
-      dimensions.out.length > 1
-        ? dimensions.out[dimensions.out.length - 1]
-        : dimensions.out[0];
+    const features = this.props.preferences.channels_first.value
+      ? dimensions.out[0]
+      : dimensions.out[dimensions.out.length - 1];
     const dimensionsLabelX =
       this.props.layer.x +
       this.props.layer.width / 2.0 +
@@ -173,9 +174,8 @@ class Layer extends React.Component {
     return (
       <g>
         <g
-          transform={`translate(${
-            this.props.layer.x - this.props.layer.width / 2.0
-          }, ${this.props.layer.y})`}
+          transform={`translate(${this.props.layer.x - this.props.layer.width / 2.0
+            }, ${this.props.layer.y})`}
         >
           <path
             d={pathData}

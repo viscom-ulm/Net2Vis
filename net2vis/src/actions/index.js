@@ -4,6 +4,7 @@ import LayerTypesApi from "../api/LayerTypesApi";
 import PreferencesApi from "../api/PreferencesApi";
 import LegendPreferencesApi from "../api/LegendPreferencesApi";
 import GroupsApi from "../api/GroupsApi";
+import ModelApi from "../api/ModelApi";
 import * as types from "./types";
 import * as sort from "../groups/Sort";
 import * as splitting from "../layers/Splitting";
@@ -52,6 +53,11 @@ export function toggleLegend() {
 // Toggle the Download Alert View
 export function toggleAlert() {
   return { type: types.TOGGLE_ALERT };
+}
+
+// Toggle the Upload Alert View
+export function toggleUpload() {
+  return { type: types.TOGGLE_UPLOAD };
 }
 
 // Loading LayerTypes was Successful
@@ -273,6 +279,19 @@ export function loadCode(id) {
   };
 }
 
+// Called to delte the model file
+export function deleteModel(id) {
+  return function (dispatch) {
+    return ModelApi.deleteModel(id)
+      .then((code) => {
+        dispatch(loadCodeSuccess(code));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
+
 // Updating Code was Succesful
 function updateCodeSuccess(code) {
   return { type: types.UPDATE_CODE_SUCESS, code };
@@ -294,6 +313,58 @@ export function updateCodeBackend(
   loader.style.display = "flex";
   return function (dispatch) {
     return CodeApi.updateCode(code, id)
+      .then((code) => {
+        dispatch(updateCodeSuccess(code));
+        return NetworkApi.getNetwork(id)
+          .then((network) => {
+            loader.style.display = "none";
+            if (network.success === true) {
+              var net = network.data;
+              if (preferences.add_splitting.value) {
+                net = splitting.addSplitLayers(net);
+              }
+              return LayerTypesApi.getLayerTypes(id).then((layerTypes) => {
+                networkLoaded(net, groups, JSON.parse(layerTypes), dispatch);
+                dispatch(
+                  loadLayerTypesSuccess(
+                    JSON.parse(layerTypes),
+                    net,
+                    generationMode
+                  )
+                );
+              });
+            } else {
+              dispatch(
+                updateAlertSnack({
+                  open: true,
+                  message: "Code not executeable.",
+                })
+              );
+              dispatch(addError(network.data));
+            }
+          })
+          .catch((error) => {
+            throw error;
+          });
+      })
+      .catch((error) => {
+        console.warn("Current Network not executable.", error);
+      });
+  };
+}
+
+export function updateModelBackend(
+  file,
+  id,
+  groups,
+  generationMode,
+  preferences
+) {
+  const loader = document.getElementById("loader");
+  loader.style.display = "flex";
+  return function (dispatch) {
+    dispatch(toggleUpload());
+    return ModelApi.updateModel(file, id)
       .then((code) => {
         dispatch(updateCodeSuccess(code));
         return NetworkApi.getNetwork(id)
@@ -362,82 +433,6 @@ export function setPreferenceMode(name) {
 // Set the item of the Legend that is currently selected.
 export function setSelectedLegendItem(name) {
   return { type: types.SET_SELECTED_LEGEND_ITEM, name };
-}
-
-// Check that all components are reloaded from the Server in the correct order.
-export function reloadAllState(id, generationMode) {
-  const loader = document.getElementById("loader");
-  loader.style.display = "flex";
-  return function (dispatch) {
-    return CodeApi.getCode(id)
-      .then((code) => {
-        dispatch(loadCodeSuccess(code));
-        return GroupsApi.getGroups(id)
-          .then((groups) => {
-            dispatch(loadGroupsSuccess(JSON.parse(groups)));
-            return NetworkApi.getNetwork(id)
-              .then((network) => {
-                loader.style.display = "none";
-                if (network.success === true) {
-                  var net = network.data;
-                  return PreferencesApi.getPreferences(id).then(
-                    (preferences) => {
-                      var prefs = JSON.parse(preferences);
-                      if (prefs.add_splitting.value) {
-                        net = splitting.addSplitLayers(net);
-                      }
-                      dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
-                      return LayerTypesApi.getLayerTypes(id).then(
-                        (layerTypes) => {
-                          networkLoaded(
-                            net,
-                            JSON.parse(groups),
-                            JSON.parse(layerTypes),
-                            dispatch
-                          );
-                          dispatch(
-                            loadLayerTypesSuccess(
-                              JSON.parse(layerTypes),
-                              net,
-                              generationMode
-                            )
-                          );
-                          return LegendPreferencesApi.getLegendPreferences(
-                            id
-                          ).then((legend_preferences) => {
-                            dispatch(
-                              loadLegendPreferencesSuccess(
-                                JSON.parse(legend_preferences)
-                              )
-                            );
-                          });
-                        }
-                      );
-                    }
-                  );
-                } else {
-                  dispatch(
-                    updateAlertSnack({
-                      open: true,
-                      message: "Code not executeable.",
-                    })
-                  );
-                  dispatch(addError(network.data));
-                }
-              })
-              .catch((error) => {
-                throw error;
-              });
-          })
-          .catch((error) => {
-            console.log(error);
-            console.warn("Error in Grouping");
-          });
-      })
-      .catch((error) => {
-        console.warn("Current Network not executable.");
-      });
-  };
 }
 
 // Loading Groups was Successful
@@ -568,4 +563,80 @@ export function setLegendBbox(bbox) {
 
 export function updateAlertSnack(alertSnack) {
   return { type: types.UPDATE_ALERT_SNACK_SUCCESS, alertSnack };
+}
+
+// Check that all components are reloaded from the Server in the correct order.
+export function reloadAllState(id, generationMode) {
+  const loader = document.getElementById("loader");
+  loader.style.display = "flex";
+  return function (dispatch) {
+    return stateRefresh(id, generationMode, dispatch);
+  };
+}
+
+async function stateRefresh(id, generationMode, dispatch) {
+  return CodeApi.getCode(id)
+    .then((code) => {
+      dispatch(loadCodeSuccess(code));
+      return GroupsApi.getGroups(id)
+        .then((groups) => {
+          dispatch(loadGroupsSuccess(JSON.parse(groups)));
+          return NetworkApi.getNetwork(id)
+            .then((network) => {
+              loader.style.display = "none";
+              if (network.success === true) {
+                var net = network.data;
+                return PreferencesApi.getPreferences(id).then((preferences) => {
+                  var prefs = JSON.parse(preferences);
+                  if (prefs.add_splitting.value) {
+                    net = splitting.addSplitLayers(net);
+                  }
+                  dispatch(loadPreferencesSuccess(JSON.parse(preferences)));
+                  return LayerTypesApi.getLayerTypes(id).then((layerTypes) => {
+                    networkLoaded(
+                      net,
+                      JSON.parse(groups),
+                      JSON.parse(layerTypes),
+                      dispatch
+                    );
+                    dispatch(
+                      loadLayerTypesSuccess(
+                        JSON.parse(layerTypes),
+                        net,
+                        generationMode
+                      )
+                    );
+                    return LegendPreferencesApi.getLegendPreferences(id).then(
+                      (legend_preferences) => {
+                        dispatch(
+                          loadLegendPreferencesSuccess(
+                            JSON.parse(legend_preferences)
+                          )
+                        );
+                      }
+                    );
+                  });
+                });
+              } else {
+                dispatch(
+                  updateAlertSnack({
+                    open: true,
+                    message: "Code not executeable.",
+                  })
+                );
+                dispatch(addError(network.data));
+              }
+            })
+            .catch((error) => {
+              throw error;
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+          console.warn("Error in Grouping");
+        });
+    })
+    .catch((error) => {
+      console.warn("Current Network not executable.");
+    });
 }

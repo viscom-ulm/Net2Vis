@@ -3,6 +3,16 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import AceEditor from "react-ace";
+import Dropzone from "react-dropzone";
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+
 import InputField from "../input/InputField";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/snippets/python";
@@ -13,6 +23,11 @@ import * as actions from "../../actions";
 
 // Component for displaying the code of the Neural Network implementation
 class Code extends React.Component {
+  constructor(props) {
+    super(props);
+    this.editorRef = React.createRef();
+  }
+
   handleOnChange = (newValue) => {
     this.props.actions.updateCode(newValue);
   };
@@ -28,8 +43,27 @@ class Code extends React.Component {
     );
   };
 
+  updateStoredModel = () => {
+    this.props.actions.uploadModel(
+      this.props.id,
+      this.props.groups,
+      this.props.color_mode.generation,
+      this.props.preferences
+    );
+  };
+
   componentDidUpdate() {
-    this.refs.aceEditor.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+    this.editorRef.current.editor.resize(); // Triggering a resize of the editor, which is needed to be displayed correctly
+  }
+
+  uploadFile(file) {
+    this.props.actions.updateModelBackend(
+      file,
+      this.props.id,
+      this.props.groups,
+      this.props.color_mode.generation,
+      this.props.preferences
+    );
   }
 
   // Render the Code into the Code View if Toggled
@@ -46,12 +80,13 @@ class Code extends React.Component {
         },
       ];
     }
+    const display = this.props.display;
     return (
       // Editor with Syntax highlighting
       <div className="preferencesWrapper">
         <div id="codeDiv">
           <AceEditor
-            ref="aceEditor"
+            ref={this.editorRef}
             mode="python"
             theme="chrome"
             wrapEnabled={true}
@@ -68,15 +103,69 @@ class Code extends React.Component {
             scrollMargin={[10, 0, 0, 0]}
           />
         </div>
-        <div>
+        {this.props.code === "No code loaded since model file is present." ? (
           <InputField
-            value={"Update"}
+            value={"Delete Model"}
             type={"codeButton"}
-            description={"Update"}
-            action={this.updateStoredCode}
+            description={"Delete Model"}
+            options={"secondary"}
+            action={() => this.props.actions.deleteModel(this.props.id)}
             active={true}
           />
-        </div>
+        ) : (
+          <div className="updateButtonContainer">
+            <InputField
+              value={"Upload Model"}
+              type={"codeButton"}
+              description={"Upload Model"}
+              action={this.props.actions.toggleUpload}
+              active={true}
+            />
+            <InputField
+              value={"Update"}
+              type={"codeButton"}
+              description={"Update"}
+              action={this.updateStoredCode}
+              active={true}
+            />
+          </div>
+        )}
+        <Dialog
+          open={display.upload_toggle}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Upload h5 or onnx Model</DialogTitle>
+          <DialogContent>
+            <div className="dropzoneContainer">
+              <Dropzone
+                onDrop={(acceptedFiles) => {
+                  this.uploadFile(acceptedFiles[0])
+                }}
+                acceptedFiles=".h5,.onnx"
+                maxFiles={1}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <p>Drag a model file here, or click to select a file.</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={this.props.actions.toggleUpload}
+              color="secondary"
+              autoFocus
+            >
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -90,6 +179,7 @@ Code.propTypes = {
   groups: PropTypes.array.isRequired,
   color_mode: PropTypes.object.isRequired,
   preferences: PropTypes.object.isRequired,
+  display: PropTypes.object.isRequired,
 };
 
 // Map the State to the Properties of this Component
@@ -103,6 +193,7 @@ function mapStateToProps(state, ownProps) {
       groups: state.groups,
       color_mode: state.color_mode,
       preferences: state.preferences,
+      display: state.display,
     };
   } else {
     return {
@@ -112,6 +203,7 @@ function mapStateToProps(state, ownProps) {
       groups: state.groups,
       color_mode: state.color_mode,
       preferences: state.preferences,
+      display: state.display,
     };
   }
 }

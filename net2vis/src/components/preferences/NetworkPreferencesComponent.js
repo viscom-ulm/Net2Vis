@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 
 import * as actions from "../../actions";
 
-import Typography from "@material-ui/core/Typography";
+import { Typography } from "@mui/material";
 
 import InputField from "../input/InputField";
 import Features from "./FeaturesComponent";
@@ -176,6 +176,13 @@ class NetworkPreferences extends React.Component {
     this.props.actions.updatePreferences(preferences, this.props.id);
   };
 
+  // Toggle the channel order
+  toggleChannelsFirst = (e) => {
+    var preferences = this.props.preferences;
+    preferences.channels_first.value = !preferences.channels_first.value;
+    this.props.actions.updatePreferences(preferences, this.props.id);
+  };
+
   // Color generation mode Changes
   handleColorModeChange = (e) => {
     this.props.actions.setColorGenerationMode(
@@ -197,107 +204,115 @@ class NetworkPreferences extends React.Component {
     var autoGroupActive = repetition !== undefined ? true : false;
     return (
       <div className="preferencesWrapper">
-        <div>
+        <div className="innerPreferencesWrapper">
           <Typography variant="h6" color="inherit">
             Network
           </Typography>
-          <InputField
-            value={this.props.preferences.layer_display_min_height.value}
-            type={this.props.preferences.layer_display_min_height.type}
-            description={
-              this.props.preferences.layer_display_min_height.description
-            }
-            action={this.handleMinChange}
-          />
-          <InputField
-            value={this.props.preferences.layer_display_max_height.value}
-            type={this.props.preferences.layer_display_max_height.type}
-            description={
-              this.props.preferences.layer_display_max_height.description
-            }
-            action={this.handleMaxChange}
-          />
-          <Features />
-          <InputField
-            value={this.props.preferences.layers_spacing_horizontal.value}
-            type={this.props.preferences.layers_spacing_horizontal.type}
-            description={
-              this.props.preferences.layers_spacing_horizontal.description
-            }
-            action={this.handleSpacingHorizontalChange}
-          />
-          <InputField
-            value={this.props.preferences.layers_spacing_vertical.value}
-            type={this.props.preferences.layers_spacing_vertical.type}
-            description={
-              this.props.preferences.layers_spacing_vertical.description
-            }
-            action={this.handleSpacingVerticalChange}
-          />
-          {!this.props.preferences.no_colors.value && (
+          <div className="innerPreferencesWrapper">
             <InputField
-              value={this.props.color_mode.generation}
-              type={"select"}
-              description={"Porposed Colors"}
-              options={options}
-              action={this.handleColorModeChange}
+              value={this.props.preferences.layer_display_min_height.value}
+              type={this.props.preferences.layer_display_min_height.type}
+              description={
+                this.props.preferences.layer_display_min_height.description
+              }
+              action={this.handleMinChange}
             />
-          )}
-          <InputField
-            value={this.props.preferences.show_dimensions.value}
-            type={this.props.preferences.show_dimensions.type}
-            description={this.props.preferences.show_dimensions.description}
-            action={this.toggleDimensionsLabel}
-          />
-          <InputField
-            value={this.props.preferences.show_features.value}
-            type={this.props.preferences.show_features.type}
-            description={this.props.preferences.show_features.description}
-            action={this.toggleFeaturesLabel}
-          />
-          <InputField
-            value={this.props.preferences.show_name.value}
-            type={this.props.preferences.show_name.type}
-            description={this.props.preferences.show_name.description}
-            action={this.toggleNameLabel}
-          />
-          <InputField
-            value={this.props.preferences.add_splitting.value}
-            type={this.props.preferences.add_splitting.type}
-            description={this.props.preferences.add_splitting.description}
-            action={this.toggleSplits}
-          />
-          <InputField
-            value={this.props.preferences.show_samples.value}
-            type={this.props.preferences.show_samples.type}
-            description={this.props.preferences.show_samples.description}
-            action={this.toggleSamples}
-          />
-          <InputField
-            value={this.props.preferences.no_colors.value}
-            type={this.props.preferences.no_colors.type}
-            description={this.props.preferences.no_colors.description}
-            action={this.toggleColors}
-          />
+            <InputField
+              value={this.props.preferences.layer_display_max_height.value}
+              type={this.props.preferences.layer_display_max_height.type}
+              description={
+                this.props.preferences.layer_display_max_height.description
+              }
+              action={this.handleMaxChange}
+            />
+            <Features />
+            <InputField
+              value={this.props.preferences.layers_spacing_horizontal.value}
+              type={this.props.preferences.layers_spacing_horizontal.type}
+              description={
+                this.props.preferences.layers_spacing_horizontal.description
+              }
+              action={this.handleSpacingHorizontalChange}
+            />
+            <InputField
+              value={this.props.preferences.layers_spacing_vertical.value}
+              type={this.props.preferences.layers_spacing_vertical.type}
+              description={
+                this.props.preferences.layers_spacing_vertical.description
+              }
+              action={this.handleSpacingVerticalChange}
+            />
+            {!this.props.preferences.no_colors.value && (
+              <InputField
+                value={this.props.color_mode.generation}
+                type={"select"}
+                description={"Porposed Colors"}
+                options={options}
+                action={this.handleColorModeChange}
+              />
+            )}
+            <InputField
+              value={this.props.preferences.show_dimensions.value}
+              type={this.props.preferences.show_dimensions.type}
+              description={this.props.preferences.show_dimensions.description}
+              action={this.toggleDimensionsLabel}
+            />
+            <InputField
+              value={this.props.preferences.show_features.value}
+              type={this.props.preferences.show_features.type}
+              description={this.props.preferences.show_features.description}
+              action={this.toggleFeaturesLabel}
+            />
+            <InputField
+              value={this.props.preferences.show_name.value}
+              type={this.props.preferences.show_name.type}
+              description={this.props.preferences.show_name.description}
+              action={this.toggleNameLabel}
+            />
+            <InputField
+              value={this.props.preferences.add_splitting.value}
+              type={this.props.preferences.add_splitting.type}
+              description={this.props.preferences.add_splitting.description}
+              action={this.toggleSplits}
+            />
+            <InputField
+              value={this.props.preferences.show_samples.value}
+              type={this.props.preferences.show_samples.type}
+              description={this.props.preferences.show_samples.description}
+              action={this.toggleSamples}
+            />
+            <InputField
+              value={this.props.preferences.no_colors.value}
+              type={this.props.preferences.no_colors.type}
+              description={this.props.preferences.no_colors.description}
+              action={this.toggleColors}
+            />
+            <InputField
+              value={this.props.preferences.channels_first.value}
+              type={this.props.preferences.channels_first.type}
+              description={this.props.preferences.channels_first.description}
+              action={this.toggleChannelsFirst}
+            />
+          </div>
         </div>
         <div>
           <InputField
             value={"Group"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Group"}
             action={this.groupLayers}
             active={groupActive}
           />
           <InputField
             value={"Autogroup"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Automatically Group"}
             action={this.autoGroupLayers}
             active={autoGroupActive}
           />
           <InputField
             value={"AutoUngroup"}
-            type={"button"}
+            type={"paddedButton"}
             description={"Automatically Remove Group"}
             action={this.autoUngroupLayers}
             options={"secondary"}
