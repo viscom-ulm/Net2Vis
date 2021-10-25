@@ -25,15 +25,14 @@ import DownloadApi from "../../api/DownloadApi";
 class Controls extends React.Component {
   // Triggers download functionality of the network graph
   downloadSVG = () => {
-    const general_transform = `translate(5, 5)`;
+    const netowrk_transform = `translate(5, 5)`;
     var graph_element = document.getElementById("main_group"); // Get the main SVG Element
     var graph_bBox = graph_element.getBBox();
     var graph_width = graph_bBox.width * this.props.group_transform.scale; // Calculate the width of this Element
     var graph_height = graph_bBox.height * this.props.group_transform.scale; // Calculate the height of this Element
     var graph_text = graph_element.innerHTML; // Get the inner elements of the svg
-    const graph_transform = `scale(${
-      this.props.group_transform.scale
-    }) translate(${-graph_bBox.x}, ${-graph_bBox.y})`; // Set the transform for the graph to match the scaling and be centred
+    const graph_transform = `scale(${this.props.group_transform.scale
+      }) translate(${-graph_bBox.x}, ${-graph_bBox.y})`; // Set the transform for the graph to match the scaling and be centred
     var graph_downloadable = "";
     if (this.props.preferences.no_colors.value) {
       // No colors should be used, so textures need to be included.
@@ -46,7 +45,7 @@ class Controls extends React.Component {
         "'>" +
         defs_element.innerHTML +
         "<g transform='" +
-        general_transform +
+        netowrk_transform +
         "'><g transform='" +
         graph_transform +
         "'>" +
@@ -60,7 +59,7 @@ class Controls extends React.Component {
         "' height='" +
         (graph_height + 10) +
         "'><g transform='" +
-        general_transform +
+        netowrk_transform +
         "'><g transform='" +
         graph_transform +
         "'>" +
@@ -68,27 +67,27 @@ class Controls extends React.Component {
         "</g></g></svg>"; // Wrap together the svg code for the Graph
     }
 
+    const lgnd_transform = `translate(25, 5)`;
     var legend_element = document.getElementById("legend_group"); // Get the legend SVG Element
     var bBox = legend_element.getBBox();
-    var legend_width = bBox.width * 1.0 * this.props.legend_transform.scale; // Calculate the width of this Element
-    var legend_height = bBox.height * 1.0 * this.props.legend_transform.scale; // Calculate the height of this Element
+    var legend_width = bBox.width * this.props.legend_transform.scale; // Calculate the width of this Element
+    var legend_height = bBox.height * this.props.legend_transform.scale; // Calculate the height of this Element
     var legend_text = legend_element.innerHTML; // Get the inner elements of the svg
-    const legend_transform = `scale(${
-      this.props.legend_transform.scale
-    }) translate(${-bBox.x}, ${-bBox.y})`; // Set the transform for the legend to match the scaling and be centred
+    const legend_transform = `scale(${this.props.legend_transform.scale
+      }) translate(${-bBox.x}, ${-bBox.y})`; // Set the transform for the legend to match the scaling and be centred
     var legend_downloadable = "";
     if (this.props.preferences.no_colors.value) {
       // No colors should be used, so textures need to be included.
       var defs_element_legend = document.getElementById("main_defs"); // Get the main SVG Element
       legend_downloadable =
         "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" +
-        (legend_width + 10) +
+        (legend_width + 50) +
         "' height='" +
         (legend_height + 10) +
         "'>" +
         defs_element_legend.innerHTML +
         "<g transform='" +
-        general_transform +
+        lgnd_transform +
         "'><g transform='" +
         legend_transform +
         "'>" +
@@ -97,11 +96,11 @@ class Controls extends React.Component {
     } else {
       legend_downloadable =
         "<svg version='1.1' baseProfile='full' xmlns='http://www.w3.org/2000/svg' width='" +
-        (legend_width + 10) +
+        (legend_width + 50) +
         "' height='" +
         (legend_height + 10) +
         "'><g transform='" +
-        general_transform +
+        lgnd_transform +
         "'><g transform='" +
         legend_transform +
         "'>" +
