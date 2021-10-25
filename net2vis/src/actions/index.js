@@ -55,6 +55,11 @@ export function toggleAlert() {
   return { type: types.TOGGLE_ALERT };
 }
 
+// Toggle the Help View
+export function toggleHelp() {
+  return { type: types.TOGGLE_HELP };
+}
+
 // Toggle the Upload Alert View
 export function toggleUpload() {
   return { type: types.TOGGLE_UPLOAD };

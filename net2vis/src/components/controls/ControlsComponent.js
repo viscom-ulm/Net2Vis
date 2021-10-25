@@ -15,7 +15,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { GetApp, BugReport } from "@mui/icons-material";
+import { GetApp, BugReport, Help } from "@mui/icons-material";
 
 import ToggleButton from "./ToggleButton";
 import * as actions from "../../actions";
@@ -140,6 +140,13 @@ class Controls extends React.Component {
             <div>
               <IconButton
                 color="inherit"
+                aria-label="Help"
+                onClick={this.props.actions.toggleHelp}
+              >
+                <Help />
+              </IconButton>
+              <IconButton
+                color="inherit"
                 aria-label="Report Bug"
                 onClick={() =>
                   window.open(
@@ -168,13 +175,45 @@ class Controls extends React.Component {
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                     This is a research project. When using these visualizations,
-                    please cite us. You can find the publication on{" "}
-                    <a href="https://arxiv.org/abs/1902.04394">ArXiv</a>.
+                    please <a href="https://ieeexplore.ieee.org/abstract/document/9350177">cite us</a>.
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={this.downloadSVG} color="primary" autoFocus>
                     Sure
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              <Dialog
+                open={display.help_toggle}
+                aria-labelledby="help-dialog-title"
+                aria-describedby="help-dialog-description"
+              >
+                <DialogTitle id="help-dialog-title">
+                  Help
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="help-dialog-description">
+                    Net2Vis has been a research project and is now maintained by the author of the <a href="https://ieeexplore.ieee.org/abstract/document/9350177">associated publication</a> and by the community that uses this application.
+                    Feel free to file issues on git or contribute yourself by implementing new features.
+                    <br />
+                    <br />
+                    <b>Grouping</b>
+                    <br />
+                    To create custom groups, select a layer, then shift-select another layer.
+                    If you selected layers that can be grouped, the group button on the lower right will become active.
+                    <br />
+                    <br />
+                    <b>Errors</b>
+                    <br />
+                    If your code contains an error, you will get a notification saying that your code is not executable.
+                    The code will also get a red x icon next to where the error occured.
+                    Hovering that icon provides more detail on the error.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.props.actions.toggleHelp} color="primary" autoFocus>
+                    Thanks!
                   </Button>
                 </DialogActions>
               </Dialog>
