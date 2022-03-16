@@ -235,8 +235,7 @@ def upload_model(identifier):
     file_ext = os.path.splitext(filename)[1]
     if file_ext not in app.config['UPLOAD_EXTENSIONS']:
         return "", error_status, text_type
-    file_path = os.path.join(
-        app.config['UPLOAD_PATH'], identifier, f'model{file_ext}')
+    file_path = os.path.join(app.config['UPLOAD_PATH'], identifier, f'model{file_ext}')
     uploaded_file.save(file_path)
     return "No code loaded since model file is present.", ok_status, text_type
 

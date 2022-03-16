@@ -175,7 +175,7 @@ class Controls extends React.Component {
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
                     This is a research project. When using these visualizations,
-                    please <a href="https://ieeexplore.ieee.org/abstract/document/9350177">cite us</a>.
+                    please <a href="https://ieeexplore.ieee.org/abstract/document/9350177" target="_blank">cite us</a>.
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
