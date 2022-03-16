@@ -76,11 +76,15 @@ For most of these URL endings, you will probably also find networks in the offic
 
 If you find this code useful please consider citing us:
 
-    @article{bauerle2019net2vis,
-      title={Net2Vis: Transforming Deep Convolutional Networks into Publication-Ready Visualizations},
-      author={B{\"a}uerle, Alex and Ropinski, Timo},
-      journal={arXiv preprint arXiv:1902.04394},
-      year={2019}
+    @article{bauerle2021net2vis,
+      title={Net2vis--a visual grammar for automatically generating publication-tailored cnn architecture visualizations},
+      author={B{\"a}uerle, Alex and Van Onzenoodt, Christian and Ropinski, Timo},
+      journal={IEEE transactions on visualization and computer graphics},
+      volume={27},
+      number={6},
+      pages={2980--2991},
+      year={2021},
+      publisher={IEEE}
     }
 
 ## Acknowlegements

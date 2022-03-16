@@ -20,9 +20,6 @@ gast==0.4.0
 google-auth==1.28.0
 google-auth-oauthlib==0.4.3
 google-pasta==0.2.0
-grpcio==1.36.1
-h5py==3.2.1
-idna==3.1
 importlib-metadata==3.7.3
 isort==5.8.0
 itsdangerous==1.1.0
@@ -33,7 +30,6 @@ lazy-object-proxy==1.5.2
 Markdown==3.3.4
 MarkupSafe==1.1.1
 mccabe==0.6.1
-numpy==1.20.1
 oauthlib==3.1.0
 opt-einsum==3.3.0
 Pillow>=8.2.0
@@ -49,10 +45,7 @@ rsa==4.7.2
 scipy==1.6.1
 six==1.15.0
 structlog==21.1.0
-tensorboard==2.4.1
-tensorboard-plugin-wit==1.8.0
 tensorflow==2.5.1
-tensorflow-estimator==2.4.0
 termcolor==1.1.0
 tinycss2==1.1.0
 toml==0.10.2
