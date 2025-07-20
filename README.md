@@ -9,9 +9,7 @@
 
 :white_check_mark: Unified Design
 
-Created by <a href="https://a13x.io/" target="_blank">Alex Bäuerle</a>, <a href="https://www.uni-ulm.de/in/mi/institut/mitarbeiter/c-onzenoodt/" target="_blank">Christian van Onzenoodt</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
-
-Accessible <a href="https://viscom.net2vis.uni-ulm.de" target="_blank">online</a>.
+Created by <a href="https://a13x.io/" target="_blank">Alex Bäuerle</a>, <a href="https://onze.io" target="_blank">Christian van Onzenoodt</a> and <a href="https://www.uni-ulm.de/in/mi/institut/mi-mitarbeiter/tr/" target="_blank">Timo Ropinski</a>.
 
 ## What is this?
 
@@ -31,12 +29,6 @@ Since these networks can get fairly complex, we added the possibility to group l
 
 The best of it: Once the application runs, you just have to paste your Keras code into your browser and the visualization is automatically generated based on that.
 You still can tweak your visualizations and create abstractions before downloading them as SVG and PDF.
-
-## How can I use this?
-
-Either, go to our <a href="https://viscom.net2vis.uni-ulm.de" target="_blank">Website</a>, or install Net2Vis locally.
-Our website includes no setup, but might be slower and limited in network size depending on what you are working on.
-Installing this locally allows you to modify the functionality and might be better performing than the online version.
 
 ## Installation
 
@@ -74,7 +66,7 @@ For most of these URL endings, you will probably also find networks in the offic
 
 ## Citation
 
-If you find this code useful please consider citing us:
+If you find this useful please consider citing us:
 
     @article{bauerle2021net2vis,
       title={Net2vis--a visual grammar for automatically generating publication-tailored cnn architecture visualizations},
